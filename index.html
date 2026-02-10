@@ -3,64 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guru Bantu Guru | Inovasi AI untuk Pendidikan</title>
+    <title>Guru Bantu Guru | AI Tools</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); }
-        .gradient-text { background: linear-gradient(90deg, #3b82f6, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        html { scroll-behavior: smooth; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #000; 
+            color: #fff;
+            overflow-x: hidden;
+        }
+        .golda-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        /* Efek Glow di belakang kartu */
+        .glow {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: #3b82f6;
+            filter: blur(100px);
+            opacity: 0.15;
+            z-index: -1;
+        }
     </style>
 </head>
-<body class="bg-[#f8fafc]">
+<body class="selection:bg-white selection:text-black">
 
-    <nav class="sticky top-0 z-50 glass border-b border-gray-100 p-4">
-        <div class="max-w-4xl mx-auto flex justify-between items-center">
-            <span class="font-extrabold text-xl tracking-tight text-gray-800">GURU<span class="text-blue-600">BANTU</span></span>
-            <a href="#produk" class="bg-black text-white px-5 py-2 rounded-full text-sm font-semibold">Beli Sekarang</a>
-        </div>
-    </nav>
+    <div class="glow top-20 left-10"></div>
+    <div class="glow bottom-20 right-10"></div>
 
-    <header class="max-w-4xl mx-auto pt-16 pb-12 px-6 text-center">
-        <h1 class="text-5xl font-extrabold text-gray-900 leading-tight mb-6">
-            Mengajar Lebih Ringan dengan <span class="gradient-text">Kekuatan AI</span>
-        </h1>
-        <p class="text-gray-600 text-lg mb-10 max-w-2xl mx-auto">
-            Solusi cerdas untuk guru Indonesia. Hemat waktu berjam-jam dalam membuat soal dan mengoreksi jawaban.
-        </p>
-    </header>
-
-    <section id="produk" class="max-w-4xl mx-auto px-6 pb-20 grid md:grid-cols-2 gap-8">
+    <main class="max-w-xl mx-auto px-6 py-20">
         
-        <div class="group bg-white p-8 rounded-[32px] shadow-xl border border-gray-50 hover:border-blue-200 transition-all">
-            <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center mb-6 text-2xl">⚡</div>
-            <h3 class="text-2xl font-bold mb-3 text-gray-800">Soal AI</h3>
-            <p class="text-gray-500 mb-6 text-sm leading-relaxed">Buat ribuan bank soal ujian otomatis hanya dengan memasukkan materi pelajaran. Mendukung pilihan ganda & esai.</p>
-            <div class="flex items-center justify-between mt-auto">
-                <span class="text-xl font-bold text-gray-900">Rp 49.000<span class="text-xs text-gray-400">/bulan</span></span>
-                <a href="https://soal.gurubantu.up.railway.app" class="bg-blue-600 text-white px-6 py-3 rounded-2xl font-bold hover:bg-blue-700 transition">Buka App</a>
+        <header class="text-center mb-24" data-aos="fade-down" data-aos-duration="1000">
+            <div class="inline-block p-[1px] rounded-full bg-gradient-to-b from-white/30 to-transparent mb-6">
+                <div class="bg-black rounded-full px-4 py-1 text-[10px] tracking-[0.2em] font-bold text-gray-400 uppercase">
+                    AI For Teachers
+                </div>
+            </div>
+            <h1 class="text-4xl font-extrabold tracking-tighter mb-4 bg-gradient-to-b from-white to-gray-500 bg-clip-text text-transparent">
+                Guru Bantu Guru
+            </h1>
+            <p class="text-gray-400 text-sm leading-relaxed max-w-xs mx-auto">
+                Koleksi alat bantu mengajar berbasis kecerdasan buatan untuk masa depan pendidikan.
+            </p>
+        </header>
+
+        <div class="space-y-6 mb-24">
+            <h2 class="text-[10px] font-bold text-gray-600 uppercase tracking-widest ml-2 mb-4" data-aos="fade-right">Tools Tersedia</h2>
+            
+            <div class="golda-card p-6 rounded-[24px] relative overflow-hidden group" data-aos="fade-up" data-aos-delay="100">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="text-xl font-bold mb-1">Soal AI</h3>
+                        <p class="text-sm text-gray-500">Bikin 50 soal dalam 1 klik.</p>
+                    </div>
+                    <span class="text-xs bg-white/10 px-3 py-1 rounded-full border border-white/10 text-gray-300 italic">v1.0</span>
+                </div>
+                <div class="mt-8 flex items-center justify-between">
+                    <span class="text-lg font-semibold">Rp 49k <span class="text-xs text-gray-500 italic">/mth</span></span>
+                    <a href="https://soal.gurubantu.up.railway.app" class="bg-white text-black px-6 py-2 rounded-xl text-sm font-bold hover:scale-105 transition-transform">Beli Sekarang</a>
+                </div>
+            </div>
+
+            <div class="golda-card p-6 rounded-[24px] relative overflow-hidden group" data-aos="fade-up" data-aos-delay="200">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="text-xl font-bold mb-1 text-green-400">Jawaban AI</h3>
+                        <p class="text-sm text-gray-500">Koreksi otomatis & feedback.</p>
+                    </div>
+                    <span class="text-xs bg-green-400/10 px-3 py-1 rounded-full border border-green-400/10 text-green-400 italic">New</span>
+                </div>
+                <div class="mt-8 flex items-center justify-between">
+                    <span class="text-lg font-semibold text-white">Rp 49k <span class="text-xs text-gray-500 italic">/mth</span></span>
+                    <a href="https://jawaban.gurubantu.up.railway.app" class="bg-white text-black px-6 py-2 rounded-xl text-sm font-bold hover:scale-105 transition-transform">Beli Sekarang</a>
+                </div>
             </div>
         </div>
 
-        <div class="group bg-white p-8 rounded-[32px] shadow-xl border border-gray-50 hover:border-green-200 transition-all">
-            <div class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center mb-6 text-2xl">🧠</div>
-            <h3 class="text-2xl font-bold mb-3 text-gray-800">Jawaban AI</h3>
-            <p class="text-gray-500 mb-6 text-sm leading-relaxed">Asisten koreksi otomatis. Cukup masukkan pertanyaan & jawaban siswa, AI akan memberikan nilai dan penjelasan.</p>
-            <div class="flex items-center justify-between mt-auto">
-                <span class="text-xl font-bold text-gray-900">Rp 49.000<span class="text-xs text-gray-400">/bulan</span></span>
-                <a href="https://jawaban.gurubantu.up.railway.app" class="bg-green-600 text-white px-6 py-3 rounded-2xl font-bold hover:bg-green-700 transition">Buka App</a>
-            </div>
+        <div class="text-center" data-aos="zoom-in" data-aos-offset="0">
+            <p class="text-xs text-gray-600 mb-6 italic">Ingin mentraktir pengembang?</p>
+            <a href="LINK_TRAKTEER_KAMU" class="inline-flex items-center gap-2 bg-white/5 border border-white/10 px-8 py-4 rounded-full text-sm font-medium hover:bg-white/10 transition">
+                ☕ Traktir Kopi
+            </a>
+            <div class="mt-20 opacity-20 text-[10px] tracking-[0.5em] uppercase">GBG © 2026</div>
         </div>
 
-    </section>
+    </main>
 
-    <footer class="max-w-4xl mx-auto px-6 pb-20 text-center">
-        <div class="bg-yellow-50 p-8 rounded-[32px] border border-yellow-100">
-            <h4 class="font-bold text-gray-800 mb-2 text-xl text-yellow-800">Ingin Dukung Platform Ini?</h4>
-            <p class="text-yellow-700 mb-6 text-sm">Setiap kontribusi Anda membantu kami mengembangkan alat bantu guru yang lebih canggih.</p>
-            <a href="LINK_TRAKTEER_KAMU" class="inline-block bg-[#FFDD00] text-black px-8 py-4 rounded-full font-extrabold text-sm shadow-sm">☕ DUKUNG GURU BANTU GURU</a>
-        </div>
-    </footer>
-
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        duration: 800, // Kecepatan animasi (ms)
+        once: false,   // Animasi ulang saat di-scroll ke atas lagi
+      });
+    </script>
 </body>
 </html>
