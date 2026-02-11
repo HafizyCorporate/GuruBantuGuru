@@ -15,29 +15,28 @@ export default function Home() {
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end start"],
+    offset: ["start start", "end end"],
   });
 
-  // MEMASTIKAN GAMBAR BERJALAN DARI 0 SAMPAI 193 (Frame Terakhir)
-  // Rentang [0, 1] berarti dari awal sampai ujung scroll section Hero
+  // MENGUBAH SCROLL JADI FRAME: 0% scroll = frame 0, 100% scroll = frame 193
   const frameIndex = useTransform(scrollYProgress, [0, 1], [0, totalFrames - 1]);
 
-  // LOGIKA TEKS (Hitam Glow Putih)
+  // ANIMASI TEKS (Hitam dengan Glow Putih agar tajam)
   const introOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
-  const introY = useTransform(scrollYProgress, [0, 0.1], [0, -50]);
+  const introY = useTransform(scrollYProgress, [0, 0.1], [0, -40]);
 
-  const promo1Opacity = useTransform(scrollYProgress, [0.2, 0.3, 0.5, 0.6], [0, 1, 1, 0]);
-  const promo1Y = useTransform(scrollYProgress, [0.2, 0.3, 0.6], [40, 0, -40]);
+  const promo1Opacity = useTransform(scrollYProgress, [0.2, 0.35, 0.5, 0.65], [0, 1, 1, 0]);
+  const promo1Y = useTransform(scrollYProgress, [0.2, 0.35, 0.65], [30, 0, -30]);
 
-  const promo2Opacity = useTransform(scrollYProgress, [0.7, 0.8, 0.9, 0.95], [0, 1, 1, 0]);
-  const promo2Y = useTransform(scrollYProgress, [0.7, 0.8, 0.95], [40, 0, -40]);
+  const promo2Opacity = useTransform(scrollYProgress, [0.75, 0.85, 0.95, 1], [0, 1, 1, 0]);
+  const promo2Y = useTransform(scrollYProgress, [0.75, 0.85, 1], [30, 0, -30]);
 
   const glowStyle = {
     color: "black",
-    textShadow: "0 0 25px rgba(255,255,255,1), 0 0 10px rgba(255,255,255,0.8), 0 0 5px rgba(255,255,255,0.6)",
+    textShadow: "0 0 25px rgba(255,255,255,1), 0 0 12px rgba(255,255,255,0.8), 0 0 6px rgba(255,255,255,0.5)",
   };
 
-  // PRELOADER & LOADING LOCK
+  // PRELOAD SEMUA GAMBAR (Penting agar tidak lag saat scroll)
   useEffect(() => {
     const loadedImages: HTMLImageElement[] = [];
     let count = 0;
@@ -61,7 +60,7 @@ export default function Home() {
     }
   }, []);
 
-  // RENDER CANVAS (Full Screen Cover)
+  // LOGIKA MENGGAMBAR KE CANVAS (Full Screen Cover)
   useEffect(() => {
     if (!isLoaded || !canvasRef.current) return;
     const context = canvasRef.current.getContext("2d");
@@ -96,61 +95,54 @@ export default function Home() {
   }, [isLoaded, images, frameIndex]);
 
   return (
-    <main className="relative bg-white font-[family-name:var(--font-outfit)] overflow-x-hidden">
+    <main className="relative bg-white font-[family-name:var(--font-outfit)]">
       
-      {/* PRELOADER SCREEN */}
+      {/* LOADING SCREEN (Lock Scroll) */}
       <AnimatePresence>
         {!isLoaded && (
-          <motion.div 
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[999] bg-white flex flex-col items-center justify-center text-blue-600"
-          >
+          <motion.div exit={{ opacity: 0 }} className="fixed inset-0 z-[999] bg-white flex flex-col items-center justify-center text-blue-600">
             <h2 className="text-4xl font-black italic tracking-tighter mb-4">GURUBANTU</h2>
             <div className="w-64 h-[2px] bg-gray-100 rounded-full overflow-hidden">
               <motion.div className="h-full bg-blue-600" animate={{ width: `${progress}%` }} />
             </div>
-            <p className="mt-4 font-mono font-bold">{progress}%</p>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* NAVBAR */}
-      <nav className="fixed top-0 w-full z-[100] px-6 py-8 flex justify-between items-center mix-blend-difference">
-        <div className="text-2xl font-black text-white tracking-tighter uppercase italic">GuruBantu</div>
-        <div className="w-8 h-[2px] bg-white" />
-      </nav>
+      <div className={isLoaded ? "block" : "hidden"}>
+        {/* CONTAINER UTAMA (Scroll Panjang) */}
+        <section ref={containerRef} className="relative h-[1200vh]">
+          {/* STICKY CANVAS: Gambar diam di tempat, Frame berubah sesuai jempol user */}
+          <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center bg-white">
+            <canvas ref={canvasRef} className="absolute inset-0 w-full h-full object-cover" />
+            
+            {/* Teks bergantian di atas gambar */}
+            <motion.div style={{ opacity: introOpacity, y: introY, ...glowStyle }} className="relative z-10 text-center px-6">
+              <h1 className="text-6xl md:text-[110px] font-black uppercase tracking-tighter italic leading-none">Guru Bantu <br /> Guru</h1>
+              <p className="text-xl md:text-2xl font-bold mt-6 italic">Asisten meringankan kerja guru.</p>
+            </motion.div>
 
-      {/* HERO SECTION (Gambarnya selesai 100% di akhir section ini) */}
-      <section ref={containerRef} className="relative h-[1200vh]">
-        <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
-          <canvas ref={canvasRef} className="absolute inset-0 w-full h-full object-cover" />
-          
-          {/* Teks Bergantian */}
-          <motion.div style={{ opacity: introOpacity, y: introY, ...glowStyle }} className="relative z-10 text-center px-6">
-            <h1 className="text-6xl md:text-[120px] font-black leading-[0.9] uppercase tracking-tighter italic">Guru Bantu <br /> Guru</h1>
-            <p className="text-xl md:text-3xl font-bold mt-8 italic">Asisten meringankan kerja guru.</p>
-          </motion.div>
+            <motion.div style={{ opacity: promo1Opacity, y: promo1Y, ...glowStyle }} className="absolute z-10 text-center px-6">
+              <h2 className="text-5xl md:text-7xl font-black uppercase italic tracking-tighter leading-none text-center">Buat Soal <br /> Otomatis</h2>
+              <p className="mt-6 text-xl md:text-2xl font-bold italic uppercase tracking-tighter">Efisiensi Maksimal dengan AI.</p>
+            </motion.div>
 
-          <motion.div style={{ opacity: promo1Opacity, y: promo1Y, ...glowStyle }} className="absolute z-10 text-center px-6">
-            <h2 className="text-5xl md:text-8xl font-black uppercase italic tracking-tighter">Buat Soal <br /> Otomatis</h2>
-            <p className="mt-6 text-xl md:text-2xl font-bold uppercase italic">Evaluasi instan dengan AI.</p>
-          </motion.div>
+            <motion.div style={{ opacity: promo2Opacity, y: promo2Y, ...glowStyle }} className="absolute z-10 text-center px-6">
+              <h2 className="text-5xl md:text-7xl font-black uppercase italic tracking-tighter leading-none text-center">Cerdas & <br /> Personal</h2>
+              <p className="mt-6 text-xl md:text-2xl font-bold italic uppercase tracking-tighter">Solusi Masa Depan Pendidikan.</p>
+            </motion.div>
+          </div>
+        </section>
 
-          <motion.div style={{ opacity: promo2Opacity, y: promo2Y, ...glowStyle }} className="absolute z-10 text-center px-6">
-            <h2 className="text-5xl md:text-8xl font-black uppercase italic tracking-tighter">Cerdas & <br /> Personal</h2>
-            <p className="mt-6 text-xl md:text-2xl font-bold uppercase italic">Memahami kebutuhan kurikulum Anda.</p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* OUR STORY (Muncul setelah scroll gambar selesai) */}
-      <div className="relative z-20 bg-white">
-        <section className="py-40 px-6 max-w-3xl mx-auto text-center text-black">
-          <span className="text-blue-600 font-bold tracking-[0.5em] uppercase text-xs block mb-6">Our Story</span>
-          <h3 className="text-5xl md:text-7xl font-black tracking-tighter italic uppercase mb-12">Lahir Dari <br /> Ruang Kelas</h3>
-          <p className="text-lg md:text-xl text-gray-700 leading-relaxed font-medium">
-            GuruBantu lahir untuk memerdekakan waktu guru. Kami membawa teknologi AI agar Anda bisa fokus kembali pada interaksi bermakna dengan siswa.
-          </p>
+        {/* SECTION AKHIR (Muncul menyapu ke atas) */}
+        <section className="relative z-20 bg-white py-40 px-6 shadow-[0_-20px_50px_rgba(0,0,0,0.1)]">
+          <div className="max-w-3xl mx-auto text-center">
+            <span className="text-blue-600 font-bold tracking-[0.5em] uppercase text-xs block mb-6">Our Story</span>
+            <h3 className="text-5xl md:text-7xl font-black tracking-tighter italic uppercase mb-12 text-black">Lahir Dari <br /> Ruang Kelas</h3>
+            <p className="text-lg md:text-xl text-gray-700 leading-relaxed font-medium">
+              GuruBantu lahir dari tumpukan kertas koreksi di meja guru yang larut malam masih terjaga. Kami hadir membawa teknologi AI untuk memerdekakan waktu mengajar Anda.
+            </p>
+          </div>
         </section>
       </div>
     </main>
