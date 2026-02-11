@@ -60,12 +60,9 @@ export default function Home() {
     return () => unsubscribe();
   }, [images, frameIndex]);
 
-  // SETTINGAN OPACITY TEXT SHADOW (KOLOM TULISAN) YANG TIPIS
-  const subtleTextStyle = {
-    WebkitTextStroke: "0.5px rgba(255,255,255,0.3)", // Garis pinggir sangat tipis & transparan
-    color: "white", // Warna teks utama putih agar clean
-    textShadow: "0 0 8px rgba(0,0,0,0.2)", // Shadow hitam sangat tipis biar gak "tebal"
-  };
+  // STYLE KHUSUS CANVAS: Kotak Emas Tipis & Teks Hitam Mencolok
+  const goldBoxStyle = "bg-[#D4AF37]/25 backdrop-blur-[1px] px-6 py-2 inline-block border border-[#D4AF37]/40 shadow-xl";
+  const canvasTitleStyle = "text-black font-black italic uppercase leading-none tracking-tighter";
 
   return (
     <main className="relative w-full bg-black">
@@ -73,37 +70,60 @@ export default function Home() {
         html, body { background-color: black; margin: 0; padding: 0; }
       `}</style>
 
-      {/* CONTAINER CANVAS */}
+      {/* SECTION 1: CANVAS DENGAN TEKS KOTAK EMAS */}
       <div ref={containerRef} className="relative h-[600vh] w-full">
         <div className="fixed top-0 left-0 w-full h-screen z-0 overflow-hidden">
           <canvas ref={canvasRef} className="w-full h-full object-cover" />
           
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-4 pointer-events-none">
+            
+            {/* TEXT 1 */}
             <motion.div style={{ opacity: text1Opacity }} className="absolute flex flex-col items-center w-full">
-              <h1 className="text-[2.6rem] md:text-8xl font-black italic tracking-tighter leading-[0.85] uppercase" style={subtleTextStyle}>
-                GURUBANTUGURU
-              </h1>
-              <p className="font-bold tracking-[0.4em] uppercase text-[9px] md:text-xs mt-4 text-white/80">
-                Asisten AI Untuk Para Guru Indonesia
-              </p>
+              <div className={goldBoxStyle}>
+                <h1 className={`${canvasTitleStyle} text-[2.6rem] md:text-8xl`}>
+                  GURUBANTUGURU
+                </h1>
+              </div>
+              <div className="mt-4 bg-black px-4 py-1">
+                <p className="font-bold tracking-[0.3em] uppercase text-[9px] md:text-xs text-[#D4AF37]">
+                  Asisten AI Untuk Para Guru Indonesia
+                </p>
+              </div>
             </motion.div>
 
-            <motion.div style={{ opacity: text2Opacity }} className="absolute w-full px-6">
-              <h2 className="text-3xl md:text-7xl font-black italic uppercase leading-none tracking-tighter" style={subtleTextStyle}>
-                Merubah Kebiasaan <br/> Yang Lama
-              </h2>
+            {/* TEXT 2 */}
+            <motion.div style={{ opacity: text2Opacity }} className="absolute w-full px-6 flex flex-col items-center gap-3">
+              <div className={goldBoxStyle}>
+                <h2 className={`${canvasTitleStyle} text-3xl md:text-7xl`}>
+                  Merubah Kebiasaan
+                </h2>
+              </div>
+              <div className={goldBoxStyle}>
+                <h2 className={`${canvasTitleStyle} text-3xl md:text-7xl`}>
+                  Yang Lama
+                </h2>
+              </div>
             </motion.div>
 
-            <motion.div style={{ opacity: text3Opacity }} className="absolute w-full px-6">
-              <h2 className="text-3xl md:text-7xl font-black italic uppercase leading-none tracking-tighter" style={subtleTextStyle}>
-                Menjadi Lebih Modern <br/> Dan Efisien
-              </h2>
+            {/* TEXT 3 */}
+            <motion.div style={{ opacity: text3Opacity }} className="absolute w-full px-6 flex flex-col items-center gap-3">
+              <div className={goldBoxStyle}>
+                <h2 className={`${canvasTitleStyle} text-3xl md:text-7xl`}>
+                  Menjadi Lebih Modern
+                </h2>
+              </div>
+              <div className={goldBoxStyle}>
+                <h2 className={`${canvasTitleStyle} text-3xl md:text-7xl`}>
+                  Dan Efisien
+                </h2>
+              </div>
             </motion.div>
+
           </div>
         </div>
       </div>
 
-      {/* OUR STORY: Menutup Canvas di akhir scroll */}
+      {/* SECTION 2: OUR STORY (BERSIH, TANPA KOTAK EMAS) */}
       <section className="relative z-20 w-full bg-white">
         <div className="min-h-screen w-full flex flex-col items-center justify-center px-6 py-32 bg-gradient-to-b from-white via-white to-blue-50">
           <div className="max-w-4xl w-full text-center">
