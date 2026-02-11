@@ -67,6 +67,8 @@ export default function Home() {
     <main className="relative w-full bg-black overflow-x-hidden">
       <style jsx global>{`
         html, body { background-color: black; margin: 0; padding: 0; overflow-x: hidden; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
 
       {/* SECTION 1: CANVAS */}
@@ -107,7 +109,7 @@ export default function Home() {
       </div>
 
       <div className="relative z-20 w-full bg-white">
-        {/* OUR STORY - Padding bawah dikurangi agar lebih dekat ke Visi */}
+        {/* OUR STORY */}
         <section className="w-full flex flex-col items-center justify-center px-6 pt-32 pb-12 bg-gradient-to-b from-white to-blue-50/30">
           <div className="max-w-4xl w-full text-center">
             <motion.h2 
@@ -125,7 +127,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* VISI & MISI - Padding atas dikurangi */}
+        {/* VISI & MISI */}
         <section className="w-full px-6 pt-12 pb-32 bg-gradient-to-b from-blue-50/30 to-white overflow-hidden">
           <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
             <motion.div 
@@ -219,6 +221,49 @@ export default function Home() {
                    </div>
                 </div>
               </motion.div>
+            </div>
+
+            {/* TESTIMONI SECTION */}
+            <div className="mt-32">
+               <motion.h2 
+                 initial={{ opacity: 0, y: 20 }}
+                 whileInView={{ opacity: 1, y: 0 }}
+                 className="text-4xl md:text-5xl font-black italic tracking-tighter text-black uppercase mb-12 text-center"
+               >
+                 Testimoni Pengguna
+               </motion.h2>
+               
+               <div className="flex gap-6 overflow-x-auto pb-8 snap-x scrollbar-hide px-4">
+                 {/* Testi 1 */}
+                 <div className="min-w-[300px] md:min-w-[400px] bg-white p-8 rounded-2xl shadow-xl border border-blue-50 snap-center">
+                   <div className="flex text-yellow-400 mb-4 text-xl">★★★★★</div>
+                   <p className="text-gray-700 italic mb-6 leading-relaxed font-medium">"Luar biasa! Dulu bikin soal butuh waktu berjam-jam, sekarang hitungan detik langsung jadi. Sangat membantu tugas administrasi saya di sekolah."</p>
+                   <div>
+                     <p className="font-black text-black uppercase italic tracking-tighter">Ibu Siti Zulaikha</p>
+                     <p className="text-[10px] text-blue-600 font-bold tracking-[0.2em] uppercase">Guru Matematika SMP</p>
+                   </div>
+                 </div>
+
+                 {/* Testi 2 */}
+                 <div className="min-w-[300px] md:min-w-[400px] bg-white p-8 rounded-2xl shadow-xl border border-blue-50 snap-center">
+                   <div className="flex text-yellow-400 mb-4 text-xl">★★★★★</div>
+                   <p className="text-gray-700 italic mb-6 leading-relaxed font-medium">"Koreksi jawaban jadi jauh lebih cepat dengan Jawaban AI. Akurasinya mantap dan saya bisa memberikan feedback personal ke siswa lebih cepat."</p>
+                   <div>
+                     <p className="font-black text-black uppercase italic tracking-tighter">Bapak Andi Pratama</p>
+                     <p className="text-[10px] text-blue-600 font-bold tracking-[0.2em] uppercase">Guru Bahasa Indonesia SMA</p>
+                   </div>
+                 </div>
+
+                 {/* Testi 3 */}
+                 <div className="min-w-[300px] md:min-w-[400px] bg-white p-8 rounded-2xl shadow-xl border border-blue-50 snap-center">
+                   <div className="flex text-yellow-400 mb-4 text-xl">★★★★★</div>
+                   <p className="text-gray-700 italic mb-6 leading-relaxed font-medium">"GURUBANTUGURU benar-benar modern. Fitur-fiturnya to-the-point dan mudah digunakan bahkan untuk guru yang tidak terlalu paham IT."</p>
+                   <div>
+                     <p className="font-black text-black uppercase italic tracking-tighter">Ibu Maya Lestari</p>
+                     <p className="text-[10px] text-blue-600 font-bold tracking-[0.2em] uppercase">Guru IPA SD</p>
+                   </div>
+                 </div>
+               </div>
             </div>
           </div>
         </section>
