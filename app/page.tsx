@@ -18,10 +18,8 @@ export default function Home() {
     offset: ["start start", "end end"] 
   });
 
-  // Animasi frame murni mengikuti scroll (0 sampai 1)
   const frameIndex = useTransform(scrollYProgress, [0, 1], [0, totalFrames - 1]);
 
-  // Kontrol Opacity Teks
   const text1Opacity = useTransform(scrollYProgress, [0, 0.15, 0.3], [1, 1, 0]);
   const text2Opacity = useTransform(scrollYProgress, [0.4, 0.55, 0.7], [0, 1, 0]);
   const text3Opacity = useTransform(scrollYProgress, [0.8, 0.95, 1], [0, 1, 1]);
@@ -75,7 +73,6 @@ export default function Home() {
 
   return (
     <main className="bg-black">
-      {/* Navbar */}
       <nav className="fixed top-0 w-full z-[100] px-6 py-6 flex justify-between items-center">
         <div className="text-xl font-black text-white mix-blend-difference italic tracking-tighter uppercase">
           GURU BANTU GURU
@@ -92,28 +89,20 @@ export default function Home() {
         <div className="sticky top-0 h-screen w-full overflow-hidden">
           <canvas ref={canvasRef} className="w-full h-full object-cover" />
 
-          {/* IKON MENUNGGU (Loading Spinner) */}
-          <AnimatePresence>
-            {!isLoaded && (
-              <motion.div 
-                exit={{ opacity: 0 }} 
-                className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black/10 backdrop-blur-md"
-              >
-                <div className="relative flex items-center justify-center">
-                    <div className="w-16 h-16 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
-                    <span className="absolute text-[12px] font-black text-white">{progress}%</span>
-                </div>
-                <p className="mt-4 text-[10px] font-black italic tracking-[0.4em] text-white uppercase">Loading AI...</p>
-              </motion.div>
-            )}
-          </AnimatePresence>
-          
-          {/* TEKS DENGAN KOLOM BLUR (Biar Jelas & Gak Norak) */}
+          {/* TEKS CANVAS DENGAN LOADING DI DALAM KOLOM */}
           <div className="absolute inset-0 flex items-center justify-center text-center px-6 pointer-events-none">
             
-            <motion.div style={{ opacity: text1Opacity }} className="absolute bg-white/30 backdrop-blur-xl p-8 rounded-[40px] border border-white/10 shadow-2xl">
+            <motion.div style={{ opacity: text1Opacity }} className="absolute bg-white/30 backdrop-blur-xl p-8 rounded-[40px] border border-white/10 shadow-2xl flex flex-col items-center">
               <h2 className="text-4xl md:text-6xl font-black italic text-black tracking-tighter leading-none">GURUBANTUGURU</h2>
               <p className="text-black/70 font-bold tracking-[0.3em] uppercase text-[10px] md:text-xs mt-4">Asisten AI Untuk Para Guru Indonesia</p>
+              
+              {/* LOADING DI BAWAH TEKS (Hanya muncul saat belum loaded) */}
+              {!isLoaded && (
+                <div className="mt-8 flex flex-col items-center gap-3">
+                  <div className="w-10 h-10 border-4 border-black/10 border-t-black rounded-full animate-spin"></div>
+                  <span className="text-[12px] font-black text-black">{progress}%</span>
+                </div>
+              )}
             </motion.div>
 
             <motion.div style={{ opacity: text2Opacity }} className="absolute bg-white/30 backdrop-blur-xl p-8 rounded-[40px] border border-white/10 shadow-2xl">
