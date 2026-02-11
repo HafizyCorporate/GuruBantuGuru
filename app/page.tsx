@@ -28,8 +28,9 @@ export default function Home() {
     offset: ["start start", "end start"],
   });
 
-  // Memetakan scroll (0 ke 1) menjadi index gambar (1 ke 50)
-  const frameIndex = useTransform(scrollYProgress, [0, 1], [1, 50]);
+  // CONFIG SEQUENCE: 192 Foto dari Ezgif
+  const totalFrames = 192; 
+  const frameIndex = useTransform(scrollYProgress, [0, 1], [1, totalFrames]);
   const [currentFrame, setCurrentFrame] = useState(1);
 
   useEffect(() => {
@@ -38,13 +39,13 @@ export default function Home() {
     });
   }, [frameIndex]);
 
-  // Efek Animasi Teks saat Scroll
-  const textOpacity = useTransform(scrollYProgress, [0, 0.5, 0.8], [1, 1, 0]);
-  const textScale = useTransform(scrollYProgress, [0, 0.8], [1, 0.8]);
+  // Animasi Teks: Tetap muncul agak lama, lalu menghilang saat mendekati konten bawah
+  const textOpacity = useTransform(scrollYProgress, [0, 0.7, 0.9], [1, 1, 0]);
+  const textScale = useTransform(scrollYProgress, [0, 0.9], [1, 0.8]);
 
   return (
     <main className="relative bg-black">
-      {/* NAVBAR - Dibuat Transparan agar Cinematic */}
+      {/* NAVBAR */}
       <nav className="fixed top-0 w-full z-[100] bg-black/20 backdrop-blur-md border-b border-white/10 px-6 py-4 flex justify-between items-center font-[family-name:var(--font-outfit)]">
         <div className="text-2xl font-black text-white tracking-tighter italic">GURUBANTU</div>
         <button onClick={() => setIsOpen(!isOpen)} className="md:hidden z-[101] p-2">
@@ -55,7 +56,7 @@ export default function Home() {
         <div className="hidden md:flex gap-8 font-bold text-xs uppercase tracking-widest text-white/70">
           <a href="#visi" className="hover:text-blue-400 transition">Visi</a>
           <a href="#produk" className="hover:text-blue-400 transition">Produk</a>
-          <a href="#kontak" className="bg-blue-600 text-white px-6 py-2 rounded-full shadow-lg shadow-blue-500/20">Hubungi Kami</a>
+          <a href="#kontak" className="bg-blue-600 text-white px-6 py-2 rounded-full shadow-lg shadow-blue-500/20 border border-blue-400/30">Hubungi Kami</a>
         </div>
       </nav>
 
@@ -66,21 +67,22 @@ export default function Home() {
         <a href="#kontak" onClick={() => setIsOpen(false)}>KONTAK</a>
       </div>
 
-      {/* HERO SECTION: IMAGE SEQUENCE */}
-      <section ref={containerRef} className="relative h-[400vh] bg-black">
+      {/* HERO SECTION: IMAGE SEQUENCE (192 FRAMES) */}
+      {/* Tinggi h-[800vh] agar scroll 192 foto terasa halus */}
+      <section ref={containerRef} className="relative h-[800vh] bg-black">
         <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
           
-          {/* Render Gambar Berdasarkan Scroll */}
+          {/* Render Gambar Format Ezgif (001, 002, ... 192) */}
           <img
-            src={`/sequence/frame-${currentFrame}.webp`}
+            src={`/sequence/ezgif-frame-${currentFrame.toString().padStart(3, '0')}.jpg`}
             alt="Cinematic Sequence"
-            className="absolute inset-0 w-full h-full object-cover opacity-60 scale-105"
+            className="absolute inset-0 w-full h-full object-cover opacity-60 scale-100"
           />
 
-          {/* Vignette Gelap */}
+          {/* Vignette Overlay */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black" />
 
-          {/* Teks Utama Cinematic */}
+          {/* Teks Cinematic */}
           <motion.div 
             style={{ opacity: textOpacity, scale: textScale }}
             className="relative z-10 text-center px-4 font-[family-name:var(--font-outfit)]"
@@ -93,16 +95,16 @@ export default function Home() {
             </p>
           </motion.div>
 
-          {/* Scroll Indicator Minimalis */}
+          {/* Scroll Indicator */}
           <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-40">
             <div className="w-[1px] h-24 bg-gradient-to-b from-blue-500 to-transparent" />
-            <span className="text-[10px] text-white tracking-[1em] uppercase rotate-90 origin-left ml-2">Scroll</span>
+            <span className="text-[10px] text-white tracking-[1em] uppercase rotate-90 origin-left ml-2 font-bold">Scroll</span>
           </div>
         </div>
       </section>
 
-      {/* WRAPPER KONTEN PUTIH (Muncul saat scroll bawah) */}
-      <div className="relative z-20 bg-white">
+      {/* WRAPPER KONTEN PUTIH */}
+      <div className="relative z-20 bg-white shadow-[0_-50px_100px_rgba(0,0,0,0.5)]">
         
         {/* VISI & MISI */}
         <section id="visi" className="py-40 px-6 max-w-6xl mx-auto font-[family-name:var(--font-outfit)]">
@@ -154,7 +156,7 @@ export default function Home() {
 
         {/* KONTAK */}
         <section id="kontak" className="py-40 px-6 max-w-4xl mx-auto text-center font-[family-name:var(--font-outfit)]">
-          <h2 className="text-7xl font-black text-slate-950 mb-16 uppercase italic tracking-tighter">Siap Bergabung?</h2>
+          <h2 className="text-7xl font-black text-slate-950 mb-16 uppercase italic tracking-tighter leading-none">Siap Bergabung?</h2>
           <div className="bg-white p-12 md:p-20 rounded-[4rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.1)] border border-slate-100 text-left">
             <p className="text-blue-600 font-bold text-sm mb-6 uppercase tracking-[0.4em]">Hubungi Kami</p>
             <p className="text-3xl md:text-5xl font-black mb-2 text-slate-900 tracking-tight">+62 822 4040 0388</p>
