@@ -22,13 +22,12 @@ export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);
 
-  // LOGIKA SCROLL SEQUENCE
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
   });
 
-  // CONFIG SEQUENCE: 192 Foto dari Ezgif
+  // CONFIG: 192 Foto
   const totalFrames = 192; 
   const frameIndex = useTransform(scrollYProgress, [0, 1], [1, totalFrames]);
   const [currentFrame, setCurrentFrame] = useState(1);
@@ -39,13 +38,11 @@ export default function Home() {
     });
   }, [frameIndex]);
 
-  // Animasi Teks: Tetap muncul agak lama, lalu menghilang saat mendekati konten bawah
   const textOpacity = useTransform(scrollYProgress, [0, 0.7, 0.9], [1, 1, 0]);
   const textScale = useTransform(scrollYProgress, [0, 0.9], [1, 0.8]);
 
   return (
     <main className="relative bg-black">
-      {/* NAVBAR */}
       <nav className="fixed top-0 w-full z-[100] bg-black/20 backdrop-blur-md border-b border-white/10 px-6 py-4 flex justify-between items-center font-[family-name:var(--font-outfit)]">
         <div className="text-2xl font-black text-white tracking-tighter italic">GURUBANTU</div>
         <button onClick={() => setIsOpen(!isOpen)} className="md:hidden z-[101] p-2">
@@ -56,33 +53,23 @@ export default function Home() {
         <div className="hidden md:flex gap-8 font-bold text-xs uppercase tracking-widest text-white/70">
           <a href="#visi" className="hover:text-blue-400 transition">Visi</a>
           <a href="#produk" className="hover:text-blue-400 transition">Produk</a>
-          <a href="#kontak" className="bg-blue-600 text-white px-6 py-2 rounded-full shadow-lg shadow-blue-500/20 border border-blue-400/30">Hubungi Kami</a>
+          <a href="#kontak" className="bg-blue-600 text-white px-6 py-2 rounded-full shadow-lg shadow-blue-500/20">Hubungi Kami</a>
         </div>
       </nav>
 
-      {/* MOBILE MENU */}
-      <div className={`fixed inset-0 bg-blue-900 z-[90] flex flex-col items-center justify-center gap-8 text-white text-3xl font-bold transition-all duration-500 font-[family-name:var(--font-outfit)] ${isOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}>
-        <a href="#visi" onClick={() => setIsOpen(false)}>VISI</a>
-        <a href="#produk" onClick={() => setIsOpen(false)}>PRODUK</a>
-        <a href="#kontak" onClick={() => setIsOpen(false)}>KONTAK</a>
-      </div>
-
-      {/* HERO SECTION: IMAGE SEQUENCE (192 FRAMES) */}
-      {/* Tinggi h-[800vh] agar scroll 192 foto terasa halus */}
       <section ref={containerRef} className="relative h-[800vh] bg-black">
         <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
           
-          {/* Render Gambar Format Ezgif (001, 002, ... 192) */}
+          {/* PATH DISESUAIKAN: Langsung ke root folder public */}
           <img
-            src={`/sequence/ezgif-frame-${currentFrame.toString().padStart(3, '0')}.jpg`}
-            alt="Cinematic Sequence"
-            className="absolute inset-0 w-full h-full object-cover opacity-60 scale-100"
+            key={currentFrame}
+            src={`/ezgif-frame-${currentFrame.toString().padStart(3, '0')}.jpg`}
+            alt="Sequence"
+            className="absolute inset-0 w-full h-full object-cover opacity-60"
           />
 
-          {/* Vignette Overlay */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black" />
 
-          {/* Teks Cinematic */}
           <motion.div 
             style={{ opacity: textOpacity, scale: textScale }}
             className="relative z-10 text-center px-4 font-[family-name:var(--font-outfit)]"
@@ -95,7 +82,6 @@ export default function Home() {
             </p>
           </motion.div>
 
-          {/* Scroll Indicator */}
           <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-40">
             <div className="w-[1px] h-24 bg-gradient-to-b from-blue-500 to-transparent" />
             <span className="text-[10px] text-white tracking-[1em] uppercase rotate-90 origin-left ml-2 font-bold">Scroll</span>
@@ -103,68 +89,42 @@ export default function Home() {
         </div>
       </section>
 
-      {/* WRAPPER KONTEN PUTIH */}
-      <div className="relative z-20 bg-white shadow-[0_-50px_100px_rgba(0,0,0,0.5)]">
-        
-        {/* VISI & MISI */}
+      {/* KONTEN PUTIH */}
+      <div className="relative z-20 bg-white">
         <section id="visi" className="py-40 px-6 max-w-6xl mx-auto font-[family-name:var(--font-outfit)]">
-          <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="flex flex-col md:flex-row items-center gap-16">
+          <div className="flex flex-col md:flex-row items-center gap-16">
             <div className="md:w-1/2">
               <h2 className="text-6xl font-black text-blue-900 mb-8 italic uppercase tracking-tighter leading-none">Visi Kami</h2>
-              <p className="text-2xl text-slate-600 leading-relaxed font-light">Menjadi mitra utama guru Indonesia dalam digitalisasi pendidikan, menghapus hambatan administrasi untuk menciptakan generasi cerdas.</p>
+              <p className="text-2xl text-slate-600 leading-relaxed font-light">Menjadi mitra utama guru Indonesia dalam digitalisasi pendidikan.</p>
             </div>
-            <div className="md:w-1/2 bg-blue-50 rounded-[4rem] p-6 rotate-3 shadow-2xl overflow-hidden border border-blue-100">
-              <img src="/img-guru-1.jpg" className="rounded-[3rem] -rotate-3 hover:rotate-0 transition-transform duration-1000 w-full h-[500px] object-cover" alt="Guru" />
+            <div className="md:w-1/2 bg-blue-50 rounded-[4rem] p-6 shadow-2xl">
+              <div className="w-full h-[500px] bg-slate-200 rounded-[3rem] animate-pulse flex items-center justify-center text-slate-400 italic">Foto Guru</div>
             </div>
-          </motion.div>
+          </div>
         </section>
 
         {/* PRODUK SECTION */}
         <section id="produk" className="py-40 px-6 bg-slate-50 font-[family-name:var(--font-outfit)]">
           <div className="max-w-7xl mx-auto space-y-40">
-            {/* SOAL AI */}
             <div className="flex flex-col md:flex-row items-center gap-20">
-              <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} className="md:w-1/2">
+              <div className="md:w-1/2">
                 <div className="bg-white p-16 rounded-[4rem] shadow-2xl border border-blue-50">
                   <span className="text-7xl mb-8 block">⚡</span>
-                  <h3 className="text-5xl font-black text-blue-900 mb-6 uppercase italic tracking-tighter">Soal AI</h3>
-                  <p className="text-slate-500 text-xl mb-6">Buat bank soal berkualitas tinggi dari materi apa pun dalam hitungan detik.</p>
+                  <h3 className="text-5xl font-black text-blue-900 mb-6 uppercase italic">Soal AI</h3>
+                  <p className="text-slate-500 text-xl mb-6">Buat bank soal dalam hitungan detik.</p>
                   <PlayStoreButton link="https://play.google.com/store/apps/details?id=com.soalai.app" />
                 </div>
-              </motion.div>
-              <div className="md:w-1/2">
-                <img src="/preview-soal.png" className="rounded-[4rem] shadow-2xl border-[12px] border-white w-full" alt="Preview Soal AI" />
               </div>
-            </div>
-
-            {/* JAWABAN AI */}
-            <div className="flex flex-col md:flex-row-reverse items-center gap-20">
-              <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} className="md:w-1/2">
-                <div className="bg-slate-950 text-white p-16 rounded-[4rem] shadow-2xl">
-                  <span className="text-7xl mb-8 block">🧠</span>
-                  <h3 className="text-5xl font-black text-blue-400 mb-6 uppercase italic tracking-tighter">Jawaban AI</h3>
-                  <p className="text-slate-400 text-xl mb-6">Koreksi otomatis yang akurat dengan umpan balik personal untuk setiap siswa.</p>
-                  <PlayStoreButton link="https://play.google.com/store/apps/details?id=com.jawabanai.app" />
-                </div>
-              </motion.div>
-              <div className="md:w-1/2">
-                <img src="/preview-jawaban.png" className="rounded-[4rem] shadow-2xl border-[12px] border-slate-900 w-full" alt="Preview Jawaban AI" />
-              </div>
+              <div className="md:w-1/2 bg-slate-200 h-[400px] rounded-[4rem] animate-pulse" />
             </div>
           </div>
         </section>
 
-        {/* KONTAK */}
         <section id="kontak" className="py-40 px-6 max-w-4xl mx-auto text-center font-[family-name:var(--font-outfit)]">
           <h2 className="text-7xl font-black text-slate-950 mb-16 uppercase italic tracking-tighter leading-none">Siap Bergabung?</h2>
-          <div className="bg-white p-12 md:p-20 rounded-[4rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.1)] border border-slate-100 text-left">
-            <p className="text-blue-600 font-bold text-sm mb-6 uppercase tracking-[0.4em]">Hubungi Kami</p>
-            <p className="text-3xl md:text-5xl font-black mb-2 text-slate-900 tracking-tight">+62 822 4040 0388</p>
-            <p className="text-xl md:text-3xl font-medium mb-12 text-slate-400 italic">GuruBantuGuru@gmail.com</p>
-            <button className="w-full bg-blue-600 text-white py-8 rounded-3xl font-black text-xl hover:bg-blue-700 shadow-2xl shadow-blue-500/40 transition-all uppercase tracking-widest">
-              Kirim Pesan via WA
-            </button>
-          </div>
+          <button className="w-full bg-blue-600 text-white py-8 rounded-3xl font-black text-xl hover:bg-blue-700 shadow-2xl shadow-blue-500/40 uppercase">
+            Kirim Pesan via WA
+          </button>
         </section>
 
         <footer className="py-16 text-center text-[10px] font-black tracking-[0.6em] text-slate-300 uppercase border-t font-[family-name:var(--font-outfit)]">
