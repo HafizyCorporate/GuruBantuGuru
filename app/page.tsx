@@ -42,7 +42,7 @@ export default function Home() {
     }
   }, []);
 
-  // Render Canvas Full Screen (Anti Black Bar)
+  // Logika Render Full Screen (Anti Black Bar)
   useEffect(() => {
     if (!isLoaded || !canvasRef.current) return;
     const context = canvasRef.current.getContext("2d");
@@ -59,6 +59,7 @@ export default function Home() {
 
         let drawWidth, drawHeight, offsetX, offsetY;
 
+        // Logika Cover agar Full Layar
         if (imgRatio > canvasRatio) {
           drawHeight = canvas.height;
           drawWidth = canvas.height * imgRatio;
@@ -82,65 +83,67 @@ export default function Home() {
   }, [isLoaded, images, frameIndex]);
 
   return (
-    <main className="relative bg-black font-[family-name:var(--font-outfit)]">
-      {/* LOADING SCREEN (Sesuai gaya visual aplikasi) */}
+    // Berubah menjadi bg-white (Latar Terang)
+    <main className="relative bg-white font-[family-name:var(--font-outfit)]">
+      
+      {/* LOADING SCREEN TERANG */}
       {!isLoaded && (
-        <div className="fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center text-white">
-          <div className="text-3xl font-black italic mb-6 tracking-tighter uppercase text-blue-400">GuruBantu</div>
-          <div className="w-64 h-[2px] bg-white/10 rounded-full overflow-hidden">
-            <div className="h-full bg-blue-500 transition-all duration-300" style={{ width: `${progress}%` }} />
+        <div className="fixed inset-0 z-[200] bg-white flex flex-col items-center justify-center text-blue-600">
+          <div className="text-3xl font-black italic mb-6 tracking-tighter uppercase">GuruBantu</div>
+          <div className="w-64 h-[2px] bg-blue-100 rounded-full overflow-hidden">
+            <div className="h-full bg-blue-600 transition-all duration-300" style={{ width: `${progress}%` }} />
           </div>
-          <span className="mt-4 text-[10px] tracking-[0.5em] opacity-40 uppercase font-bold">Inisialisasi {progress}%</span>
+          <span className="mt-4 text-[10px] tracking-[0.5em] opacity-60 uppercase font-bold">Memuat {progress}%</span>
         </div>
       )}
 
-      {/* NAVBAR TRANSPARAN (GAYA GOLDA) */}
-      <nav className="fixed top-0 w-full z-[100] px-6 py-8 flex justify-between items-center mix-blend-difference">
-        <div className="text-2xl font-black text-blue-400 tracking-tighter uppercase italic">
+      {/* NAVBAR BIRU - PUTIH */}
+      <nav className="fixed top-0 w-full z-[100] px-6 py-8 flex justify-between items-center">
+        <div className="text-2xl font-black text-blue-600 tracking-tighter uppercase italic drop-shadow-sm">
           GuruBantu
         </div>
         <button className="flex flex-col gap-1.5 p-2 group">
-          <div className="w-8 h-[2px] bg-white group-hover:bg-blue-400 transition-colors" />
-          <div className="w-8 h-[2px] bg-white group-hover:bg-blue-400 transition-colors" />
-          <div className="w-5 h-[2px] bg-white group-hover:bg-blue-400 transition-colors self-end" />
+          <div className="w-8 h-[2px] bg-blue-600" />
+          <div className="w-8 h-[2px] bg-blue-600" />
+          <div className="w-5 h-[2px] bg-blue-600 self-end" />
         </button>
       </nav>
 
       {/* HERO SECTION */}
-      <section ref={containerRef} className="relative h-[1500vh] bg-black">
+      <section ref={containerRef} className="relative h-[1500vh] bg-white">
         <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
           
-          {/* Canvas: Full Layar Langsung dari Awal */}
+          {/* Canvas Full Screen */}
           <motion.canvas
             ref={canvasRef}
             style={{ opacity: canvasOpacity }}
             className="absolute inset-0 w-full h-full"
           />
 
-          {/* Overlay Tipis */}
-          <div className="absolute inset-0 bg-black/10" />
+          {/* Overlay Putih Transparan (Agar gambar terlihat lebih terang/bersih) */}
+          <div className="absolute inset-0 bg-white/10" />
 
-          {/* TEKS ZOOM: Muncul Hanya Setelah Frame Terakhir Selesai */}
+          {/* TEKS ZOOM: Muncul setelah frame selesai */}
           <motion.div 
             style={{ scale: textScale, opacity: textOpacity }}
             className="relative z-10 pointer-events-none"
           >
-            <h1 className="text-6xl md:text-[140px] font-black text-white leading-none uppercase tracking-tighter text-center italic drop-shadow-2xl">
+            <h1 className="text-6xl md:text-[140px] font-black text-blue-600 leading-none uppercase tracking-tighter text-center italic drop-shadow-xl">
               GURU BANTU <br /> GURU
             </h1>
           </motion.div>
         </div>
       </section>
 
-      {/* SEKSI BERIKUTNYA */}
-      <div className="relative z-20 bg-black text-white">
+      {/* KONTEN BERIKUTNYA */}
+      <div className="relative z-20 bg-white text-blue-900">
         <section className="py-60 px-6 max-w-5xl mx-auto text-center">
           <motion.span 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             className="text-blue-500 font-bold tracking-[0.6em] uppercase text-xs block mb-12"
           >
-            Visi Kami
+            Misi Kami
           </motion.span>
           <motion.p 
             initial={{ opacity: 0, y: 40 }}
@@ -148,8 +151,8 @@ export default function Home() {
             transition={{ duration: 1.2 }}
             className="text-4xl md:text-7xl font-light leading-none tracking-tighter"
           >
-            Memberdayakan <br /> 
-            <span className="text-blue-500 font-bold italic">Pendidikan Indonesia.</span>
+            Digitalisasi Pendidikan <br /> 
+            <span className="text-blue-600 font-bold italic">Tanpa Batas.</span>
           </motion.p>
         </section>
       </div>
