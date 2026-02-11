@@ -11,7 +11,6 @@ export default function Home() {
 
   const totalFrames = 194;
   
-  // Kita buat durasi scroll canvas 500vh
   const { scrollYProgress } = useScroll({ 
     target: containerRef, 
     offset: ["start start", "end end"] 
@@ -19,7 +18,6 @@ export default function Home() {
 
   const frameIndex = useTransform(scrollYProgress, [0, 1], [0, totalFrames - 1]);
 
-  // Opacity teks canvas
   const text1Opacity = useTransform(scrollYProgress, [0, 0.1, 0.2], [1, 1, 0]);
   const text2Opacity = useTransform(scrollYProgress, [0.35, 0.5, 0.6], [0, 1, 0]);
   const text3Opacity = useTransform(scrollYProgress, [0.75, 0.85, 0.95], [0, 1, 0]);
@@ -62,10 +60,11 @@ export default function Home() {
     return () => unsubscribe();
   }, [images, frameIndex]);
 
-  const hollowTextStyle = {
-    WebkitTextStroke: "1px white",
-    color: "black",
-    textShadow: "0 0 12px rgba(255,255,255,0.6)",
+  // SETTINGAN OPACITY TEXT SHADOW (KOLOM TULISAN) YANG TIPIS
+  const subtleTextStyle = {
+    WebkitTextStroke: "0.5px rgba(255,255,255,0.3)", // Garis pinggir sangat tipis & transparan
+    color: "white", // Warna teks utama putih agar clean
+    textShadow: "0 0 8px rgba(0,0,0,0.2)", // Shadow hitam sangat tipis biar gak "tebal"
   };
 
   return (
@@ -74,31 +73,29 @@ export default function Home() {
         html, body { background-color: black; margin: 0; padding: 0; }
       `}</style>
 
-      {/* CONTAINER SCROLL UNTUK CANVAS */}
+      {/* CONTAINER CANVAS */}
       <div ref={containerRef} className="relative h-[600vh] w-full">
-        
-        {/* CANVAS: Pakai FIXED biar dia Full Screen 100% dan GAK GERAK ke atas */}
         <div className="fixed top-0 left-0 w-full h-screen z-0 overflow-hidden">
           <canvas ref={canvasRef} className="w-full h-full object-cover" />
           
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-4 pointer-events-none">
             <motion.div style={{ opacity: text1Opacity }} className="absolute flex flex-col items-center w-full">
-              <h1 className="text-[2.6rem] md:text-8xl font-black italic tracking-tighter leading-[0.85] uppercase" style={hollowTextStyle}>
+              <h1 className="text-[2.6rem] md:text-8xl font-black italic tracking-tighter leading-[0.85] uppercase" style={subtleTextStyle}>
                 GURUBANTUGURU
               </h1>
-              <p className="font-bold tracking-[0.4em] uppercase text-[9px] md:text-xs mt-4 text-white mix-blend-difference">
+              <p className="font-bold tracking-[0.4em] uppercase text-[9px] md:text-xs mt-4 text-white/80">
                 Asisten AI Untuk Para Guru Indonesia
               </p>
             </motion.div>
 
             <motion.div style={{ opacity: text2Opacity }} className="absolute w-full px-6">
-              <h2 className="text-3xl md:text-7xl font-black italic uppercase leading-none tracking-tighter" style={hollowTextStyle}>
+              <h2 className="text-3xl md:text-7xl font-black italic uppercase leading-none tracking-tighter" style={subtleTextStyle}>
                 Merubah Kebiasaan <br/> Yang Lama
               </h2>
             </motion.div>
 
             <motion.div style={{ opacity: text3Opacity }} className="absolute w-full px-6">
-              <h2 className="text-3xl md:text-7xl font-black italic uppercase leading-none tracking-tighter" style={hollowTextStyle}>
+              <h2 className="text-3xl md:text-7xl font-black italic uppercase leading-none tracking-tighter" style={subtleTextStyle}>
                 Menjadi Lebih Modern <br/> Dan Efisien
               </h2>
             </motion.div>
@@ -106,8 +103,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* OUR STORY: Baru muncul SETELAH 600vh (setelah canvas habis scroll) */}
-      {/* Pakai z-20 dan bg-white biar dia MENUMPUK/KETIBAN canvas di bawahnya */}
+      {/* OUR STORY: Menutup Canvas di akhir scroll */}
       <section className="relative z-20 w-full bg-white">
         <div className="min-h-screen w-full flex flex-col items-center justify-center px-6 py-32 bg-gradient-to-b from-white via-white to-blue-50">
           <div className="max-w-4xl w-full text-center">
