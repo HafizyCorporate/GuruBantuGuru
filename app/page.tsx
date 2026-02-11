@@ -181,16 +181,13 @@ export default function Home() {
                    {/* SLIDER FOTO SOAL AI */}
                    <div className="flex gap-4 overflow-x-auto pb-4 snap-x scrollbar-hide">
                       <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-100 rounded-xl snap-center overflow-hidden border">
-                        <img src="/1000408464.jpg" alt="Login Page" className="w-full h-full object-cover" />
+                        <img src="/soal-ai-1.jpg" alt="Soal AI 1" className="w-full h-full object-cover" />
                       </div>
                       <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-100 rounded-xl snap-center overflow-hidden border">
-                        <img src="/1000408465.jpg" alt="Login Success" className="w-full h-full object-cover" />
+                        <img src="/soal-ai-2.jpg" alt="Soal AI 2" className="w-full h-full object-cover" />
                       </div>
                       <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-100 rounded-xl snap-center overflow-hidden border">
-                        <img src="/1000408466.jpg" alt="Dashboard" className="w-full h-full object-cover" />
-                      </div>
-                      <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-100 rounded-xl snap-center overflow-hidden border">
-                        <img src="/1000408467.jpg" alt="Create Question" className="w-full h-full object-cover" />
+                        <img src="/soal-ai-3.jpg" alt="Soal AI 3" className="w-full h-full object-cover" />
                       </div>
                    </div>
                 </div>
@@ -211,11 +208,13 @@ export default function Home() {
                    {/* SLIDER FOTO JAWABAN AI */}
                    <div className="flex gap-4 overflow-x-auto pb-4 snap-x scrollbar-hide">
                       <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-800 rounded-xl snap-center overflow-hidden border border-white/10">
-                        <img src="/1000408454.jpg" alt="Jawaban AI Banner" className="w-full h-full object-cover" />
+                        <img src="/jawaban-ai-1.jpg" alt="Jawaban AI 1" className="w-full h-full object-cover" />
                       </div>
-                      {/* Tambahkan foto jawaban ai lainnya di sini jika ada */}
-                      <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-800 rounded-xl snap-center flex items-center justify-center text-gray-500 border border-white/10">
-                        Proses Koreksi Otomatis
+                      <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-800 rounded-xl snap-center overflow-hidden border border-white/10">
+                        <img src="/jawaban-ai-2.jpg" alt="Jawaban AI 2" className="w-full h-full object-cover" />
+                      </div>
+                      <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-800 rounded-xl snap-center overflow-hidden border border-white/10">
+                        <img src="/jawaban-ai-3.jpg" alt="Jawaban AI 3" className="w-full h-full object-cover" />
                       </div>
                    </div>
                 </div>
