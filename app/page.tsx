@@ -20,12 +20,14 @@ export default function Home() {
 
   const frameIndex = useTransform(scrollYProgress, [0, 1], [0, totalFrames - 1]);
 
-  // --- LOGIKA TEKS CANVAS (BARU) ---
+  // --- LOGIKA TEKS CANVAS & SCROLL REVEAL (UPDATED) ---
   const text1Opacity = useTransform(scrollYProgress, [0, 0.1, 0.2], [1, 1, 0]);
   const text2Opacity = useTransform(scrollYProgress, [0.3, 0.4, 0.5, 0.6], [0, 1, 1, 0]);
-  const text3Opacity = useTransform(scrollYProgress, [0.7, 0.8, 0.85], [0, 1, 0]);
-  const contentY = useTransform(scrollYProgress, [0.85, 1], ["100vh", "0vh"]);
-  // --------------------------------
+  const text3Opacity = useTransform(scrollYProgress, [0.7, 0.85, 0.95], [0, 1, 0]);
+  
+  // Durasi diubah ke 0.95 agar konten baru naik di akhir canvas
+  const contentY = useTransform(scrollYProgress, [0.95, 1], ["100vh", "0vh"]);
+  // ----------------------------------------------------
 
   useEffect(() => {
     const loadedImages: HTMLImageElement[] = [];
@@ -114,22 +116,21 @@ export default function Home() {
         <div className="sticky top-0 h-screen w-full overflow-hidden">
           <canvas ref={canvasRef} className="w-full h-full object-cover" />
           
-          {/* OVERLAY TEKS PADA CANVAS */}
+          {/* OVERLAY TEKS PADA CANVAS - UKURAN DIKECILKAN */}
           <div className="absolute inset-0 flex items-center justify-center text-center px-6 pointer-events-none">
             <motion.div style={{ opacity: text1Opacity }} className="absolute">
-              <h2 className="text-5xl md:text-8xl font-black italic text-white tracking-tighter leading-none">GURUBANTUGURU</h2>
-              <p className="text-blue-400 font-bold tracking-[0.3em] uppercase text-xs md:text-sm mt-4">Asisten AI Untuk Para Guru Indonesia</p>
+              <h2 className="text-4xl md:text-6xl font-black italic text-white tracking-tighter leading-none">GURUBANTUGURU</h2>
+              <p className="text-blue-400 font-bold tracking-[0.3em] uppercase text-[10px] md:text-xs mt-4">Asisten AI Untuk Para Guru Indonesia</p>
             </motion.div>
 
             <motion.div style={{ opacity: text2Opacity }} className="absolute">
-              <h2 className="text-4xl md:text-7xl font-black italic text-white tracking-tighter leading-none uppercase">Merubah Kebiasaan <br/> Yang Lama</h2>
+              <h2 className="text-3xl md:text-5xl font-black italic text-white tracking-tighter leading-none uppercase">Merubah Kebiasaan <br/> Yang Lama</h2>
             </motion.div>
 
             <motion.div style={{ opacity: text3Opacity }} className="absolute">
-              <h2 className="text-4xl md:text-7xl font-black italic text-white tracking-tighter leading-none uppercase">Menjadi Lebih Modern <br/> Dan Efisien</h2>
+              <h2 className="text-3xl md:text-5xl font-black italic text-white tracking-tighter leading-none uppercase">Menjadi Lebih Modern <br/> Dan Efisien</h2>
             </motion.div>
           </div>
-          {/* Overlay gelap tipis agar teks lebih terbaca */}
           <div className="absolute inset-0 bg-black/10 pointer-events-none" />
         </div>
 
