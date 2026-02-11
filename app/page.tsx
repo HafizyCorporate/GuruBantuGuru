@@ -1,4 +1,4 @@
-  "use client";
+"use client";
 
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
@@ -24,23 +24,25 @@ export default function Home() {
   const text2Opacity = useTransform(scrollYProgress, [0.4, 0.55, 0.7], [0, 1, 0]);
   const text3Opacity = useTransform(scrollYProgress, [0.8, 0.95, 1], [0, 1, 1]);
 
-  // LOGIKA PENGUNCI SCROLL
+  // LOGIKA LOCK SCROLL: User tidak bisa gerak sampai isLoaded = true
   useEffect(() => {
     if (!isLoaded) {
-      // Kunci scroll: paksa posisi di paling atas dan hilangkan scrollbar
       document.body.style.overflow = "hidden";
       window.scrollTo(0, 0);
     } else {
-      // Buka kunci scroll setelah loading selesai
       document.body.style.overflow = "unset";
     }
-    // Cleanup saat komponen unmount
     return () => { document.body.style.overflow = "unset"; };
   }, [isLoaded]);
 
   useEffect(() => {
     const loadedImages: HTMLImageElement[] = [];
     let count = 0;
+    
+    // Load frame pertama dulu supaya langsung tampil tanpa nunggu yang lain
+    const firstImg = new Image();
+    firstImg.src = `/ezgif-frame-001.jpg`;
+    
     for (let i = 1; i <= totalFrames; i++) {
       const img = new Image();
       img.src = `/ezgif-frame-${i.toString().padStart(3, '0')}.jpg`;
@@ -57,16 +59,12 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (!isLoaded || !canvasRef.current) return;
-    const context = canvasRef.current.getContext("2d", { alpha: false });
-    let lastFrame = -1;
-
-    const render = (val: number) => {
-      const currentIndex = Math.floor(val);
-      if (currentIndex === lastFrame) return;
-      
-      const img = images[currentIndex];
-      if (img && context) {
+    // Render tetap jalan meskipun belum 100% supaya frame awal kelihatan
+    const context = canvasRef.current?.getContext("2d", { alpha: false });
+    
+    const render = (index: number) => {
+      const img = images[Math.floor(index)];
+      if (img && img.complete && context) {
         const canvas = canvasRef.current!;
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -74,16 +72,18 @@ export default function Home() {
         const x = (canvas.width / 2) - (img.width / 2) * scale;
         const y = (canvas.height / 2) - (img.height / 2) * scale;
         context.drawImage(img, x, y, img.width * scale, img.height * scale);
-        lastFrame = currentIndex;
       }
     };
+
+    // Jalankan render awal untuk frame 0
+    if (images[0]) render(0);
 
     const unsubscribe = frameIndex.on("change", (latest) => {
       requestAnimationFrame(() => render(latest));
     });
 
     return () => unsubscribe();
-  }, [isLoaded, images, frameIndex]);
+  }, [images, isLoaded]);
 
   return (
     <main className="bg-white">
@@ -98,45 +98,44 @@ export default function Home() {
 
       <section ref={containerRef} className="relative h-[600vh]">
         <div className="sticky top-0 h-screen w-full overflow-hidden bg-white">
+          {/* Canvas langsung tampil */}
           <canvas ref={canvasRef} className="w-full h-full object-cover" />
           
           <div className="absolute inset-0 flex items-center justify-center text-center px-6 pointer-events-none">
-            
             <motion.div style={{ opacity: text1Opacity }} className="absolute">
-              <h2 className="text-5xl md:text-7xl font-black italic text-black tracking-tighter leading-none drop-shadow-[0_2px_5px_rgba(255,255,255,0.8)]">
+              <h2 className="text-5xl md:text-7xl font-black italic text-black tracking-tighter leading-none drop-shadow-[0_2px_10px_rgba(255,255,255,0.8)]">
                 GURUBANTUGURU
               </h2>
-              <p className="text-black/80 font-bold tracking-[0.3em] uppercase text-[10px] md:text-xs mt-4 drop-shadow-[0_1px_3px_rgba(255,255,255,0.8)]">
+              <p className="text-black font-bold tracking-[0.3em] uppercase text-[10px] md:text-xs mt-4 drop-shadow-[0_1px_5px_rgba(255,255,255,0.8)]">
                 Asisten AI Untuk Para Guru Indonesia
               </p>
 
-              {/* Ikon loading di bawah teks judul */}
+              {/* Ikon Loading hanya muncul di bawah teks tanpa nutupin canvas */}
               <AnimatePresence>
                 {!isLoaded && (
                   <motion.div 
-                    exit={{ opacity: 0, scale: 0.8 }}
+                    exit={{ opacity: 0 }}
                     className="mt-8 flex flex-col items-center gap-2"
                   >
-                    <div className="w-6 h-6 border-2 border-black/10 border-t-black rounded-full animate-spin"></div>
+                    <div className="w-6 h-6 border-2 border-black/20 border-t-black rounded-full animate-spin"></div>
                     <span className="text-[10px] font-black text-black tracking-widest">{progress}%</span>
-                    <p className="text-[8px] font-bold text-black/40 uppercase tracking-tighter">Sabar, lagi nyiapin aset...</p>
+                    <p className="text-[8px] font-bold text-black/50 uppercase">Menyiapkan Pengalaman...</p>
                   </motion.div>
                 )}
               </AnimatePresence>
             </motion.div>
 
-            <motion.div style={{ opacity: text2Opacity }} className="absolute">
-              <h2 className="text-4xl md:text-6xl font-black italic text-black uppercase leading-none tracking-tighter drop-shadow-[0_2px_5px_rgba(255,255,255,0.8)]">
+            <motion.div style={{ opacity: text2Opacity }} className="absolute drop-shadow-[0_2px_10px_rgba(255,255,255,0.8)]">
+              <h2 className="text-4xl md:text-6xl font-black italic text-black uppercase leading-none tracking-tighter">
                 Merubah Kebiasaan <br/> Yang Lama
               </h2>
             </motion.div>
 
-            <motion.div style={{ opacity: text3Opacity }} className="absolute">
-              <h2 className="text-4xl md:text-6xl font-black italic text-black uppercase leading-none tracking-tighter drop-shadow-[0_2px_5px_rgba(255,255,255,0.8)]">
+            <motion.div style={{ opacity: text3Opacity }} className="absolute drop-shadow-[0_2px_10px_rgba(255,255,255,0.8)]">
+              <h2 className="text-4xl md:text-6xl font-black italic text-black uppercase leading-none tracking-tighter">
                 Menjadi Lebih Modern <br/> Dan Efisien
               </h2>
             </motion.div>
-
           </div>
         </div>
       </section>
