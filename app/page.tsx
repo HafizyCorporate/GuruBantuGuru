@@ -110,6 +110,22 @@ export default function Home() {
       </AnimatePresence>
 
       <div className={isLoaded ? "block" : "hidden"}>
+        
+        {/* HEADER BARU: GURUBANTUGURU (Kiri) & Hamburger (Kanan) */}
+        <nav className="fixed top-0 w-full z-[100] px-6 py-8 flex justify-between items-center">
+          <div className="text-2xl font-black italic tracking-tighter uppercase leading-none">
+            <span className="text-blue-600">GURU</span>
+            <span className="text-white drop-shadow-[0_0_10px_rgba(0,0,0,0.5)]">BANTU</span>
+            <span className="text-blue-600">GURU</span>
+          </div>
+
+          <button className="flex flex-col gap-1.5 p-2 mix-blend-difference">
+            <div className="w-8 h-[2.5px] bg-white rounded-full" />
+            <div className="w-8 h-[2.5px] bg-white rounded-full" />
+            <div className="w-5 h-[2.5px] bg-white rounded-full self-end" />
+          </button>
+        </nav>
+
         {/* CONTAINER UTAMA (Scroll Panjang) */}
         <section ref={containerRef} className="relative h-[1200vh]">
           {/* STICKY CANVAS: Gambar diam di tempat, Frame berubah sesuai jempol user */}
