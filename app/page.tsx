@@ -19,32 +19,29 @@ export default function Home() {
 
   const frameIndex = useTransform(scrollYProgress, [0, 1], [0, totalFrames - 1]);
 
-  const text1Opacity = useTransform(scrollYProgress, [0, 0.1, 0.25], [1, 1, 0]);
-  const text2Opacity = useTransform(scrollYProgress, [0.35, 0.5, 0.65], [0, 1, 0]);
+  const text1Opacity = useTransform(scrollYProgress, [0, 0.1, 0.2], [1, 1, 0]);
+  const text2Opacity = useTransform(scrollYProgress, [0.35, 0.5, 0.6], [0, 1, 0]);
   const text3Opacity = useTransform(scrollYProgress, [0.75, 0.9, 1], [0, 1, 1]);
 
   useEffect(() => {
-    // Bunuh background sistem instan
+    // Bunuh flicker putih/hitam di level sistem
     document.documentElement.style.background = "transparent";
     document.body.style.background = "transparent";
     
     const loadedImages: HTMLImageElement[] = [];
     let count = 0;
 
-    // 1. AMBIL FRAME PERTAMA SECEPAT KILAT
+    // Load Frame 1 Instan
     const firstImg = new Image();
     firstImg.src = `/ezgif-frame-001.jpg`;
     firstImg.onload = () => {
       if (canvasRef.current) {
         const ctx = canvasRef.current.getContext("2d", { alpha: false });
-        if (ctx) {
-            ctx.imageSmoothingEnabled = false; // Speed up
-            draw(firstImg, ctx, canvasRef.current);
-        }
+        if (ctx) draw(firstImg, ctx, canvasRef.current);
       }
     };
 
-    // 2. LOAD SISANYA SECARA ASYNC
+    // Async Load sisanya
     for (let i = 1; i <= totalFrames; i++) {
       const img = new Image();
       img.src = `/ezgif-frame-${i.toString().padStart(3, '0')}.jpg`;
@@ -76,28 +73,26 @@ export default function Home() {
     
     const unsubscribe = frameIndex.on("change", (latest) => {
       const img = images[Math.floor(latest)];
-      if (img) {
-        requestAnimationFrame(() => draw(img, context, canvasRef.current!));
-      }
+      if (img) requestAnimationFrame(() => draw(img, context, canvasRef.current!));
     });
     return () => unsubscribe();
   }, [images]);
 
-  // Style Teks: Glow diringankan biar render lebih enteng
-  const textStyle = {
-    filter: "drop-shadow(0 0 8px rgba(255,255,255,0.9))",
-    color: "black"
+  // JURUS BIAR TEKS KELIHATAN: Garis pinggir (Stroke) + Shadow
+  const hollowTextStyle = {
+    WebkitTextStroke: "1px white",
+    color: "black",
+    textShadow: "0 0 10px rgba(255,255,255,0.5)",
   };
 
   return (
-    <main className="relative">
+    <main className="relative bg-transparent">
       <style jsx global>{`
-        html, body { background: transparent !important; margin: 0; padding: 0; }
-        canvas { background: transparent; }
+        html, body { background: transparent !important; margin: 0; padding: 0; overflow-x: hidden; }
       `}</style>
 
-      <nav className="fixed top-0 w-full z-50 px-6 py-6 flex justify-between items-center mix-blend-difference">
-        <div className="text-lg font-black text-white italic tracking-tighter uppercase">
+      <nav className="fixed top-0 w-full z-50 px-6 py-8 flex justify-between items-center mix-blend-difference">
+        <div className="text-sm font-black text-white italic tracking-tighter uppercase">
           GURU BANTU GURU
         </div>
       </nav>
@@ -106,32 +101,37 @@ export default function Home() {
         <div className="sticky top-0 h-screen w-full overflow-hidden">
           <canvas ref={canvasRef} className="absolute inset-0 w-full h-full object-cover" />
           
-          <div className="relative z-10 h-full w-full flex flex-col items-center justify-center text-center px-6 pointer-events-none">
+          <div className="relative z-10 h-full w-full flex flex-col items-center justify-center text-center px-4 pointer-events-none">
             
-            <motion.div style={{ opacity: text1Opacity, ...textStyle }} className="absolute flex flex-col items-center">
-              <h1 className="text-5xl md:text-8xl font-black italic tracking-tighter leading-[0.85] uppercase">
+            {/* TEXT 1 - UKURAN DI-ADJUST BIAR PAS DI HP */}
+            <motion.div style={{ opacity: text1Opacity }} className="absolute flex flex-col items-center w-full">
+              <h1 className="text-[2.6rem] md:text-8xl font-black italic tracking-tighter leading-[0.85] uppercase" style={hollowTextStyle}>
                 GURUBANTUGURU
               </h1>
-              <p className="font-bold tracking-[0.3em] uppercase text-[10px] md:text-xs mt-4">
+              <p className="font-bold tracking-[0.4em] uppercase text-[9px] md:text-xs mt-4 text-white mix-blend-difference">
                 Asisten AI Untuk Para Guru Indonesia
               </p>
 
-              {/* Progress tipis aja biar gak berat */}
               {!isLoaded && (
-                <div className="mt-6 opacity-40">
-                  <span className="text-[10px] font-bold">{progress}%</span>
+                <div className="mt-10 flex flex-col items-center">
+                  <span className="text-[10px] font-black text-white mix-blend-difference">{progress}%</span>
+                  <div className="w-20 h-[1px] bg-white/30 mt-1">
+                    <motion.div className="h-full bg-white" animate={{ width: `${progress}%` }} />
+                  </div>
                 </div>
               )}
             </motion.div>
 
-            <motion.div style={{ opacity: text2Opacity, ...textStyle }} className="absolute">
-              <h2 className="text-4xl md:text-7xl font-black italic uppercase leading-none tracking-tighter">
+            {/* TEXT 2 */}
+            <motion.div style={{ opacity: text2Opacity }} className="absolute w-full px-6">
+              <h2 className="text-3xl md:text-7xl font-black italic uppercase leading-none tracking-tighter" style={hollowTextStyle}>
                 Merubah Kebiasaan <br/> Yang Lama
               </h2>
             </motion.div>
 
-            <motion.div style={{ opacity: text3Opacity, ...textStyle }} className="absolute">
-              <h2 className="text-4xl md:text-7xl font-black italic uppercase leading-none tracking-tighter">
+            {/* TEXT 3 */}
+            <motion.div style={{ opacity: text3Opacity }} className="absolute w-full px-6">
+              <h2 className="text-3xl md:text-7xl font-black italic uppercase leading-none tracking-tighter" style={hollowTextStyle}>
                 Menjadi Lebih Modern <br/> Dan Efisien
               </h2>
             </motion.div>
