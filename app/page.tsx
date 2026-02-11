@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 
 export default function Home() {
@@ -18,8 +18,15 @@ export default function Home() {
     offset: ["start start", "end end"],
   });
 
-  // MENGUBAH SCROLL JADI FRAME: 0% scroll = frame 0, 100% scroll = frame 193
-  const frameIndex = useTransform(scrollYProgress, [0, 1], [0, totalFrames - 1]);
+  // --- OPTIMASI SMOOTHING (Agar tidak patah-patah) ---
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
+  // MENGUBAH SCROLL JADI FRAME (Menggunakan smoothProgress bukan scrollYProgress langsung)
+  const frameIndex = useTransform(smoothProgress, [0, 1], [0, totalFrames - 1]);
 
   // ANIMASI TEKS (Hitam dengan Glow Putih agar tajam)
   const introOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
@@ -60,7 +67,7 @@ export default function Home() {
     }
   }, []);
 
-  // LOGIKA MENGGAMBAR KE CANVAS (Optimasi Ketajaman)
+  // LOGIKA MENGGAMBAR KE CANVAS (Optimasi Ketajaman & Performa)
   useEffect(() => {
     if (!isLoaded || !canvasRef.current) return;
     const context = canvasRef.current.getContext("2d");
@@ -96,7 +103,11 @@ export default function Home() {
       }
     };
 
-    const unsubscribe = frameIndex.on("change", (latest) => renderCanvas(latest));
+    // Menggunakan requestAnimationFrame untuk frame rate yang stabil
+    const unsubscribe = frameIndex.on("change", (latest) => {
+      requestAnimationFrame(() => renderCanvas(latest));
+    });
+
     renderCanvas(0);
     return () => unsubscribe();
   }, [isLoaded, images, frameIndex]);
