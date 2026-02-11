@@ -1,3 +1,4 @@
+
 "use client";
 
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
@@ -8,6 +9,7 @@ export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [images, setImages] = useState<HTMLImageElement[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // State baru untuk hamburger
 
   const totalFrames = 194;
   
@@ -82,7 +84,6 @@ export default function Home() {
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* CSS UNTUK LOADING ICON */
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
@@ -96,6 +97,57 @@ export default function Home() {
           animation: spin 1s linear infinite;
         }
       `}</style>
+
+      {/* --- FLOATING HEADER (LOGOTYPE & HAMBURGER) --- */}
+      <header className="fixed top-0 left-0 w-full z-[90] p-6 flex justify-between items-center pointer-events-none">
+        <div className="pointer-events-auto">
+          <h2 className="text-white font-black italic tracking-tighter text-xl md:text-2xl uppercase bg-black/20 backdrop-blur-md px-4 py-1 rounded-lg border border-white/10">
+            GURUBANTUGURU
+          </h2>
+        </div>
+
+        <button 
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="pointer-events-auto w-12 h-12 bg-white rounded-full flex flex-col items-center justify-center gap-1.5 shadow-2xl z-[100]"
+        >
+          <motion.span 
+            animate={isMenuOpen ? { rotate: 45, y: 6.5 } : { rotate: 0, y: 0 }} 
+            className="w-6 h-0.5 bg-black block" 
+          />
+          <motion.span 
+            animate={isMenuOpen ? { opacity: 0 } : { opacity: 1 }} 
+            className="w-6 h-0.5 bg-black block" 
+          />
+          <motion.span 
+            animate={isMenuOpen ? { rotate: -45, y: -6.5 } : { rotate: 0, y: 0 }} 
+            className="w-6 h-0.5 bg-black block" 
+          />
+        </button>
+      </header>
+
+      {/* --- MENU OVERLAY --- */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, x: "100%" }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="fixed inset-0 z-[85] bg-white flex flex-col items-center justify-center gap-8"
+          >
+            {['Home', 'Our Story', 'Produk', 'Testimoni'].map((item) => (
+              <a 
+                key={item} 
+                href={`#${item.toLowerCase().replace(' ', '-')}`} 
+                onClick={() => setIsMenuOpen(false)}
+                className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-black hover:text-blue-600 transition-colors"
+              >
+                {item}
+              </a>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* SECTION 1: CANVAS */}
       <div ref={containerRef} className="relative h-[600vh] w-full">
@@ -154,7 +206,7 @@ export default function Home() {
 
       <div className="relative z-20 w-full bg-white">
         {/* OUR STORY */}
-        <section className="w-full flex flex-col items-center justify-center px-6 pt-32 pb-12 bg-gradient-to-b from-white to-blue-50/30">
+        <section id="our-story" className="w-full flex flex-col items-center justify-center px-6 pt-32 pb-12 bg-gradient-to-b from-white to-blue-50/30">
           <div className="max-w-4xl w-full text-center">
             <motion.h2 
               initial={{ opacity: 0, y: 50 }}
@@ -201,7 +253,7 @@ export default function Home() {
         </section>
 
         {/* PRODUK KAMI */}
-        <section className="w-full px-6 py-32 bg-[#eef6ff] overflow-hidden">
+        <section id="produk" className="w-full px-6 py-32 bg-[#eef6ff] overflow-hidden">
           <div className="max-w-7xl mx-auto">
             <motion.h2 
               initial={{ opacity: 0, y: 30 }}
@@ -224,7 +276,6 @@ export default function Home() {
                    <p className="text-gray-700 font-medium mb-6 leading-relaxed">
                      AI yang menjadi asisten para guru untuk membuat soal secara instan! Khusus diatur untuk jenjang **SD, SMP, dan SMA**. Jangan biarkan waktu Anda habis hanya untuk mengetik soal. Dengan SOAL AI, Anda bisa menciptakan bank soal berkualitas, variatif, dan sesuai kurikulum hanya dalam hitungan detik. Biarkan teknologi bekerja, sementara Anda fokus menginspirasi siswa!
                    </p>
-                   {/* SLIDER FOTO SOAL AI */}
                    <div className="flex gap-4 overflow-x-auto pb-4 snap-x scrollbar-hide">
                       <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-100 rounded-xl snap-center overflow-hidden border">
                         <img src="/soal-ai-1.jpg" alt="Soal AI 1" className="w-full h-full object-cover" />
@@ -251,7 +302,6 @@ export default function Home() {
                    <p className="text-blue-50 font-medium mb-6 leading-relaxed">
                      Lelah memeriksa tumpukan kertas ujian setiap malam? **JAWABAN AI** dirancang khusus untuk menjadi asisten pribadi Anda dalam memeriksa soal murid secara otomatis dan akurat. AI kami tidak hanya memberi skor, tapi memberikan analisis mendalam tentang pemahaman siswa. Kurangi beban kerja Anda secara drastis dan kembalikan waktu berharga Anda bersama keluarga. Efisiensi bukan lagi mimpi!
                    </p>
-                   {/* SLIDER FOTO JAWABAN AI */}
                    <div className="flex gap-4 overflow-x-auto pb-4 snap-x scrollbar-hide">
                       <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-800 rounded-xl snap-center overflow-hidden border border-white/10">
                         <img src="/jawaban-ai-1.jpg" alt="Jawaban AI 1" className="w-full h-full object-cover" />
@@ -268,7 +318,7 @@ export default function Home() {
             </div>
 
             {/* TESTIMONI SECTION */}
-            <div className="mt-32">
+            <div id="testimoni" className="mt-32">
                <motion.h2 
                  initial={{ opacity: 0, y: 20 }}
                  whileInView={{ opacity: 1, y: 0 }}
@@ -316,4 +366,3 @@ export default function Home() {
     </main>
   );
 }
-
