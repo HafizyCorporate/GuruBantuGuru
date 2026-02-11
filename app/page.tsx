@@ -64,9 +64,15 @@ export default function Home() {
   const canvasTitleStyle = "text-black font-black italic uppercase leading-none tracking-tighter";
 
   return (
-    <main className="relative w-full bg-black">
+    /* FIXED: Ditambahkan overflow-x-hidden untuk mencegah scroll ke samping */
+    <main className="relative w-full bg-black overflow-x-hidden">
       <style jsx global>{`
-        html, body { background-color: black; margin: 0; padding: 0; }
+        html, body { 
+          background-color: black; 
+          margin: 0; 
+          padding: 0; 
+          overflow-x: hidden; /* Mencegah bug ruang di sisi kanan browser */
+        }
       `}</style>
 
       {/* SECTION 1: CANVAS */}
@@ -126,7 +132,8 @@ export default function Home() {
         </section>
 
         {/* VISI & MISI */}
-        <section className="w-full px-6 py-32 bg-gradient-to-b from-blue-50/30 to-white">
+        {/* FIXED: Ditambahkan overflow-hidden di level section */}
+        <section className="w-full px-6 py-32 bg-gradient-to-b from-blue-50/30 to-white overflow-hidden">
           <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
             <motion.div 
               initial={{ opacity: 0, x: -50 }}
@@ -154,8 +161,9 @@ export default function Home() {
           </div>
         </section>
 
-        {/* PRODUK KAMI - SECTION BARU */}
-        <section className="w-full px-6 py-32 bg-[#eef6ff]">
+        {/* PRODUK KAMI */}
+        {/* FIXED: Ditambahkan overflow-hidden di level section */}
+        <section className="w-full px-6 py-32 bg-[#eef6ff] overflow-hidden">
           <div className="max-w-7xl mx-auto">
             <motion.h2 
               initial={{ opacity: 0, y: 30 }}
@@ -178,7 +186,6 @@ export default function Home() {
                    <p className="text-gray-700 font-medium mb-6 leading-relaxed">
                      AI yang menjadi asisten para guru untuk membuat soal secara instan! Khusus diatur untuk jenjang **SD, SMP, dan SMA**. Jangan biarkan waktu Anda habis hanya untuk mengetik soal. Dengan SOAL AI, Anda bisa menciptakan bank soal berkualitas, variatif, dan sesuai kurikulum hanya dalam hitungan detik. Biarkan teknologi bekerja, sementara Anda fokus menginspirasi siswa!
                    </p>
-                   {/* Placeholder Slider - Masukkan link gambar Anda di sini */}
                    <div className="flex gap-2 overflow-x-auto pb-4 snap-x">
                       <div className="min-w-full h-64 bg-gray-200 rounded-xl snap-center flex items-center justify-center text-gray-400">Slide Foto 1</div>
                       <div className="min-w-full h-64 bg-gray-200 rounded-xl snap-center flex items-center justify-center text-gray-400">Slide Foto 2</div>
@@ -199,7 +206,6 @@ export default function Home() {
                    <p className="text-blue-50 font-medium mb-6 leading-relaxed">
                      Lelah memeriksa tumpukan kertas ujian setiap malam? **JAWABAN AI** dirancang khusus untuk menjadi asisten pribadi Anda dalam memeriksa soal murid secara otomatis dan akurat. AI kami tidak hanya memberi skor, tapi memberikan analisis mendalam tentang pemahaman siswa. Kurangi beban kerja Anda secara drastis dan kembalikan waktu berharga Anda bersama keluarga. Efisiensi bukan lagi mimpi!
                    </p>
-                   {/* Placeholder Slider - Masukkan link gambar Anda di sini */}
                    <div className="flex gap-2 overflow-x-auto pb-4 snap-x">
                       <div className="min-w-full h-64 bg-gray-800 rounded-xl snap-center flex items-center justify-center text-gray-500">Slide Foto 1</div>
                       <div className="min-w-full h-64 bg-gray-800 rounded-xl snap-center flex items-center justify-center text-gray-500">Slide Foto 2</div>
