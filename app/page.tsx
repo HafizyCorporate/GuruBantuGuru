@@ -10,25 +10,27 @@ export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [progress, setProgress] = useState(0);
 
-  const totalFrames = 192;
+  // SEKARANG 121 FOTO
+  const totalFrames = 121; 
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"],
   });
 
-  // Alur: Gambar (0-85%), Teks Zoom (85-100%)
+  // Alur: Gambar (0-85%), Teks Zoom Muncul (85-100%)
   const frameIndex = useTransform(scrollYProgress, [0, 0.85], [0, totalFrames - 1]);
   const textOpacity = useTransform(scrollYProgress, [0.84, 0.86, 0.98, 1], [0, 1, 1, 0]);
   const textScale = useTransform(scrollYProgress, [0.85, 1], [1, 35]);
   const canvasOpacity = useTransform(scrollYProgress, [0.95, 1], [1, 0]);
 
-  // Preload Images
+  // PRELOAD IMAGES
   useEffect(() => {
     const loadedImages: HTMLImageElement[] = [];
     let count = 0;
     for (let i = 1; i <= totalFrames; i++) {
       const img = new Image();
+      // Format file sesuai permintaan: ezgif-frame-001.jpg
       img.src = `/ezgif-frame-${i.toString().padStart(3, '0')}.jpg`;
       img.onload = () => {
         count++;
@@ -42,7 +44,7 @@ export default function Home() {
     }
   }, []);
 
-  // Logika Render Full Screen (Anti Black Bar)
+  // LOGIKA RENDER FULL SCREEN (COVER)
   useEffect(() => {
     if (!isLoaded || !canvasRef.current) return;
     const context = canvasRef.current.getContext("2d");
@@ -57,23 +59,23 @@ export default function Home() {
         const canvasRatio = canvas.width / canvas.height;
         const imgRatio = img.width / img.height;
 
-        let drawWidth, drawHeight, offsetX, offsetY;
+        let dWidth, dHeight, dx, dy;
 
-        // Logika Cover agar Full Layar
+        // Memastikan gambar memenuhi layar (Center Crop)
         if (imgRatio > canvasRatio) {
-          drawHeight = canvas.height;
-          drawWidth = canvas.height * imgRatio;
-          offsetX = (canvas.width - drawWidth) / 2;
-          offsetY = 0;
+          dHeight = canvas.height;
+          dWidth = canvas.height * imgRatio;
+          dx = (canvas.width - dWidth) / 2;
+          dy = 0;
         } else {
-          drawWidth = canvas.width;
-          drawHeight = canvas.width / imgRatio;
-          offsetX = 0;
-          offsetY = (canvas.height - drawHeight) / 2;
+          dWidth = canvas.width;
+          dHeight = canvas.width / imgRatio;
+          dx = 0;
+          dy = (canvas.height - dHeight) / 2;
         }
 
         context.clearRect(0, 0, canvas.width, canvas.height);
-        context.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+        context.drawImage(img, dx, dy, dWidth, dHeight);
       }
     };
 
@@ -83,7 +85,6 @@ export default function Home() {
   }, [isLoaded, images, frameIndex]);
 
   return (
-    // Berubah menjadi bg-white (Latar Terang)
     <main className="relative bg-white font-[family-name:var(--font-outfit)]">
       
       {/* LOADING SCREEN TERANG */}
@@ -97,54 +98,45 @@ export default function Home() {
         </div>
       )}
 
-      {/* NAVBAR BIRU - PUTIH */}
+      {/* NAVBAR BIRU - PUTIH (GAYA GOLDA) */}
       <nav className="fixed top-0 w-full z-[100] px-6 py-8 flex justify-between items-center">
-        <div className="text-2xl font-black text-blue-600 tracking-tighter uppercase italic drop-shadow-sm">
+        <div className="text-2xl font-black text-blue-400 tracking-tighter uppercase italic drop-shadow-sm">
           GuruBantu
         </div>
         <button className="flex flex-col gap-1.5 p-2 group">
-          <div className="w-8 h-[2px] bg-blue-600" />
-          <div className="w-8 h-[2px] bg-blue-600" />
-          <div className="w-5 h-[2px] bg-blue-600 self-end" />
+          <div className="w-8 h-[2px] bg-blue-400" />
+          <div className="w-8 h-[2px] bg-blue-400" />
+          <div className="w-5 h-[2px] bg-blue-400 self-end" />
         </button>
       </nav>
 
-      {/* HERO SECTION */}
-      <section ref={containerRef} className="relative h-[1500vh] bg-white">
+      {/* HERO SECTION DENGAN 1200vh SUPAYA SCROLL MULUS */}
+      <section ref={containerRef} className="relative h-[1200vh] bg-white">
         <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
           
-          {/* Canvas Full Screen */}
           <motion.canvas
             ref={canvasRef}
             style={{ opacity: canvasOpacity }}
             className="absolute inset-0 w-full h-full"
           />
 
-          {/* Overlay Putih Transparan (Agar gambar terlihat lebih terang/bersih) */}
-          <div className="absolute inset-0 bg-white/10" />
+          <div className="absolute inset-0 bg-white/5" />
 
-          {/* TEKS ZOOM: Muncul setelah frame selesai */}
+          {/* TEKS ZOOM: MUNCUL SETELAH FRAME 121 */}
           <motion.div 
             style={{ scale: textScale, opacity: textOpacity }}
             className="relative z-10 pointer-events-none"
           >
-            <h1 className="text-6xl md:text-[140px] font-black text-blue-600 leading-none uppercase tracking-tighter text-center italic drop-shadow-xl">
+            <h1 className="text-6xl md:text-[140px] font-black text-blue-500 leading-none uppercase tracking-tighter text-center italic">
               GURU BANTU <br /> GURU
             </h1>
           </motion.div>
         </div>
       </section>
 
-      {/* KONTEN BERIKUTNYA */}
+      {/* CONTENT */}
       <div className="relative z-20 bg-white text-blue-900">
         <section className="py-60 px-6 max-w-5xl mx-auto text-center">
-          <motion.span 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            className="text-blue-500 font-bold tracking-[0.6em] uppercase text-xs block mb-12"
-          >
-            Misi Kami
-          </motion.span>
           <motion.p 
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -152,7 +144,7 @@ export default function Home() {
             className="text-4xl md:text-7xl font-light leading-none tracking-tighter"
           >
             Digitalisasi Pendidikan <br /> 
-            <span className="text-blue-600 font-bold italic">Tanpa Batas.</span>
+            <span className="text-blue-500 font-bold italic">Mencerdaskan Bangsa.</span>
           </motion.p>
         </section>
       </div>
