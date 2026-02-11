@@ -45,21 +45,53 @@ export default function Home() {
         <a href="#kontak" onClick={() => setIsOpen(false)}>KONTAK</a>
       </div>
 
-      {/* HERO SECTION */}
-      <section className="relative h-screen flex items-center justify-center bg-slate-950 overflow-hidden font-[family-name:var(--font-outfit)]">
-        <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover opacity-40">
-          <source src="/hero-video.mp4" type="video/mp4" />
-        </video>
-        <div className="relative z-10 text-center px-6">
-          <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="text-5xl md:text-8xl font-black text-white tracking-tighter mb-6 leading-[0.9]">
-            REVOLUSI <br /> <span className="text-blue-400">PENDIDIKAN.</span>
-          </motion.h1>
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="text-blue-100/70 text-lg md:text-2xl max-w-2xl mx-auto font-light mb-10">
-            Fokus mengajar, biarkan AI urus administrasi. Hemat waktu hingga 80%.
-          </motion.p>
-          <a href="#produk" className="bg-white text-blue-900 px-10 py-4 rounded-full font-bold text-lg shadow-2xl hover:bg-blue-50 transition-all">Lihat Aplikasi</a>
-        </div>
-      </section>
+      {/* HERO SECTION CINEMATIC V2 */}
+<section className="relative h-screen flex items-center justify-center bg-black overflow-hidden font-[family-name:var(--font-outfit)]">
+  {/* Background Media */}
+  <div className="absolute inset-0 z-0">
+    <video 
+      autoPlay 
+      muted 
+      loop 
+      playsInline 
+      className="w-full h-full object-cover opacity-50 scale-110"
+    >
+      <source src="/hero-video.mp4" type="video/mp4" />
+    </video>
+    {/* Overlay Vignette - Memberikan kesan cinematic gelap di pinggir */}
+    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/70" />
+  </div>
+
+  <div className="relative z-10 text-center px-4">
+    <motion.div
+      initial={{ opacity: 0, letterSpacing: "0.5em" }}
+      animate={{ opacity: 1, letterSpacing: "0.1em" }}
+      transition={{ duration: 1.5, ease: "easeOut" }}
+    >
+      {/* Judul Utama: Bold & Simpel */}
+      <h1 className="text-5xl md:text-[120px] font-[900] text-white leading-none uppercase tracking-tighter mb-4">
+        GURU BANTU GURU
+      </h1>
+      
+      {/* Slogan Baru: Cinematic Spacing */}
+      <motion.p 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1, duration: 1 }}
+        className="text-sm md:text-xl text-blue-400 font-light tracking-[0.4em] uppercase"
+      >
+        Kami hadir membantu untuk mencerdaskan anak bangsa
+      </motion.p>
+    </motion.div>
+  </div>
+
+  {/* Garis Dekoratif Minimalis ala High-End Brand */}
+  <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4">
+    <div className="w-[1px] h-20 bg-gradient-to-b from-blue-500 to-transparent" />
+    <span className="text-[10px] text-white/30 tracking-[1em] uppercase rotate-90 origin-left ml-2">Scroll</span>
+  </div>
+</section>
+
 
       {/* VISI & MISI */}
       <section id="visi" className="py-32 px-6 max-w-6xl mx-auto font-[family-name:var(--font-outfit)]">
