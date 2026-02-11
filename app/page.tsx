@@ -74,13 +74,10 @@ export default function Home() {
   return (
     <main className="bg-black">
       <nav className="fixed top-0 w-full z-[100] px-6 py-6 flex justify-between items-center">
-        <div className="text-xl font-black text-white mix-blend-difference italic tracking-tighter uppercase">
+        <div className="text-xl font-black text-black mix-blend-difference italic tracking-tighter uppercase">
           GURU BANTU GURU
         </div>
-        <button 
-          onClick={() => setIsMenuOpen(!isMenuOpen)} 
-          className="text-white font-bold uppercase text-[10px] tracking-[0.2em] bg-black px-5 py-2.5 rounded-full"
-        >
+        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-white font-bold uppercase text-[10px] tracking-[0.2em] bg-black px-5 py-2.5 rounded-full shadow-xl">
           {isMenuOpen ? "Close" : "Menu"}
         </button>
       </nav>
@@ -88,37 +85,47 @@ export default function Home() {
       <section ref={containerRef} className="relative h-[600vh]">
         <div className="sticky top-0 h-screen w-full overflow-hidden">
           <canvas ref={canvasRef} className="w-full h-full object-cover" />
-
-          {/* TEKS CANVAS DENGAN LOADING DI DALAM KOLOM */}
+          
           <div className="absolute inset-0 flex items-center justify-center text-center px-6 pointer-events-none">
             
-            <motion.div style={{ opacity: text1Opacity }} className="absolute bg-white/30 backdrop-blur-xl p-8 rounded-[40px] border border-white/10 shadow-2xl flex flex-col items-center">
-              <h2 className="text-4xl md:text-6xl font-black italic text-black tracking-tighter leading-none">GURUBANTUGURU</h2>
-              <p className="text-black/70 font-bold tracking-[0.3em] uppercase text-[10px] md:text-xs mt-4">Asisten AI Untuk Para Guru Indonesia</p>
+            {/* TEXT 1 + LOADING */}
+            <motion.div 
+              style={{ opacity: text1Opacity }} 
+              className="absolute drop-shadow-[0_2px_8px_rgba(255,255,255,0.8)]"
+            >
+              <h2 className="text-5xl md:text-7xl font-black italic text-black tracking-tighter leading-none">GURUBANTUGURU</h2>
+              <p className="text-black font-bold tracking-[0.3em] uppercase text-[10px] md:text-xs mt-4">Asisten AI Untuk Para Guru Indonesia</p>
               
-              {/* LOADING DI BAWAH TEKS (Hanya muncul saat belum loaded) */}
               {!isLoaded && (
-                <div className="mt-8 flex flex-col items-center gap-3">
-                  <div className="w-10 h-10 border-4 border-black/10 border-t-black rounded-full animate-spin"></div>
-                  <span className="text-[12px] font-black text-black">{progress}%</span>
+                <div className="mt-10 flex flex-col items-center gap-2">
+                  <div className="w-6 h-6 border-2 border-black/10 border-t-black rounded-full animate-spin"></div>
+                  <span className="text-[10px] font-black text-black tracking-widest">{progress}%</span>
                 </div>
               )}
             </motion.div>
 
-            <motion.div style={{ opacity: text2Opacity }} className="absolute bg-white/30 backdrop-blur-xl p-8 rounded-[40px] border border-white/10 shadow-2xl">
-              <h2 className="text-3xl md:text-5xl font-black italic text-black uppercase leading-none">Merubah Kebiasaan <br/> Yang Lama</h2>
+            {/* TEXT 2 */}
+            <motion.div 
+              style={{ opacity: text2Opacity }} 
+              className="absolute drop-shadow-[0_2px_8px_rgba(255,255,255,0.8)]"
+            >
+              <h2 className="text-4xl md:text-6xl font-black italic text-black uppercase leading-none tracking-tighter">Merubah Kebiasaan <br/> Yang Lama</h2>
             </motion.div>
 
-            <motion.div style={{ opacity: text3Opacity }} className="absolute bg-white/30 backdrop-blur-xl p-8 rounded-[40px] border border-white/10 shadow-2xl">
-              <h2 className="text-3xl md:text-5xl font-black italic text-black uppercase leading-none">Menjadi Lebih Modern <br/> Dan Efisien</h2>
+            {/* TEXT 3 */}
+            <motion.div 
+              style={{ opacity: text3Opacity }} 
+              className="absolute drop-shadow-[0_2px_8px_rgba(255,255,255,0.8)]"
+            >
+              <h2 className="text-4xl md:text-6xl font-black italic text-black uppercase leading-none tracking-tighter">Menjadi Lebih Modern <br/> Dan Efisien</h2>
             </motion.div>
 
           </div>
         </div>
       </section>
 
-      <footer className="bg-white py-8 text-center">
-        <p className="opacity-30 text-[10px] font-black uppercase tracking-[0.5em]">© 2026 GURU BANTU GURU</p>
+      <footer className="bg-white py-6 text-center border-t border-gray-100">
+        <p className="opacity-20 text-[10px] font-black uppercase tracking-[0.5em]">© 2026 GURU BANTU GURU</p>
       </footer>
     </main>
   );
