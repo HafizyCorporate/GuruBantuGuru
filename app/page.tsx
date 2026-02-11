@@ -19,11 +19,8 @@ export default function Home() {
   });
 
   // --- LOGIKA HABIS (BUKAN DIKUNCI) ---
-  // Canvas akan berjalan terus dari frame 0 ke frame terakhir 
-  // mengikuti scroll dari paling atas (0) sampai paling bawah (1) tanpa tertahan.
   const frameIndex = useTransform(scrollYProgress, [0, 1], [0, totalFrames - 1]);
 
-  // Teks mengikuti durasi scroll yang sama agar tidak tabrakan
   const text1Opacity = useTransform(scrollYProgress, [0, 0.15, 0.3], [1, 1, 0]);
   const text2Opacity = useTransform(scrollYProgress, [0.4, 0.55, 0.7], [0, 1, 0]);
   const text3Opacity = useTransform(scrollYProgress, [0.8, 0.95], [0, 1]);
@@ -77,64 +74,62 @@ export default function Home() {
 
   return (
     <main className="bg-white">
-      {/* Navbar - Teks menu hitam */}
+      {/* Navbar - Menggunakan warna Deep Charcoal agar senada dengan teks */}
       <nav className="fixed top-0 w-full z-[100] px-6 py-6 flex justify-between items-center">
-        <div className="text-xl font-black text-black italic tracking-tighter uppercase">GURU BANTU GURU</div>
+        <div className="text-xl font-black text-[#1a1a1a] italic tracking-tighter uppercase">GURU BANTU GURU</div>
         <button 
           onClick={() => setIsMenuOpen(!isMenuOpen)} 
-          className="text-white font-bold uppercase text-[10px] tracking-[0.2em] bg-black px-5 py-2.5 rounded-full"
+          className="text-white font-bold uppercase text-[10px] tracking-[0.2em] bg-[#1a1a1a] px-5 py-2.5 rounded-full"
         >
           {isMenuOpen ? "Close" : "Menu"}
         </button>
       </nav>
 
-      {/* h-[500vh] atau lebih pendek agar scroll tidak melelahkan tapi tetap halus */}
       <section ref={containerRef} className="relative h-[600vh]">
         <div className="sticky top-0 h-screen w-full overflow-hidden">
           <canvas ref={canvasRef} className="w-full h-full object-cover" />
 
-          {/* LOADING OVERLAY DI ATAS CANVAS */}
+          {/* LOADING DI ATAS CANVAS (Tanpa background putih full) */}
           <AnimatePresence>
             {!isLoaded && (
               <motion.div 
                 exit={{ opacity: 0 }} 
-                className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white"
+                className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white/60 backdrop-blur-[2px]"
               >
-                <div className="w-48 h-1 bg-gray-200 rounded-full overflow-hidden">
+                <div className="w-48 h-0.5 bg-black/10 rounded-full overflow-hidden">
                   <motion.div 
                     initial={{ width: 0 }}
                     animate={{ width: `${progress}%` }}
-                    className="h-full bg-black"
+                    className="h-full bg-[#1a1a1a]"
                   />
                 </div>
-                <p className="mt-4 text-[10px] font-black italic tracking-widest text-black uppercase">
-                  Processing AI {progress}%
+                <p className="mt-4 text-[9px] font-black italic tracking-[0.3em] text-[#1a1a1a] uppercase">
+                  INITIALIZING AI {progress}%
                 </p>
               </motion.div>
             )}
           </AnimatePresence>
           
-          {/* TEKS CANVAS HITAM */}
+          {/* TEKS CANVAS - Menggunakan Deep Charcoal dengan Soft Shadow */}
           <div className="absolute inset-0 flex items-center justify-center text-center px-6 pointer-events-none">
-            <motion.div style={{ opacity: text1Opacity }} className="absolute">
-              <h2 className="text-4xl md:text-6xl font-black italic text-black tracking-tighter leading-none">GURUBANTUGURU</h2>
-              <p className="text-black/60 font-bold tracking-[0.3em] uppercase text-[10px] md:text-xs mt-4">Asisten AI Untuk Para Guru Indonesia</p>
+            <motion.div style={{ opacity: text1Opacity }} className="absolute drop-shadow-[0_2px_10px_rgba(255,255,255,0.5)]">
+              <h2 className="text-4xl md:text-7xl font-black italic text-[#1a1a1a] tracking-tighter leading-[0.85]">GURUBANTUGURU</h2>
+              <p className="text-[#1a1a1a]/70 font-bold tracking-[0.4em] uppercase text-[10px] md:text-xs mt-6">Asisten AI Untuk Para Guru Indonesia</p>
             </motion.div>
 
-            <motion.div style={{ opacity: text2Opacity }} className="absolute">
-              <h2 className="text-3xl md:text-5xl font-black italic text-black uppercase leading-none">Merubah Kebiasaan <br/> Yang Lama</h2>
+            <motion.div style={{ opacity: text2Opacity }} className="absolute drop-shadow-[0_2px_10px_rgba(255,255,255,0.5)]">
+              <h2 className="text-3xl md:text-6xl font-black italic text-[#1a1a1a] uppercase leading-[0.9] tracking-tighter">Merubah Kebiasaan <br/> Yang Lama</h2>
             </motion.div>
 
-            <motion.div style={{ opacity: text3Opacity }} className="absolute">
-              <h2 className="text-3xl md:text-5xl font-black italic text-black uppercase leading-none">Menjadi Lebih Modern <br/> Dan Efisien</h2>
+            <motion.div style={{ opacity: text3Opacity }} className="absolute drop-shadow-[0_2px_10px_rgba(255,255,255,0.5)]">
+              <h2 className="text-3xl md:text-6xl font-black italic text-[#1a1a1a] uppercase leading-[0.9] tracking-tighter">Menjadi Lebih Modern <br/> Dan Efisien</h2>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Footer Simple */}
       <footer className="bg-white py-10 text-center border-t border-gray-100">
-        <p className="opacity-40 text-[10px] font-black uppercase tracking-[0.5em]">© 2026 GURU BANTU GURU</p>
+        <p className="opacity-40 text-[10px] font-black uppercase tracking-[0.5em] text-[#1a1a1a]">© 2026 GURU BANTU GURU</p>
       </footer>
     </main>
   );
