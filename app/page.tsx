@@ -18,19 +18,19 @@ export default function Home() {
     offset: ["start start", "end end"] 
   });
 
-  // --- PERUBAHAN DRAGSTIS DISINI ---
-  // 1. Canvas selesai diputar jauh lebih awal (di 70% scroll)
-  const frameIndex = useTransform(scrollYProgress, [0, 0.7], [0, totalFrames - 1]);
+  // --- LOGIKA "ANTI-BALAPAN" ---
+  // Canvas SELESAI di 60% scroll. Gedung modern HARUS sudah jadi di titik ini.
+  const frameIndex = useTransform(scrollYProgress, [0, 0.6], [0, totalFrames - 1], { clamp: true });
 
-  // 2. Teks 3 juga selesai lebih awal agar tidak menabrak konten naik
+  // Teks muncul dan hilang semua sebelum 80% scroll
   const text1Opacity = useTransform(scrollYProgress, [0, 0.1, 0.2], [1, 1, 0]);
-  const text2Opacity = useTransform(scrollYProgress, [0.3, 0.4, 0.5, 0.6], [0, 1, 1, 0]);
-  const text3Opacity = useTransform(scrollYProgress, [0.65, 0.75, 0.85], [0, 1, 0]);
+  const text2Opacity = useTransform(scrollYProgress, [0.25, 0.35, 0.45], [0, 1, 0]);
+  const text3Opacity = useTransform(scrollYProgress, [0.5, 0.6, 0.7], [0, 1, 0]);
   
-  // 3. Konten naik dipaksa hanya muncul di ujung paling akhir (0.98 ke 1.0)
-  // Artinya ada 28% jarak scroll dimana gedung modern DIAM (dari 0.7 sampai 0.98)
-  const contentY = useTransform(scrollYProgress, [0.98, 1], ["100vh", "0vh"]);
-  // ---------------------------------
+  // Content "Our Story" BARU BOLEH NAIK SETELAH 0.99 (Benar-benar di ujung scroll)
+  // Jarak dari 0.6 ke 0.99 (hampir setengah scroll) itu gedung modern lu DIAM TOTAL.
+  const contentY = useTransform(scrollYProgress, [0.99, 1], ["100vh", "0vh"]);
+  // -----------------------------
 
   useEffect(() => {
     const loadedImages: HTMLImageElement[] = [];
@@ -92,29 +92,13 @@ export default function Home() {
 
       <nav className="fixed top-0 w-full z-[100] px-6 py-6 flex justify-between items-center mix-blend-difference">
         <div className="text-xl font-black text-white italic tracking-tighter uppercase">GURU BANTU GURU</div>
-        <button 
-          onClick={() => setIsMenuOpen(!isMenuOpen)} 
-          className="text-white font-bold uppercase text-[10px] tracking-[0.2em] bg-blue-600 px-5 py-2.5 rounded-full hover:scale-105 transition-transform"
-        >
+        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-white font-bold uppercase text-[10px] tracking-[0.2em] bg-blue-600 px-5 py-2.5 rounded-full">
           {isMenuOpen ? "Close" : "Menu"}
         </button>
       </nav>
 
-      <AnimatePresence>
-        {isMenuOpen && (
-          <motion.div 
-            initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 z-[90] bg-blue-600 flex flex-col items-center justify-center gap-8 text-white text-4xl font-black italic uppercase"
-          >
-            <a href="#ourstory" onClick={() => setIsMenuOpen(false)} className="hover:line-through">Our Story</a>
-            <a href="#visi" onClick={() => setIsMenuOpen(false)} className="hover:line-through">Visi & Misi</a>
-            <a href="#produk" onClick={() => setIsMenuOpen(false)} className="hover:line-through">Produk</a>
-            <a href="#contact" onClick={() => setIsMenuOpen(false)} className="hover:line-through">Contact</a>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <section ref={containerRef} className="relative h-[1000vh]">
+      {/* h-[1500vh] biar scroll-nya lambat banget, gedung modern dapet panggung lama */}
+      <section ref={containerRef} className="relative h-[1500vh]">
         <div className="sticky top-0 h-screen w-full overflow-hidden">
           <canvas ref={canvasRef} className="w-full h-full object-cover" />
           
@@ -123,20 +107,17 @@ export default function Home() {
               <h2 className="text-4xl md:text-6xl font-black italic text-white tracking-tighter leading-none">GURUBANTUGURU</h2>
               <p className="text-blue-400 font-bold tracking-[0.3em] uppercase text-[10px] md:text-xs mt-4">Asisten AI Untuk Para Guru Indonesia</p>
             </motion.div>
-
             <motion.div style={{ opacity: text2Opacity }} className="absolute">
-              <h2 className="text-3xl md:text-5xl font-black italic text-white tracking-tighter leading-none uppercase">Merubah Kebiasaan <br/> Yang Lama</h2>
+              <h2 className="text-3xl md:text-5xl font-black italic text-white uppercase">Merubah Kebiasaan <br/> Yang Lama</h2>
             </motion.div>
-
             <motion.div style={{ opacity: text3Opacity }} className="absolute">
-              <h2 className="text-3xl md:text-5xl font-black italic text-white tracking-tighter leading-none uppercase">Menjadi Lebih Modern <br/> Dan Efisien</h2>
+              <h2 className="text-3xl md:text-5xl font-black italic text-white uppercase">Menjadi Lebih Modern <br/> Dan Efisien</h2>
             </motion.div>
           </div>
           <div className="absolute inset-0 bg-black/10 pointer-events-none" />
         </div>
 
-        <motion.div style={{ y: contentY }} className="relative z-20 bg-white shadow-[0_-30px_60px_rgba(0,0,0,0.2)] rounded-t-[50px] md:rounded-t-[100px]">
-          
+        <motion.div style={{ y: contentY }} className="relative z-20 bg-white shadow-[0_-50px_100px_rgba(0,0,0,0.3)] rounded-t-[50px] md:rounded-t-[100px]">
           <section id="ourstory" className="py-40 px-6 bg-white border-t border-gray-100 rounded-t-[50px] md:rounded-t-[100px]">
             <div className="max-w-4xl mx-auto text-center">
               <span className="text-blue-600 font-bold tracking-[0.3em] uppercase text-xs mb-4 block">The Mission</span>
@@ -148,45 +129,14 @@ export default function Home() {
             </div>
           </section>
 
-          <section id="visi" className="bg-[#001a41] py-32 px-6 text-white text-center rounded-t-[50px] md:rounded-t-[100px]">
-            <div className="max-w-4xl mx-auto space-y-16">
-              <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
-                <h4 className="uppercase font-bold tracking-[0.5em] text-blue-400 text-xs mb-4">Visi Kami</h4>
-                <p className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter">Hemat waktu kerja guru hingga 80%.</p>
-              </motion.div>
-              <div className="h-[1px] w-20 bg-blue-600 mx-auto"></div>
-              <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
-                <h4 className="uppercase font-bold tracking-[0.5em] text-blue-400 text-xs mb-4">Misi Kami</h4>
-                <p className="text-xl md:text-2xl font-bold italic text-blue-100 leading-snug">
-                  Menghapus beban menyusun soal dan koreksi jawaban secara otomatis, agar guru bisa fokus mendidik.
-                </p>
-              </motion.div>
-            </div>
-          </section>
-
-          <section id="produk" className="py-40 px-6 bg-gray-50">
-            <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12">
-              <div className="bg-white p-12 rounded-[50px] shadow-xl hover:shadow-2xl transition-shadow border border-gray-100">
-                <h4 className="text-4xl font-black italic mb-6 text-blue-600 uppercase tracking-tighter">01. SOAL AI</h4>
-                <p className="text-gray-500 mb-10 font-medium italic text-lg leading-relaxed">
-                  Generator soal cerdas. Masukkan materi, dan biarkan AI menyusun soal HOTS sesuai kurikulum dalam sekejap.
-                </p>
-                <button className="bg-black text-white px-8 py-4 rounded-full font-black italic uppercase text-xs tracking-widest hover:bg-blue-600 transition-colors">Play Store</button>
-              </div>
-              <div className="bg-white p-12 rounded-[50px] shadow-xl hover:shadow-2xl transition-shadow border border-gray-100 md:mt-20">
-                <h4 className="text-4xl font-black italic mb-6 text-blue-600 uppercase tracking-tighter">02. JAWABAN AI</h4>
-                <p className="text-gray-500 mb-10 font-medium italic text-lg leading-relaxed">
-                  Koreksi otomatis berbasis kamera. Cukup scan lembar jawaban siswa dan lihat hasilnya seketika.
-                </p>
-                <button className="bg-black text-white px-8 py-4 rounded-full font-black italic uppercase text-xs tracking-widest hover:bg-blue-600 transition-colors">Play Store</button>
-              </div>
-            </div>
+          <section id="visi" className="bg-[#001a41] py-32 px-6 text-white text-center">
+            <h4 className="uppercase font-bold tracking-[0.5em] text-blue-400 text-xs mb-4">Visi Kami</h4>
+            <p className="text-4xl md:text-6xl font-black italic uppercase">Hemat waktu kerja guru hingga 80%.</p>
           </section>
 
           <footer id="contact" className="py-32 px-6 text-center border-t border-gray-100">
-            <h3 className="text-5xl md:text-7xl font-black italic mb-12 tracking-tighter">CONTACT US</h3>
-            <p className="font-black text-blue-600 uppercase tracking-[0.2em] text-lg underline">halo@gurubantu.ai</p>
-            <p className="mt-24 opacity-20 text-[10px] font-black uppercase tracking-[0.5em]">© 2026 GURU BANTU GURU</p>
+            <h3 className="text-5xl md:text-7xl font-black italic">CONTACT US</h3>
+            <p className="font-black text-blue-600 uppercase underline">halo@gurubantu.ai</p>
           </footer>
         </motion.div>
       </section>
