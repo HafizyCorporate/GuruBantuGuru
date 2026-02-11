@@ -18,14 +18,15 @@ export default function Home() {
     offset: ["start start", "end end"] 
   });
 
-  const frameIndex = useTransform(scrollYProgress, [0, 1], [0, totalFrames - 1]);
+  // Video selesai diputar saat scroll mencapai 90% (0.9)
+  const frameIndex = useTransform(scrollYProgress, [0, 0.9], [0, totalFrames - 1]);
 
-  // --- LOGIKA TEKS CANVAS & SCROLL REVEAL (UPDATED) ---
+  // --- LOGIKA TEKS CANVAS & SCROLL REVEAL (DIKUNCI KE AKHIR) ---
   const text1Opacity = useTransform(scrollYProgress, [0, 0.1, 0.2], [1, 1, 0]);
   const text2Opacity = useTransform(scrollYProgress, [0.3, 0.4, 0.5, 0.6], [0, 1, 1, 0]);
-  const text3Opacity = useTransform(scrollYProgress, [0.7, 0.85, 0.95], [0, 1, 0]);
+  const text3Opacity = useTransform(scrollYProgress, [0.7, 0.85, 0.92], [0, 1, 0]);
   
-  // Durasi diubah ke 0.95 agar konten baru naik di akhir canvas
+  // Konten baru mulai naik SETELAH frame gambar berhenti (start di 0.95)
   const contentY = useTransform(scrollYProgress, [0.95, 1], ["100vh", "0vh"]);
   // ----------------------------------------------------
 
@@ -111,8 +112,8 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* Section Scroll Canvas */}
-      <section ref={containerRef} className="relative h-[800vh]">
+      {/* Section Scroll Canvas - h-[1000vh] untuk memberikan ruang jeda di akhir */}
+      <section ref={containerRef} className="relative h-[1000vh]">
         <div className="sticky top-0 h-screen w-full overflow-hidden">
           <canvas ref={canvasRef} className="w-full h-full object-cover" />
           
@@ -135,7 +136,7 @@ export default function Home() {
         </div>
 
         {/* WRAPPER SCROLL REVEAL UNTUK KONTEN BAWAH */}
-        <motion.div style={{ y: contentY }} className="relative z-20 bg-white shadow-[0_-20px_50px_rgba(0,0,0,0.1)] rounded-t-[50px] md:rounded-t-[100px]">
+        <motion.div style={{ y: contentY }} className="relative z-20 bg-white shadow-[0_-30px_60px_rgba(0,0,0,0.2)] rounded-t-[50px] md:rounded-t-[100px]">
           
           <section id="ourstory" className="py-40 px-6 bg-white border-t border-gray-100 rounded-t-[50px] md:rounded-t-[100px]">
             <div className="max-w-4xl mx-auto text-center">
