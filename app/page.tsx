@@ -1,4 +1,4 @@
-"use client";
+  "use client";
 
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
@@ -23,6 +23,20 @@ export default function Home() {
   const text1Opacity = useTransform(scrollYProgress, [0, 0.15, 0.3], [1, 1, 0]);
   const text2Opacity = useTransform(scrollYProgress, [0.4, 0.55, 0.7], [0, 1, 0]);
   const text3Opacity = useTransform(scrollYProgress, [0.8, 0.95, 1], [0, 1, 1]);
+
+  // LOGIKA PENGUNCI SCROLL
+  useEffect(() => {
+    if (!isLoaded) {
+      // Kunci scroll: paksa posisi di paling atas dan hilangkan scrollbar
+      document.body.style.overflow = "hidden";
+      window.scrollTo(0, 0);
+    } else {
+      // Buka kunci scroll setelah loading selesai
+      document.body.style.overflow = "unset";
+    }
+    // Cleanup saat komponen unmount
+    return () => { document.body.style.overflow = "unset"; };
+  }, [isLoaded]);
 
   useEffect(() => {
     const loadedImages: HTMLImageElement[] = [];
@@ -72,52 +86,55 @@ export default function Home() {
   }, [isLoaded, images, frameIndex]);
 
   return (
-    <main className="bg-black">
+    <main className="bg-white">
       <nav className="fixed top-0 w-full z-[100] px-6 py-6 flex justify-between items-center">
         <div className="text-xl font-black text-black mix-blend-difference italic tracking-tighter uppercase">
           GURU BANTU GURU
         </div>
-        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-white font-bold uppercase text-[10px] tracking-[0.2em] bg-black px-5 py-2.5 rounded-full shadow-xl">
+        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-white font-bold uppercase text-[10px] tracking-[0.2em] bg-black px-5 py-2.5 rounded-full shadow-lg">
           {isMenuOpen ? "Close" : "Menu"}
         </button>
       </nav>
 
       <section ref={containerRef} className="relative h-[600vh]">
-        <div className="sticky top-0 h-screen w-full overflow-hidden">
+        <div className="sticky top-0 h-screen w-full overflow-hidden bg-white">
           <canvas ref={canvasRef} className="w-full h-full object-cover" />
           
           <div className="absolute inset-0 flex items-center justify-center text-center px-6 pointer-events-none">
             
-            {/* TEXT 1 + LOADING */}
-            <motion.div 
-              style={{ opacity: text1Opacity }} 
-              className="absolute drop-shadow-[0_2px_8px_rgba(255,255,255,0.8)]"
-            >
-              <h2 className="text-5xl md:text-7xl font-black italic text-black tracking-tighter leading-none">GURUBANTUGURU</h2>
-              <p className="text-black font-bold tracking-[0.3em] uppercase text-[10px] md:text-xs mt-4">Asisten AI Untuk Para Guru Indonesia</p>
-              
-              {!isLoaded && (
-                <div className="mt-10 flex flex-col items-center gap-2">
-                  <div className="w-6 h-6 border-2 border-black/10 border-t-black rounded-full animate-spin"></div>
-                  <span className="text-[10px] font-black text-black tracking-widest">{progress}%</span>
-                </div>
-              )}
+            <motion.div style={{ opacity: text1Opacity }} className="absolute">
+              <h2 className="text-5xl md:text-7xl font-black italic text-black tracking-tighter leading-none drop-shadow-[0_2px_5px_rgba(255,255,255,0.8)]">
+                GURUBANTUGURU
+              </h2>
+              <p className="text-black/80 font-bold tracking-[0.3em] uppercase text-[10px] md:text-xs mt-4 drop-shadow-[0_1px_3px_rgba(255,255,255,0.8)]">
+                Asisten AI Untuk Para Guru Indonesia
+              </p>
+
+              {/* Ikon loading di bawah teks judul */}
+              <AnimatePresence>
+                {!isLoaded && (
+                  <motion.div 
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    className="mt-8 flex flex-col items-center gap-2"
+                  >
+                    <div className="w-6 h-6 border-2 border-black/10 border-t-black rounded-full animate-spin"></div>
+                    <span className="text-[10px] font-black text-black tracking-widest">{progress}%</span>
+                    <p className="text-[8px] font-bold text-black/40 uppercase tracking-tighter">Sabar, lagi nyiapin aset...</p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
 
-            {/* TEXT 2 */}
-            <motion.div 
-              style={{ opacity: text2Opacity }} 
-              className="absolute drop-shadow-[0_2px_8px_rgba(255,255,255,0.8)]"
-            >
-              <h2 className="text-4xl md:text-6xl font-black italic text-black uppercase leading-none tracking-tighter">Merubah Kebiasaan <br/> Yang Lama</h2>
+            <motion.div style={{ opacity: text2Opacity }} className="absolute">
+              <h2 className="text-4xl md:text-6xl font-black italic text-black uppercase leading-none tracking-tighter drop-shadow-[0_2px_5px_rgba(255,255,255,0.8)]">
+                Merubah Kebiasaan <br/> Yang Lama
+              </h2>
             </motion.div>
 
-            {/* TEXT 3 */}
-            <motion.div 
-              style={{ opacity: text3Opacity }} 
-              className="absolute drop-shadow-[0_2px_8px_rgba(255,255,255,0.8)]"
-            >
-              <h2 className="text-4xl md:text-6xl font-black italic text-black uppercase leading-none tracking-tighter">Menjadi Lebih Modern <br/> Dan Efisien</h2>
+            <motion.div style={{ opacity: text3Opacity }} className="absolute">
+              <h2 className="text-4xl md:text-6xl font-black italic text-black uppercase leading-none tracking-tighter drop-shadow-[0_2px_5px_rgba(255,255,255,0.8)]">
+                Menjadi Lebih Modern <br/> Dan Efisien
+              </h2>
             </motion.div>
 
           </div>
