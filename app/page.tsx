@@ -17,17 +17,13 @@ export default function Home() {
     offset: ["start start", "end start"],
   });
 
-  // 1. ZONA GAMBAR: 0% - 85% scroll untuk menghabiskan semua frame
+  // Alur: Gambar (0-85%), Teks Zoom (85-100%)
   const frameIndex = useTransform(scrollYProgress, [0, 0.85], [0, totalFrames - 1]);
-  
-  // 2. ZONA TEKS: Muncul & Zoom setelah 85% (Gambar sudah di frame terakhir)
-  const textOpacity = useTransform(scrollYProgress, [0, 0.84, 0.85, 0.98, 1], [0, 0, 1, 1, 0]);
-  const textScale = useTransform(scrollYProgress, [0.85, 1], [1, 30]);
-  
-  // 3. TRANSISI AKHIR: Gambar tetap 100% terlihat sampai teks hampir menutupi layar
-  const canvasOpacity = useTransform(scrollYProgress, [0.9, 1], [1, 0]);
+  const textOpacity = useTransform(scrollYProgress, [0.84, 0.86, 0.98, 1], [0, 1, 1, 0]);
+  const textScale = useTransform(scrollYProgress, [0.85, 1], [1, 35]);
+  const canvasOpacity = useTransform(scrollYProgress, [0.95, 1], [1, 0]);
 
-  // PRELOAD IMAGES
+  // Preload Images
   useEffect(() => {
     const loadedImages: HTMLImageElement[] = [];
     let count = 0;
@@ -46,7 +42,7 @@ export default function Home() {
     }
   }, []);
 
-  // LOGIKA RENDER CANVAS (FULL SCREEN COVER)
+  // Render Canvas Full Screen (Anti Black Bar)
   useEffect(() => {
     if (!isLoaded || !canvasRef.current) return;
     const context = canvasRef.current.getContext("2d");
@@ -55,96 +51,89 @@ export default function Home() {
       const img = images[Math.floor(index)];
       if (img && context && canvasRef.current) {
         const canvas = canvasRef.current;
-        
-        // Logika Object-Fit: Cover
-        const imgRatio = img.width / img.height;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
         const canvasRatio = canvas.width / canvas.height;
-        let dWidth = canvas.width;
-        let dHeight = canvas.height;
-        let dx = 0;
-        let dy = 0;
+        const imgRatio = img.width / img.height;
+
+        let drawWidth, drawHeight, offsetX, offsetY;
 
         if (imgRatio > canvasRatio) {
-          dWidth = canvas.height * imgRatio;
-          dx = (canvas.width - dWidth) / 2;
+          drawHeight = canvas.height;
+          drawWidth = canvas.height * imgRatio;
+          offsetX = (canvas.width - drawWidth) / 2;
+          offsetY = 0;
         } else {
-          dHeight = canvas.width / imgRatio;
-          dy = (canvas.height - dHeight) / 2;
+          drawWidth = canvas.width;
+          drawHeight = canvas.width / imgRatio;
+          offsetX = 0;
+          offsetY = (canvas.height - drawHeight) / 2;
         }
 
         context.clearRect(0, 0, canvas.width, canvas.height);
-        context.drawImage(img, dx, dy, dWidth, dHeight);
+        context.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
       }
     };
 
     const unsubscribe = frameIndex.on("change", (latest) => renderCanvas(latest));
-    renderCanvas(0); // Render frame awal
+    renderCanvas(0);
     return () => unsubscribe();
   }, [isLoaded, images, frameIndex]);
 
-  // Handle Resize Window
-  useEffect(() => {
-    const resize = () => {
-      if (canvasRef.current) {
-        canvasRef.current.width = window.innerWidth;
-        canvasRef.current.height = window.innerHeight;
-      }
-    };
-    window.addEventListener("resize", resize);
-    resize();
-    return () => window.removeEventListener("resize", resize);
-  }, []);
-
   return (
-    <main className="relative bg-black">
-      {/* LOADING SCREEN */}
+    <main className="relative bg-black font-[family-name:var(--font-outfit)]">
+      {/* LOADING SCREEN (Sesuai gaya visual aplikasi) */}
       {!isLoaded && (
-        <div className="fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center text-white font-[family-name:var(--font-outfit)]">
-          <div className="text-3xl font-black italic mb-6 tracking-tighter uppercase">GuruBantu</div>
+        <div className="fixed inset-0 z-[200] bg-black flex flex-col items-center justify-center text-white">
+          <div className="text-3xl font-black italic mb-6 tracking-tighter uppercase text-blue-400">GuruBantu</div>
           <div className="w-64 h-[2px] bg-white/10 rounded-full overflow-hidden">
-            <div className="h-full bg-blue-600 transition-all duration-300" style={{ width: `${progress}%` }} />
+            <div className="h-full bg-blue-500 transition-all duration-300" style={{ width: `${progress}%` }} />
           </div>
-          <span className="mt-4 text-[10px] tracking-[0.6em] opacity-40 uppercase">Loading {progress}%</span>
+          <span className="mt-4 text-[10px] tracking-[0.5em] opacity-40 uppercase font-bold">Inisialisasi {progress}%</span>
         </div>
       )}
+
+      {/* NAVBAR TRANSPARAN (GAYA GOLDA) */}
+      <nav className="fixed top-0 w-full z-[100] px-6 py-8 flex justify-between items-center mix-blend-difference">
+        <div className="text-2xl font-black text-blue-400 tracking-tighter uppercase italic">
+          GuruBantu
+        </div>
+        <button className="flex flex-col gap-1.5 p-2 group">
+          <div className="w-8 h-[2px] bg-white group-hover:bg-blue-400 transition-colors" />
+          <div className="w-8 h-[2px] bg-white group-hover:bg-blue-400 transition-colors" />
+          <div className="w-5 h-[2px] bg-white group-hover:bg-blue-400 transition-colors self-end" />
+        </button>
+      </nav>
 
       {/* HERO SECTION */}
       <section ref={containerRef} className="relative h-[1500vh] bg-black">
         <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
           
-          {/* Canvas: Full Layar & Selalu di Bawah Teks */}
+          {/* Canvas: Full Layar Langsung dari Awal */}
           <motion.canvas
             ref={canvasRef}
             style={{ opacity: canvasOpacity }}
             className="absolute inset-0 w-full h-full"
           />
 
-          {/* Overlay Tipis agar Teks Terbaca */}
+          {/* Overlay Tipis */}
           <div className="absolute inset-0 bg-black/10" />
 
-          {/* TEKS: Zoom setelah Frame Selesai */}
+          {/* TEKS ZOOM: Muncul Hanya Setelah Frame Terakhir Selesai */}
           <motion.div 
             style={{ scale: textScale, opacity: textOpacity }}
-            className="relative z-10 pointer-events-none font-[family-name:var(--font-outfit)]"
+            className="relative z-10 pointer-events-none"
           >
             <h1 className="text-6xl md:text-[140px] font-black text-white leading-none uppercase tracking-tighter text-center italic drop-shadow-2xl">
               GURU BANTU <br /> GURU
             </h1>
           </motion.div>
-
-          {/* Indikator Scroll */}
-          <motion.div 
-            style={{ opacity: useTransform(scrollYProgress, [0, 0.05], [1, 0]) }}
-            className="absolute bottom-12 flex flex-col items-center gap-4 opacity-40"
-          >
-            <div className="w-[1px] h-20 bg-gradient-to-b from-blue-500 to-transparent" />
-            <span className="text-[10px] text-white tracking-[1em] uppercase rotate-90 ml-2 font-bold">Scroll</span>
-          </motion.div>
         </div>
       </section>
 
-      {/* SEKSI CONTENT */}
-      <div className="relative z-20 bg-black text-white font-[family-name:var(--font-outfit)]">
+      {/* SEKSI BERIKUTNYA */}
+      <div className="relative z-20 bg-black text-white">
         <section className="py-60 px-6 max-w-5xl mx-auto text-center">
           <motion.span 
             initial={{ opacity: 0 }}
@@ -157,10 +146,10 @@ export default function Home() {
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2 }}
-            className="text-3xl md:text-7xl font-light leading-none tracking-tighter"
+            className="text-4xl md:text-7xl font-light leading-none tracking-tighter"
           >
-            Teknologi untuk <br /> 
-            <span className="text-blue-600 font-bold">Mencerdaskan Bangsa.</span>
+            Memberdayakan <br /> 
+            <span className="text-blue-500 font-bold italic">Pendidikan Indonesia.</span>
           </motion.p>
         </section>
       </div>
