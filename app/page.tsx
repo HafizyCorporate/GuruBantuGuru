@@ -107,8 +107,8 @@ export default function Home() {
       </div>
 
       <div className="relative z-20 w-full bg-white">
-        {/* OUR STORY */}
-        <section className="min-h-screen w-full flex flex-col items-center justify-center px-6 py-32 bg-gradient-to-b from-white to-blue-50/30">
+        {/* OUR STORY - Padding bawah dikurangi agar lebih dekat ke Visi */}
+        <section className="w-full flex flex-col items-center justify-center px-6 pt-32 pb-12 bg-gradient-to-b from-white to-blue-50/30">
           <div className="max-w-4xl w-full text-center">
             <motion.h2 
               initial={{ opacity: 0, y: 50 }}
@@ -125,8 +125,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* VISI & MISI */}
-        <section className="w-full px-6 py-32 bg-gradient-to-b from-blue-50/30 to-white overflow-hidden">
+        {/* VISI & MISI - Padding atas dikurangi */}
+        <section className="w-full px-6 pt-12 pb-32 bg-gradient-to-b from-blue-50/30 to-white overflow-hidden">
           <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
             <motion.div 
               initial={{ opacity: 0, x: -50 }}
