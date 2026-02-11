@@ -18,13 +18,15 @@ export default function Home() {
     offset: ["start start", "end end"] 
   });
 
-  // Canvas habis di 0.99 (99% scroll)
-  const frameIndex = useTransform(scrollYProgress, [0, 0.99], [0, totalFrames - 1], { clamp: true });
+  // --- LOGIKA HABIS (BUKAN DIKUNCI) ---
+  // Canvas akan berjalan terus dari frame 0 ke frame terakhir 
+  // mengikuti scroll dari paling atas (0) sampai paling bawah (1) tanpa tertahan.
+  const frameIndex = useTransform(scrollYProgress, [0, 1], [0, totalFrames - 1]);
 
-  // Teks sekarang warna hitam (diubah di class) dan opacity diatur
-  const text1Opacity = useTransform(scrollYProgress, [0, 0.1, 0.2], [1, 1, 0]);
-  const text2Opacity = useTransform(scrollYProgress, [0.3, 0.4, 0.5, 0.6], [0, 1, 1, 0]);
-  const text3Opacity = useTransform(scrollYProgress, [0.7, 0.85, 0.99], [0, 1, 1]);
+  // Teks mengikuti durasi scroll yang sama agar tidak tabrakan
+  const text1Opacity = useTransform(scrollYProgress, [0, 0.15, 0.3], [1, 1, 0]);
+  const text2Opacity = useTransform(scrollYProgress, [0.4, 0.55, 0.7], [0, 1, 0]);
+  const text3Opacity = useTransform(scrollYProgress, [0.8, 0.95], [0, 1]);
 
   useEffect(() => {
     const loadedImages: HTMLImageElement[] = [];
@@ -75,7 +77,7 @@ export default function Home() {
 
   return (
     <main className="bg-white">
-      {/* Navbar - Teks menu hitam agar keliatan di atas canvas */}
+      {/* Navbar - Teks menu hitam */}
       <nav className="fixed top-0 w-full z-[100] px-6 py-6 flex justify-between items-center">
         <div className="text-xl font-black text-black italic tracking-tighter uppercase">GURU BANTU GURU</div>
         <button 
@@ -86,17 +88,17 @@ export default function Home() {
         </button>
       </nav>
 
-      <section ref={containerRef} className="relative h-[800vh]">
+      {/* h-[500vh] atau lebih pendek agar scroll tidak melelahkan tapi tetap halus */}
+      <section ref={containerRef} className="relative h-[600vh]">
         <div className="sticky top-0 h-screen w-full overflow-hidden">
-          {/* Canvas Utama */}
           <canvas ref={canvasRef} className="w-full h-full object-cover" />
 
-          {/* INPUT LOADING DI ATAS CANVAS (Muncul sebelum load selesai) */}
+          {/* LOADING OVERLAY DI ATAS CANVAS */}
           <AnimatePresence>
             {!isLoaded && (
               <motion.div 
                 exit={{ opacity: 0 }} 
-                className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white/80 backdrop-blur-sm"
+                className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white"
               >
                 <div className="w-48 h-1 bg-gray-200 rounded-full overflow-hidden">
                   <motion.div 
@@ -106,13 +108,13 @@ export default function Home() {
                   />
                 </div>
                 <p className="mt-4 text-[10px] font-black italic tracking-widest text-black uppercase">
-                  Processing Guru Bantu AI {progress}%
+                  Processing AI {progress}%
                 </p>
               </motion.div>
             )}
           </AnimatePresence>
           
-          {/* TEKS CANVAS - SEMUA JADI HITAM */}
+          {/* TEKS CANVAS HITAM */}
           <div className="absolute inset-0 flex items-center justify-center text-center px-6 pointer-events-none">
             <motion.div style={{ opacity: text1Opacity }} className="absolute">
               <h2 className="text-4xl md:text-6xl font-black italic text-black tracking-tighter leading-none">GURUBANTUGURU</h2>
@@ -130,8 +132,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FOOTER SIMPLE (Tanpa Our Story) */}
-      <footer className="relative z-30 bg-white py-10 text-center">
+      {/* Footer Simple */}
+      <footer className="bg-white py-10 text-center border-t border-gray-100">
         <p className="opacity-40 text-[10px] font-black uppercase tracking-[0.5em]">© 2026 GURU BANTU GURU</p>
       </footer>
     </main>
