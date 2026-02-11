@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 
 export default function Home() {
@@ -21,6 +21,16 @@ export default function Home() {
   const text1Opacity = useTransform(scrollYProgress, [0, 0.1, 0.2], [1, 1, 0]);
   const text2Opacity = useTransform(scrollYProgress, [0.35, 0.5, 0.6], [0, 1, 0]);
   const text3Opacity = useTransform(scrollYProgress, [0.75, 0.85, 0.95], [0, 1, 0]);
+
+  // --- LOGIKA LOCK SCROLL ---
+  useEffect(() => {
+    if (!isLoaded) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+      document.body.style.overflowX = "hidden";
+    }
+  }, [isLoaded]);
 
   useEffect(() => {
     const loadedImages: HTMLImageElement[] = [];
@@ -57,6 +67,8 @@ export default function Home() {
       const img = images[Math.floor(latest)];
       if (img) requestAnimationFrame(() => draw(img, context, canvasRef.current!));
     });
+    // Render frame pertama agar tidak kosong saat baru terbuka
+    draw(images[0], context, canvasRef.current);
     return () => unsubscribe();
   }, [images, frameIndex]);
 
@@ -69,11 +81,43 @@ export default function Home() {
         html, body { background-color: black; margin: 0; padding: 0; overflow-x: hidden; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* CSS UNTUK LOADING ICON */
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        .loader {
+          border: 3px solid rgba(255, 255, 255, 0.1);
+          border-left-color: #ffffff;
+          border-radius: 50%;
+          width: 40px;
+          height: 40px;
+          animation: spin 1s linear infinite;
+        }
       `}</style>
 
       {/* SECTION 1: CANVAS */}
       <div ref={containerRef} className="relative h-[600vh] w-full">
         <div className="fixed top-0 left-0 w-full h-screen z-0 overflow-hidden">
+          
+          {/* --- LOADING OVERLAY --- */}
+          <AnimatePresence>
+            {!isLoaded && (
+              <motion.div 
+                initial={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.8 }}
+                className="absolute inset-0 z-[100] flex flex-col items-center justify-center bg-black"
+              >
+                <div className="loader mb-4"></div>
+                <p className="text-white text-[10px] font-black tracking-[0.3em] uppercase opacity-50 italic">
+                    Loading AI Assets...
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           <canvas ref={canvasRef} className="w-full h-full object-cover" />
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-4 pointer-events-none">
             <motion.div style={{ opacity: text1Opacity }} className="absolute flex flex-col items-center w-full">
@@ -234,7 +278,6 @@ export default function Home() {
                </motion.h2>
                
                <div className="flex gap-6 overflow-x-auto pb-8 snap-x scrollbar-hide px-4">
-                 {/* Testi 1 */}
                  <div className="min-w-[300px] md:min-w-[400px] bg-white p-8 rounded-2xl shadow-xl border border-blue-50 snap-center">
                    <div className="flex text-yellow-400 mb-4 text-xl">★★★★★</div>
                    <p className="text-gray-700 italic mb-6 leading-relaxed font-medium">"Luar biasa! Dulu bikin soal butuh waktu berjam-jam, sekarang hitungan detik langsung jadi. Sangat membantu tugas administrasi saya di sekolah."</p>
@@ -244,7 +287,6 @@ export default function Home() {
                    </div>
                  </div>
 
-                 {/* Testi 2 */}
                  <div className="min-w-[300px] md:min-w-[400px] bg-white p-8 rounded-2xl shadow-xl border border-blue-50 snap-center">
                    <div className="flex text-yellow-400 mb-4 text-xl">★★★★★</div>
                    <p className="text-gray-700 italic mb-6 leading-relaxed font-medium">"Koreksi jawaban jadi jauh lebih cepat dengan Jawaban AI. Akurasinya mantap dan saya bisa memberikan feedback personal ke siswa lebih cepat."</p>
@@ -254,7 +296,6 @@ export default function Home() {
                    </div>
                  </div>
 
-                 {/* Testi 3 */}
                  <div className="min-w-[300px] md:min-w-[400px] bg-white p-8 rounded-2xl shadow-xl border border-blue-50 snap-center">
                    <div className="flex text-yellow-400 mb-4 text-xl">★★★★★</div>
                    <p className="text-gray-700 italic mb-6 leading-relaxed font-medium">"GURUBANTUGURU benar-benar modern. Fitur-fiturnya to-the-point dan mudah digunakan bahkan untuk guru yang tidak terlalu paham IT."</p>
@@ -275,3 +316,4 @@ export default function Home() {
     </main>
   );
 }
+
