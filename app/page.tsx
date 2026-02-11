@@ -18,21 +18,19 @@ export default function Home() {
     offset: ["start start", "end end"] 
   });
 
-  // --- LOGIKA TIMING CANVAS (DIPERBAIKI) ---
-  // Frame dipaksa selesai lebih awal di 0.85 (85% scroll)
-  // Agar gedung modern (akhir canvas) diam tertahan sampai scroll mencapai 0.98
-  const frameIndex = useTransform(scrollYProgress, [0, 0.85], [0, totalFrames - 1]);
+  // --- PERUBAHAN DRAGSTIS DISINI ---
+  // 1. Canvas selesai diputar jauh lebih awal (di 70% scroll)
+  const frameIndex = useTransform(scrollYProgress, [0, 0.7], [0, totalFrames - 1]);
 
+  // 2. Teks 3 juga selesai lebih awal agar tidak menabrak konten naik
   const text1Opacity = useTransform(scrollYProgress, [0, 0.1, 0.2], [1, 1, 0]);
   const text2Opacity = useTransform(scrollYProgress, [0.3, 0.4, 0.5, 0.6], [0, 1, 1, 0]);
+  const text3Opacity = useTransform(scrollYProgress, [0.65, 0.75, 0.85], [0, 1, 0]);
   
-  // Teks 3 hilang di 0.9 agar canvas bersih sebelum transisi naik
-  const text3Opacity = useTransform(scrollYProgress, [0.7, 0.85, 0.9], [0, 1, 0]);
-  
-  // Konten BARU NAIK di detik-detik terakhir scroll (0.98 ke 1.0)
-  // Ini memastikan gedung modern sudah terlihat sempurna tanpa gangguan
+  // 3. Konten naik dipaksa hanya muncul di ujung paling akhir (0.98 ke 1.0)
+  // Artinya ada 28% jarak scroll dimana gedung modern DIAM (dari 0.7 sampai 0.98)
   const contentY = useTransform(scrollYProgress, [0.98, 1], ["100vh", "0vh"]);
-  // -----------------------------------------
+  // ---------------------------------
 
   useEffect(() => {
     const loadedImages: HTMLImageElement[] = [];
@@ -116,7 +114,6 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* Tetap 1000vh agar scroll terasa halus */}
       <section ref={containerRef} className="relative h-[1000vh]">
         <div className="sticky top-0 h-screen w-full overflow-hidden">
           <canvas ref={canvasRef} className="w-full h-full object-cover" />
