@@ -20,6 +20,13 @@ export default function Home() {
 
   const frameIndex = useTransform(scrollYProgress, [0, 1], [0, totalFrames - 1]);
 
+  // --- LOGIKA TEKS CANVAS (BARU) ---
+  const text1Opacity = useTransform(scrollYProgress, [0, 0.1, 0.2], [1, 1, 0]);
+  const text2Opacity = useTransform(scrollYProgress, [0.3, 0.4, 0.5, 0.6], [0, 1, 1, 0]);
+  const text3Opacity = useTransform(scrollYProgress, [0.7, 0.8, 0.85], [0, 1, 0]);
+  const contentY = useTransform(scrollYProgress, [0.85, 1], ["100vh", "0vh"]);
+  // --------------------------------
+
   useEffect(() => {
     const loadedImages: HTMLImageElement[] = [];
     let count = 0;
@@ -78,7 +85,6 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* Nav: Mix-blend-difference agar teks otomatis berubah warna tergantung background */}
       <nav className="fixed top-0 w-full z-[100] px-6 py-6 flex justify-between items-center mix-blend-difference">
         <div className="text-xl font-black text-white italic tracking-tighter uppercase">GURU BANTU GURU</div>
         <button 
@@ -89,13 +95,10 @@ export default function Home() {
         </button>
       </nav>
 
-      {/* Overlay Menu Hamburger */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}
             className="fixed inset-0 z-[90] bg-blue-600 flex flex-col items-center justify-center gap-8 text-white text-4xl font-black italic uppercase"
           >
             <a href="#ourstory" onClick={() => setIsMenuOpen(false)} className="hover:line-through">Our Story</a>
@@ -107,98 +110,85 @@ export default function Home() {
       </AnimatePresence>
 
       {/* Section Scroll Canvas */}
-      <section ref={containerRef} className="relative h-[600vh]">
+      <section ref={containerRef} className="relative h-[800vh]">
         <div className="sticky top-0 h-screen w-full overflow-hidden">
           <canvas ref={canvasRef} className="w-full h-full object-cover" />
-        </div>
-      </section>
-
-      {/* Section Our Story */}
-      <section id="ourstory" className="py-40 px-6 bg-white border-t border-gray-100">
-        <div className="max-w-4xl mx-auto text-center">
-          <span className="text-blue-600 font-bold tracking-[0.3em] uppercase text-xs mb-4 block">The Mission</span>
-          <h3 className="text-6xl md:text-8xl font-black italic uppercase mb-10 tracking-tighter">OUR STORY</h3>
-          <p className="text-xl md:text-3xl text-gray-500 font-medium italic leading-relaxed">
-            Berawal dari sekolah yang <span className="text-blue-600 font-bold">gaptek</span>. 
-            Kami hadir untuk memerdekakan waktu guru yang tercuri oleh administrasi purba melalui AI.
-          </p>
-        </div>
-      </section>
-
-      {/* Visi Misi */}
-      <section id="visi" className="bg-[#001a41] py-32 px-6 text-white text-center rounded-t-[50px] md:rounded-t-[100px]">
-        <div className="max-w-4xl mx-auto space-y-16">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
-            <h4 className="uppercase font-bold tracking-[0.5em] text-blue-400 text-xs mb-4">Visi Kami</h4>
-            <p className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter">Hemat waktu kerja guru hingga 80%.</p>
-          </motion.div>
-          <div className="h-[1px] w-20 bg-blue-600 mx-auto"></div>
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
-            <h4 className="uppercase font-bold tracking-[0.5em] text-blue-400 text-xs mb-4">Misi Kami</h4>
-            <p className="text-xl md:text-2xl font-bold italic text-blue-100 leading-snug">
-              Menghapus beban menyusun soal dan koreksi jawaban secara otomatis, agar guru bisa fokus mendidik.
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Produk Section */}
-      <section id="produk" className="py-40 px-6 bg-gray-50">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12">
-          {/* Card Soal AI */}
-          <div className="bg-white p-12 rounded-[50px] shadow-xl hover:shadow-2xl transition-shadow border border-gray-100">
-            <h4 className="text-4xl font-black italic mb-6 text-blue-600 uppercase tracking-tighter">01. SOAL AI</h4>
-            <p className="text-gray-500 mb-10 font-medium italic text-lg leading-relaxed">
-              Generator soal cerdas. Masukkan materi, dan biarkan AI menyusun soal HOTS sesuai kurikulum dalam sekejap.
-            </p>
-            <button className="bg-black text-white px-8 py-4 rounded-full font-black italic uppercase text-xs tracking-widest hover:bg-blue-600 transition-colors">Play Store</button>
-          </div>
           
-          {/* Card Jawaban AI */}
-          <div className="bg-white p-12 rounded-[50px] shadow-xl hover:shadow-2xl transition-shadow border border-gray-100 md:mt-20">
-            <h4 className="text-4xl font-black italic mb-6 text-blue-600 uppercase tracking-tighter">02. JAWABAN AI</h4>
-            <p className="text-gray-500 mb-10 font-medium italic text-lg leading-relaxed">
-              Koreksi otomatis berbasis kamera. Cukup scan lembar jawaban siswa dan lihat hasilnya seketika.
-            </p>
-            <button className="bg-black text-white px-8 py-4 rounded-full font-black italic uppercase text-xs tracking-widest hover:bg-blue-600 transition-colors">Play Store</button>
+          {/* OVERLAY TEKS PADA CANVAS */}
+          <div className="absolute inset-0 flex items-center justify-center text-center px-6 pointer-events-none">
+            <motion.div style={{ opacity: text1Opacity }} className="absolute">
+              <h2 className="text-5xl md:text-8xl font-black italic text-white tracking-tighter leading-none">GURUBANTUGURU</h2>
+              <p className="text-blue-400 font-bold tracking-[0.3em] uppercase text-xs md:text-sm mt-4">Asisten AI Untuk Para Guru Indonesia</p>
+            </motion.div>
+
+            <motion.div style={{ opacity: text2Opacity }} className="absolute">
+              <h2 className="text-4xl md:text-7xl font-black italic text-white tracking-tighter leading-none uppercase">Merubah Kebiasaan <br/> Yang Lama</h2>
+            </motion.div>
+
+            <motion.div style={{ opacity: text3Opacity }} className="absolute">
+              <h2 className="text-4xl md:text-7xl font-black italic text-white tracking-tighter leading-none uppercase">Menjadi Lebih Modern <br/> Dan Efisien</h2>
+            </motion.div>
           </div>
+          {/* Overlay gelap tipis agar teks lebih terbaca */}
+          <div className="absolute inset-0 bg-black/10 pointer-events-none" />
         </div>
-      </section>
 
-      {/* Review Section */}
-      <section className="bg-white py-32 px-6">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
-          {[
-            { t: "Hidup saya berubah, gak perlu lembur koreksi lagi!", n: "Ibu Rahma", r: "Guru SMP" },
-            { t: "Fitur Soal AI-nya gila sih, akurat banget!", n: "Pak Junaidi", r: "Guru SD" },
-            { t: "UI-nya ramah banget buat guru yang gaptek.", n: "Ibu Siska", r: "Guru SMA" }
-          ].map((item, idx) => (
-            <div key={idx} className="p-10 bg-gray-50 rounded-[40px] border border-gray-100">
-              <div className="text-blue-600 text-2xl mb-4 font-black">★★★★★</div>
-              <p className="italic font-bold text-[#001a41] mb-6 text-lg">"{item.t}"</p>
-              <p className="text-blue-600 font-black uppercase text-xs tracking-widest">{item.n}</p>
-              <p className="text-gray-400 text-[10px] font-bold uppercase">{item.r}</p>
+        {/* WRAPPER SCROLL REVEAL UNTUK KONTEN BAWAH */}
+        <motion.div style={{ y: contentY }} className="relative z-20 bg-white shadow-[0_-20px_50px_rgba(0,0,0,0.1)] rounded-t-[50px] md:rounded-t-[100px]">
+          
+          <section id="ourstory" className="py-40 px-6 bg-white border-t border-gray-100 rounded-t-[50px] md:rounded-t-[100px]">
+            <div className="max-w-4xl mx-auto text-center">
+              <span className="text-blue-600 font-bold tracking-[0.3em] uppercase text-xs mb-4 block">The Mission</span>
+              <h3 className="text-6xl md:text-8xl font-black italic uppercase mb-10 tracking-tighter">OUR STORY</h3>
+              <p className="text-xl md:text-3xl text-gray-500 font-medium italic leading-relaxed">
+                Berawal dari sekolah yang <span className="text-blue-600 font-bold">gaptek</span>. 
+                Kami hadir untuk memerdekakan waktu guru yang tercuri oleh administrasi purba melalui AI.
+              </p>
             </div>
-          ))}
-        </div>
-      </section>
+          </section>
 
-      {/* Footer Contact */}
-      <footer id="contact" className="py-32 px-6 text-center border-t border-gray-100">
-        <h3 className="text-5xl md:text-7xl font-black italic mb-12 tracking-tighter">CONTACT US</h3>
-        <div className="space-y-4 mb-16">
-          <p className="font-black text-blue-600 uppercase tracking-[0.2em] text-lg underline">halo@gurubantu.ai</p>
-          <p className="font-black text-[#001a41] uppercase tracking-[0.2em] text-lg">+62 812 3344 5566</p>
-        </div>
-        
-        <div className="max-w-md mx-auto p-12 bg-blue-600 rounded-[50px] text-white shadow-2xl">
-          <h4 className="font-black italic mb-4 uppercase tracking-tighter text-2xl">AI Support</h4>
-          <p className="text-blue-100 font-medium italic mb-8 text-sm opacity-80">Butuh bantuan teknis? Ngobrol dengan asisten AI kami.</p>
-          <button className="bg-white text-blue-600 w-full py-5 rounded-3xl font-black italic uppercase tracking-widest hover:bg-black hover:text-white transition-all">Chat Now</button>
-        </div>
-        
-        <p className="mt-24 opacity-20 text-[10px] font-black uppercase tracking-[0.5em]">© 2026 GURU BANTU GURU</p>
-      </footer>
+          <section id="visi" className="bg-[#001a41] py-32 px-6 text-white text-center rounded-t-[50px] md:rounded-t-[100px]">
+            <div className="max-w-4xl mx-auto space-y-16">
+              <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
+                <h4 className="uppercase font-bold tracking-[0.5em] text-blue-400 text-xs mb-4">Visi Kami</h4>
+                <p className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter">Hemat waktu kerja guru hingga 80%.</p>
+              </motion.div>
+              <div className="h-[1px] w-20 bg-blue-600 mx-auto"></div>
+              <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
+                <h4 className="uppercase font-bold tracking-[0.5em] text-blue-400 text-xs mb-4">Misi Kami</h4>
+                <p className="text-xl md:text-2xl font-bold italic text-blue-100 leading-snug">
+                  Menghapus beban menyusun soal dan koreksi jawaban secara otomatis, agar guru bisa fokus mendidik.
+                </p>
+              </motion.div>
+            </div>
+          </section>
+
+          <section id="produk" className="py-40 px-6 bg-gray-50">
+            <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12">
+              <div className="bg-white p-12 rounded-[50px] shadow-xl hover:shadow-2xl transition-shadow border border-gray-100">
+                <h4 className="text-4xl font-black italic mb-6 text-blue-600 uppercase tracking-tighter">01. SOAL AI</h4>
+                <p className="text-gray-500 mb-10 font-medium italic text-lg leading-relaxed">
+                  Generator soal cerdas. Masukkan materi, dan biarkan AI menyusun soal HOTS sesuai kurikulum dalam sekejap.
+                </p>
+                <button className="bg-black text-white px-8 py-4 rounded-full font-black italic uppercase text-xs tracking-widest hover:bg-blue-600 transition-colors">Play Store</button>
+              </div>
+              <div className="bg-white p-12 rounded-[50px] shadow-xl hover:shadow-2xl transition-shadow border border-gray-100 md:mt-20">
+                <h4 className="text-4xl font-black italic mb-6 text-blue-600 uppercase tracking-tighter">02. JAWABAN AI</h4>
+                <p className="text-gray-500 mb-10 font-medium italic text-lg leading-relaxed">
+                  Koreksi otomatis berbasis kamera. Cukup scan lembar jawaban siswa dan lihat hasilnya seketika.
+                </p>
+                <button className="bg-black text-white px-8 py-4 rounded-full font-black italic uppercase text-xs tracking-widest hover:bg-blue-600 transition-colors">Play Store</button>
+              </div>
+            </div>
+          </section>
+
+          <footer id="contact" className="py-32 px-6 text-center border-t border-gray-100">
+            <h3 className="text-5xl md:text-7xl font-black italic mb-12 tracking-tighter">CONTACT US</h3>
+            <p className="font-black text-blue-600 uppercase tracking-[0.2em] text-lg underline">halo@gurubantu.ai</p>
+            <p className="mt-24 opacity-20 text-[10px] font-black uppercase tracking-[0.5em]">© 2026 GURU BANTU GURU</p>
+          </footer>
+        </motion.div>
+      </section>
     </main>
   );
 }
