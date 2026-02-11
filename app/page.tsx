@@ -6,12 +6,12 @@ import { useState, useEffect, useRef } from "react";
 export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  
   const [images, setImages] = useState<HTMLImageElement[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
   const totalFrames = 194;
   
+  // Kita buat durasi scroll canvas 500vh
   const { scrollYProgress } = useScroll({ 
     target: containerRef, 
     offset: ["start start", "end end"] 
@@ -19,26 +19,14 @@ export default function Home() {
 
   const frameIndex = useTransform(scrollYProgress, [0, 1], [0, totalFrames - 1]);
 
-  // Opacity teks untuk Canvas (GURUBANTUGURU)
+  // Opacity teks canvas
   const text1Opacity = useTransform(scrollYProgress, [0, 0.1, 0.2], [1, 1, 0]);
   const text2Opacity = useTransform(scrollYProgress, [0.35, 0.5, 0.6], [0, 1, 0]);
   const text3Opacity = useTransform(scrollYProgress, [0.75, 0.85, 0.95], [0, 1, 0]);
 
   useEffect(() => {
-    document.documentElement.style.background = "transparent";
-    document.body.style.background = "transparent";
-    
     const loadedImages: HTMLImageElement[] = [];
     let count = 0;
-
-    const firstImg = new Image();
-    firstImg.src = `/ezgif-frame-001.jpg`;
-    firstImg.onload = () => {
-      if (canvasRef.current) {
-        const ctx = canvasRef.current.getContext("2d", { alpha: false });
-        if (ctx) draw(firstImg, ctx, canvasRef.current);
-      }
-    };
 
     for (let i = 1; i <= totalFrames; i++) {
       const img = new Image();
@@ -81,17 +69,19 @@ export default function Home() {
   };
 
   return (
-    <main className="relative bg-transparent">
+    <main className="relative w-full bg-black">
       <style jsx global>{`
-        html, body { background: transparent !important; margin: 0; padding: 0; overflow-x: hidden; }
+        html, body { background-color: black; margin: 0; padding: 0; }
       `}</style>
 
-      {/* SECTION 1: CANVAS - Tinggi 600vh agar scroll terasa panjang dan full */}
-      <section ref={containerRef} className="relative h-[600vh]">
-        <div className="sticky top-0 h-screen w-full overflow-hidden">
-          <canvas ref={canvasRef} className="absolute inset-0 w-full h-full object-cover z-0" />
+      {/* CONTAINER SCROLL UNTUK CANVAS */}
+      <div ref={containerRef} className="relative h-[600vh] w-full">
+        
+        {/* CANVAS: Pakai FIXED biar dia Full Screen 100% dan GAK GERAK ke atas */}
+        <div className="fixed top-0 left-0 w-full h-screen z-0 overflow-hidden">
+          <canvas ref={canvasRef} className="w-full h-full object-cover" />
           
-          <div className="relative z-10 h-full w-full flex flex-col items-center justify-center text-center px-4 pointer-events-none">
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-4 pointer-events-none">
             <motion.div style={{ opacity: text1Opacity }} className="absolute flex flex-col items-center w-full">
               <h1 className="text-[2.6rem] md:text-8xl font-black italic tracking-tighter leading-[0.85] uppercase" style={hollowTextStyle}>
                 GURUBANTUGURU
@@ -114,52 +104,46 @@ export default function Home() {
             </motion.div>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* SECTION 2: OUR STORY - Berada di luar container Canvas agar muncul SETELAH scroll selesai */}
-      <div className="relative z-20 bg-white">
-        <section 
-          className="min-h-screen w-full flex flex-col items-center justify-center px-6 py-32 bg-gradient-to-b from-white via-white to-blue-50"
-        >
+      {/* OUR STORY: Baru muncul SETELAH 600vh (setelah canvas habis scroll) */}
+      {/* Pakai z-20 dan bg-white biar dia MENUMPUK/KETIBAN canvas di bawahnya */}
+      <section className="relative z-20 w-full bg-white">
+        <div className="min-h-screen w-full flex flex-col items-center justify-center px-6 py-32 bg-gradient-to-b from-white via-white to-blue-50">
           <div className="max-w-4xl w-full text-center">
             <motion.h2 
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
+              transition={{ duration: 1 }}
               className="text-5xl md:text-7xl font-black italic tracking-tighter text-black uppercase mb-16"
             >
               Our Story
             </motion.h2>
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 1.5, delay: 0.5 }}
-              className="space-y-10 text-black px-4"
-            >
+            <div className="space-y-10 text-black px-4">
               <p className="text-xl md:text-3xl font-semibold leading-tight italic text-blue-900/80">
                 "Berawal dari mimpi sederhana di tengah keterbatasan teknologi, kami melihat cahaya yang meredup di mata para pendidik bangsa."
               </p>
               
               <p className="text-lg md:text-xl leading-relaxed font-light">
-                Kami berdiri di sana, menyaksikan para guru yang memikul beban administrasi setinggi gunung, mengorbankan waktu berharga yang seharusnya milik anak-anak didik dan keluarga mereka. Di sanalah nurani kami terpanggil. Kami berangkat untuk meruntuhkan sekat-sekat rumit itu dan menggantinya dengan <span className="font-bold underline decoration-blue-500">keajaiban teknologi yang memanusiakan.</span>
+                Kami menyaksikan lelahnya mata mereka di balik tumpukan kertas, raga yang terkuras hanya untuk administrasi yang seolah tak pernah usai. Kami berangkat untuk meruntuhkan sekat-sekat rumit itu dan menggantinya dengan <span className="font-bold underline decoration-blue-500">keajaiban teknologi yang memanusiakan.</span>
               </p>
 
               <div className="h-[2px] w-32 bg-gradient-to-r from-transparent via-blue-400 to-transparent mx-auto my-12" />
 
-              <p className="text-lg md:text-xl leading-relaxed italic">
-                Guru Bantu Guru bukan sekadar platform digital. Ia adalah persembahan cinta bagi mereka yang tak lelah menanam benih masa depan. Kami hadir agar tak ada lagi guru yang merasa tertinggal, agar tak ada lagi dedikasi yang terbuang sia-sia. Karena saat beban guru terangkat, saat itulah masa depan bangsa benar-benar mulai <span className="font-bold text-blue-700">bertumbuh dan bersemi.</span>
+              <p className="text-lg md:text-xl leading-relaxed italic text-gray-700">
+                Guru Bantu Guru hadir agar tak ada lagi guru yang merasa tertinggal. Karena saat beban guru terangkat, saat itulah masa depan bangsa benar-benar mulai <span className="font-bold text-blue-700">bertumbuh dan bersemi.</span>
               </p>
-            </motion.div>
+            </div>
           </div>
-        </section>
+        </div>
 
-        <footer className="py-12 text-center">
+        <footer className="py-12 text-center bg-blue-50">
           <p className="opacity-40 text-[10px] font-black uppercase tracking-[0.5em] text-blue-900">
             © 2026 GURU BANTU GURU
           </p>
         </footer>
-      </div>
+      </section>
     </main>
   );
 }
