@@ -18,17 +18,19 @@ export default function Home() {
     offset: ["start start", "end end"] 
   });
 
-  // Video selesai diputar saat scroll mencapai 90% (0.9)
-  const frameIndex = useTransform(scrollYProgress, [0, 0.9], [0, totalFrames - 1]);
+  // --- LOGIKA TIMING CANVAS (DIUBAH) ---
+  // Frame canvas dipaksa selesai di 0.8 (80% scroll) supaya dia diam dulu di akhir
+  const frameIndex = useTransform(scrollYProgress, [0, 0.8], [0, totalFrames - 1]);
 
-  // --- LOGIKA TEKS CANVAS & SCROLL REVEAL (DIKUNCI KE AKHIR) ---
   const text1Opacity = useTransform(scrollYProgress, [0, 0.1, 0.2], [1, 1, 0]);
   const text2Opacity = useTransform(scrollYProgress, [0.3, 0.4, 0.5, 0.6], [0, 1, 1, 0]);
-  const text3Opacity = useTransform(scrollYProgress, [0.7, 0.85, 0.92], [0, 1, 0]);
   
-  // Konten baru mulai naik SETELAH frame gambar berhenti (start di 0.95)
-  const contentY = useTransform(scrollYProgress, [0.95, 1], ["100vh", "0vh"]);
-  // ----------------------------------------------------
+  // Teks 3 hilang di 0.9 agar ada ruang kosong sebelum konten naik
+  const text3Opacity = useTransform(scrollYProgress, [0.7, 0.85, 0.9], [0, 1, 0]);
+  
+  // Konten baru naik setelah canvas selesai & teks hilang (di 0.98 - 1.0)
+  const contentY = useTransform(scrollYProgress, [0.98, 1], ["100vh", "0vh"]);
+  // ------------------------------------
 
   useEffect(() => {
     const loadedImages: HTMLImageElement[] = [];
@@ -112,12 +114,10 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* Section Scroll Canvas - h-[1000vh] untuk memberikan ruang jeda di akhir */}
       <section ref={containerRef} className="relative h-[1000vh]">
         <div className="sticky top-0 h-screen w-full overflow-hidden">
           <canvas ref={canvasRef} className="w-full h-full object-cover" />
           
-          {/* OVERLAY TEKS PADA CANVAS - UKURAN DIKECILKAN */}
           <div className="absolute inset-0 flex items-center justify-center text-center px-6 pointer-events-none">
             <motion.div style={{ opacity: text1Opacity }} className="absolute">
               <h2 className="text-4xl md:text-6xl font-black italic text-white tracking-tighter leading-none">GURUBANTUGURU</h2>
@@ -135,7 +135,6 @@ export default function Home() {
           <div className="absolute inset-0 bg-black/10 pointer-events-none" />
         </div>
 
-        {/* WRAPPER SCROLL REVEAL UNTUK KONTEN BAWAH */}
         <motion.div style={{ y: contentY }} className="relative z-20 bg-white shadow-[0_-30px_60px_rgba(0,0,0,0.2)] rounded-t-[50px] md:rounded-t-[100px]">
           
           <section id="ourstory" className="py-40 px-6 bg-white border-t border-gray-100 rounded-t-[50px] md:rounded-t-[100px]">
