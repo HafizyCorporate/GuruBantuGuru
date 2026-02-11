@@ -60,7 +60,8 @@ export default function Home() {
     return () => unsubscribe();
   }, [images, frameIndex]);
 
-  const goldBoxStyle = "bg-[#D4AF37]/25 backdrop-blur-[1px] px-6 py-2 inline-block border border-[#D4AF37]/40 shadow-xl";
+  // STYLE BARU: Kolom Putih Tipis & Teks Hitam (Menghapus Emas)
+  const whiteBoxStyle = "bg-white/40 backdrop-blur-[4px] px-6 py-2 inline-block border border-white/60 shadow-lg";
   const canvasTitleStyle = "text-black font-black italic uppercase leading-none tracking-tighter";
 
   return (
@@ -69,31 +70,52 @@ export default function Home() {
         html, body { background-color: black; margin: 0; padding: 0; }
       `}</style>
 
-      {/* CANVAS SECTION */}
+      {/* SECTION 1: CANVAS */}
       <div ref={containerRef} className="relative h-[600vh] w-full">
         <div className="fixed top-0 left-0 w-full h-screen z-0 overflow-hidden">
           <canvas ref={canvasRef} className="w-full h-full object-cover" />
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-4 pointer-events-none">
+            
+            {/* TEXT 1 */}
             <motion.div style={{ opacity: text1Opacity }} className="absolute flex flex-col items-center w-full">
-              <div className={goldBoxStyle}><h1 className={`${canvasTitleStyle} text-[2.6rem] md:text-8xl`}>GURUBANTUGURU</h1></div>
-              <div className="mt-4 bg-black px-4 py-1"><p className="font-bold tracking-[0.3em] uppercase text-[9px] md:text-xs text-[#D4AF37]">Asisten AI Untuk Para Guru Indonesia</p></div>
+              <div className={whiteBoxStyle}>
+                <h1 className={`${canvasTitleStyle} text-[2.6rem] md:text-8xl`}>GURUBANTUGURU</h1>
+              </div>
+              <div className="mt-4 bg-black/90 px-4 py-1">
+                <p className="font-bold tracking-[0.3em] uppercase text-[9px] md:text-xs text-white">
+                    Asisten AI Untuk Para Guru Indonesia
+                </p>
+              </div>
             </motion.div>
+
+            {/* TEXT 2 */}
             <motion.div style={{ opacity: text2Opacity }} className="absolute w-full px-6 flex flex-col items-center gap-3">
-              <div className={goldBoxStyle}><h2 className={`${canvasTitleStyle} text-3xl md:text-7xl`}>Merubah Kebiasaan</h2></div>
-              <div className={goldBoxStyle}><h2 className={`${canvasTitleStyle} text-3xl md:text-7xl`}>Yang Lama</h2></div>
+              <div className={whiteBoxStyle}>
+                <h2 className={`${canvasTitleStyle} text-3xl md:text-7xl`}>Merubah Kebiasaan</h2>
+              </div>
+              <div className={whiteBoxStyle}>
+                <h2 className={`${canvasTitleStyle} text-3xl md:text-7xl`}>Yang Lama</h2>
+              </div>
             </motion.div>
+
+            {/* TEXT 3 */}
             <motion.div style={{ opacity: text3Opacity }} className="absolute w-full px-6 flex flex-col items-center gap-3">
-              <div className={goldBoxStyle}><h2 className={`${canvasTitleStyle} text-3xl md:text-7xl`}>Menjadi Lebih Modern</h2></div>
-              <div className={goldBoxStyle}><h2 className={`${canvasTitleStyle} text-3xl md:text-7xl`}>Dan Efisien</h2></div>
+              <div className={whiteBoxStyle}>
+                <h2 className={`${canvasTitleStyle} text-3xl md:text-7xl`}>Menjadi Lebih Modern</h2>
+              </div>
+              <div className={whiteBoxStyle}>
+                <h2 className={`${canvasTitleStyle} text-3xl md:text-7xl`}>Dan Efisien</h2>
+              </div>
             </motion.div>
+
           </div>
         </div>
       </div>
 
-      {/* WHITE SECTIONS WRAPPER */}
+      {/* WHITE SECTIONS (Story, Visi & Misi) */}
       <div className="relative z-20 w-full bg-white">
         
-        {/* OUR STORY SECTION */}
+        {/* OUR STORY */}
         <section className="min-h-screen w-full flex flex-col items-center justify-center px-6 py-32 bg-gradient-to-b from-white to-blue-50/30">
           <div className="max-w-4xl w-full text-center">
             <motion.h2 
@@ -111,33 +133,31 @@ export default function Home() {
           </div>
         </section>
 
-        {/* VISI & MISI SECTION (2 KOLOM) */}
+        {/* VISI & MISI 2 KOLOM */}
         <section className="w-full px-6 py-32 bg-gradient-to-b from-blue-50/30 to-white">
           <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
             
-            {/* KOLOM VISI */}
             <motion.div 
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1, ease: "easeOut" }}
+              transition={{ duration: 1 }}
               className="p-8 md:p-12 border-l-4 border-blue-400 bg-blue-50/20 shadow-sm"
             >
               <h3 className="text-4xl md:text-5xl font-black italic tracking-tighter text-black uppercase mb-8">Visi</h3>
               <p className="text-lg md:text-xl leading-relaxed text-gray-800 font-light">
-                Menjadi episentrum transformasi digital pendidikan di Indonesia yang tidak hanya mengandalkan kecerdasan buatan, namun mengedepankan empati teknologi. Kami bervisi menciptakan ekosistem di mana setiap guru, dari pelosok hingga kota besar, memiliki asisten pintar yang memungkinkan mereka kembali pada tugas mulia paling mendasar: membentuk karakter dan masa depan manusia tanpa terbelenggu rantai administrasi yang usang.
+                Menjadi episentrum transformasi digital pendidikan di Indonesia yang tidak hanya mengandalkan kecerdasan buatan, namun mengedepankan empati teknologi. Kami bervisi menciptakan ekosistem di mana setiap guru memiliki asisten pintar.
               </p>
             </motion.div>
 
-            {/* KOLOM MISI */}
             <motion.div 
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
+              transition={{ duration: 1, delay: 0.2 }}
               className="p-8 md:p-12 border-l-4 border-blue-400 bg-blue-50/20 shadow-sm"
             >
               <h3 className="text-4xl md:text-5xl font-black italic tracking-tighter text-black uppercase mb-8">Misi</h3>
               <p className="text-lg md:text-xl leading-relaxed text-gray-800 font-light">
-                Membangun teknologi yang inklusif dan mudah diakses untuk menyederhanakan proses belajar mengajar harian secara revolusioner. Kami berkomitmen untuk mendemokrasikan akses AI bagi pendidik, menyediakan alat kolaborasi yang memangkas waktu kerja efektif, serta terus berinovasi dalam menyajikan konten pendidikan yang adaptif. Misi kami adalah memastikan tidak ada satu pun pahlawan tanpa tanda jasa yang berjalan sendirian di era disrupsi ini.
+                Membangun teknologi yang inklusif untuk menyederhanakan proses belajar mengajar secara revolusioner. Kami berkomitmen untuk mendemokrasikan akses AI bagi pendidik, serta memastikan tidak ada guru yang berjalan sendirian.
               </p>
             </motion.div>
 
