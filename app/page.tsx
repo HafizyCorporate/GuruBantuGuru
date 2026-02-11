@@ -7,6 +7,7 @@ export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [images, setImages] = useState<HTMLImageElement[]>([]);
+  const [progress, setProgress] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
 
   const totalFrames = 194;
@@ -22,17 +23,6 @@ export default function Home() {
   const text2Opacity = useTransform(scrollYProgress, [0.4, 0.55, 0.7], [0, 1, 0]);
   const text3Opacity = useTransform(scrollYProgress, [0.8, 0.95, 1], [0, 1, 1]);
 
-  // LOCK SCROLL SAMPAI KELAR DOWNLOAD (TANPA LAYAR HITAM)
-  useEffect(() => {
-    if (!isLoaded) {
-      document.body.style.overflow = "hidden";
-      window.scrollTo(0, 0);
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    return () => { document.body.style.overflow = "unset"; };
-  }, [isLoaded]);
-
   useEffect(() => {
     const loadedImages: HTMLImageElement[] = [];
     let count = 0;
@@ -41,13 +31,16 @@ export default function Home() {
       img.src = `/ezgif-frame-${i.toString().padStart(3, '0')}.jpg`;
       img.onload = () => {
         count++;
+        const currentProgress = Math.floor((count / totalFrames) * 100);
+        setProgress(currentProgress);
         if (count === totalFrames) {
-          setImages(loadedImages);
           setIsLoaded(true);
         }
       };
       loadedImages[i - 1] = img;
     }
+    setImages(loadedImages);
+    document.body.style.overflow = "unset";
   }, []);
 
   useEffect(() => {
@@ -57,6 +50,7 @@ export default function Home() {
     const render = (val: number) => {
       const currentIndex = Math.floor(val);
       const img = images[currentIndex];
+      
       if (img && context) {
         const canvas = canvasRef.current!;
         canvas.width = window.innerWidth;
@@ -75,49 +69,60 @@ export default function Home() {
     return () => unsubscribe();
   }, [images]);
 
-  // EFEK GLOW AGAR TEKS HITAM TEMBUS DI GAMBAR GELAP
-  const glowStyle = "drop-shadow(0 0 15px rgba(255,255,255,0.9)) drop-shadow(0 0 5px rgba(255,255,255,1))";
+  // Style Teks Hitam dengan Cahaya Putih agar kontras
+  const textStyle = {
+    filter: "drop-shadow(0 0 12px rgba(255,255,255,1))",
+    color: "black"
+  };
 
   return (
-    <main className="bg-white">
-      {/* Navbar Transparan */}
-      <nav className="fixed top-0 w-full z-[100] px-6 py-6 flex justify-between items-center">
-        <div className="text-xl font-black text-black italic tracking-tighter uppercase mix-blend-difference">
+    <main className="relative bg-white">
+      <nav className="fixed top-0 w-full z-[100] px-6 py-6 flex justify-between items-center mix-blend-difference">
+        <div className="text-xl font-black text-white italic tracking-tighter uppercase">
           GURU BANTU GURU
         </div>
-        <button className="text-white font-bold uppercase text-[10px] tracking-[0.2em] bg-black px-5 py-2.5 rounded-full">
-          Menu
-        </button>
       </nav>
 
       <section ref={containerRef} className="relative h-[600vh]">
         <div className="sticky top-0 h-screen w-full overflow-hidden">
           
-          {/* LANGSUNG CANVAS (GAK ADA DIV ITEM/PUTIH SAMA SEKALI) */}
           <canvas ref={canvasRef} className="w-full h-full object-cover" />
           
           <div className="absolute inset-0 flex items-center justify-center text-center px-6 pointer-events-none">
             
-            {/* TEXT 1 */}
-            <motion.div style={{ opacity: text1Opacity, filter: glowStyle }} className="absolute">
-              <h2 className="text-5xl md:text-8xl font-black italic text-black tracking-tighter leading-none">
+            <motion.div style={{ opacity: text1Opacity, ...textStyle }} className="absolute flex flex-col items-center">
+              <h2 className="text-5xl md:text-8xl font-black italic tracking-tighter leading-none">
                 GURUBANTUGURU
               </h2>
-              <p className="text-black font-bold tracking-[0.4em] uppercase text-[10px] md:text-xs mt-6">
+              <p className="font-bold tracking-[0.4em] uppercase text-[10px] md:text-xs mt-4">
                 Asisten AI Untuk Para Guru Indonesia
               </p>
+
+              {/* LOADING SCREEN BERJALAN 0-100% */}
+              {!isLoaded && (
+                <div className="mt-10 flex flex-col items-center gap-2">
+                  <div className="w-48 h-[2px] bg-black/10 overflow-hidden rounded-full shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+                    <motion.div 
+                      className="h-full bg-black" 
+                      initial={{ width: 0 }}
+                      animate={{ width: `${progress}%` }}
+                    />
+                  </div>
+                  <span className="text-[12px] font-black italic tracking-tighter">
+                    LOADING {progress}%
+                  </span>
+                </div>
+              )}
             </motion.div>
 
-            {/* TEXT 2 */}
-            <motion.div style={{ opacity: text2Opacity, filter: glowStyle }} className="absolute">
-              <h2 className="text-4xl md:text-7xl font-black italic text-black uppercase leading-none tracking-tighter">
+            <motion.div style={{ opacity: text2Opacity, ...textStyle }} className="absolute">
+              <h2 className="text-4xl md:text-7xl font-black italic uppercase leading-none tracking-tighter">
                 Merubah Kebiasaan <br/> Yang Lama
               </h2>
             </motion.div>
 
-            {/* TEXT 3 */}
-            <motion.div style={{ opacity: text3Opacity, filter: glowStyle }} className="absolute">
-              <h2 className="text-4xl md:text-7xl font-black italic text-black uppercase leading-none tracking-tighter">
+            <motion.div style={{ opacity: text3Opacity, ...textStyle }} className="absolute">
+              <h2 className="text-4xl md:text-7xl font-black italic uppercase leading-none tracking-tighter">
                 Menjadi Lebih Modern <br/> Dan Efisien
               </h2>
             </motion.div>
@@ -126,7 +131,7 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="bg-white py-6 text-center border-t border-gray-100">
+      <footer className="bg-white py-6 text-center">
         <p className="opacity-20 text-[10px] font-black uppercase tracking-[0.5em]">© 2026 GURU BANTU GURU</p>
       </footer>
     </main>
