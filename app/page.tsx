@@ -60,7 +60,7 @@ export default function Home() {
     }
   }, []);
 
-  // LOGIKA MENGGAMBAR KE CANVAS (Full Screen Cover)
+  // LOGIKA MENGGAMBAR KE CANVAS (Optimasi Ketajaman)
   useEffect(() => {
     if (!isLoaded || !canvasRef.current) return;
     const context = canvasRef.current.getContext("2d");
@@ -69,19 +69,26 @@ export default function Home() {
       const img = images[Math.floor(index)];
       if (img && context && canvasRef.current) {
         const canvas = canvasRef.current;
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
         
-        const canvasRatio = canvas.width / canvas.height;
+        // --- START OPTIMASI KETAJAMAN ---
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = window.innerWidth * dpr;
+        canvas.height = window.innerHeight * dpr;
+        context.scale(dpr, dpr);
+        context.imageSmoothingEnabled = true;
+        context.imageSmoothingQuality = 'high';
+        // --- END OPTIMASI KETAJAMAN ---
+
+        const canvasRatio = window.innerWidth / window.innerHeight;
         const imgRatio = img.width / img.height;
         let dW, dH, dX, dY;
 
         if (imgRatio > canvasRatio) {
-          dH = canvas.height; dW = canvas.height * imgRatio;
-          dX = (canvas.width - dW) / 2; dY = 0;
+          dH = window.innerHeight; dW = window.innerHeight * imgRatio;
+          dX = (window.innerWidth - dW) / 2; dY = 0;
         } else {
-          dW = canvas.width; dH = canvas.width / imgRatio;
-          dX = 0; dY = (canvas.height - dH) / 2;
+          dW = window.innerWidth; dH = window.innerWidth / imgRatio;
+          dX = 0; dY = (window.innerHeight - dH) / 2;
         }
 
         context.clearRect(0, 0, canvas.width, canvas.height);
@@ -130,7 +137,12 @@ export default function Home() {
         <section ref={containerRef} className="relative h-[1200vh]">
           {/* STICKY CANVAS: Gambar diam di tempat, Frame berubah sesuai jempol user */}
           <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center bg-white">
-            <canvas ref={canvasRef} className="absolute inset-0 w-full h-full object-cover" />
+            {/* Ditambahkan filter contrast untuk efek tajam tambahan */}
+            <canvas 
+              ref={canvasRef} 
+              className="absolute inset-0 w-full h-full object-cover" 
+              style={{ filter: 'contrast(1.03) brightness(1.02)' }}
+            />
             
             {/* Teks bergantian di atas gambar */}
             <motion.div style={{ opacity: introOpacity, y: introY, ...glowStyle }} className="relative z-10 text-center px-6">
