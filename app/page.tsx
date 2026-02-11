@@ -18,18 +18,13 @@ export default function Home() {
     offset: ["start start", "end end"] 
   });
 
-  // 1. Canvas menghabiskan hampir seluruh scroll (0 sampai 0.98)
-  // Ini memastikan gedung jadi modern SEBELUM konten naik.
-  const frameIndex = useTransform(scrollYProgress, [0, 0.98], [0, totalFrames - 1], { clamp: true });
+  // Canvas habis di 0.99 (99% scroll)
+  const frameIndex = useTransform(scrollYProgress, [0, 0.99], [0, totalFrames - 1], { clamp: true });
 
-  // 2. Teks diatur agar sudah bersih saat gedung modern selesai
+  // Teks sekarang warna hitam (diubah di class) dan opacity diatur
   const text1Opacity = useTransform(scrollYProgress, [0, 0.1, 0.2], [1, 1, 0]);
   const text2Opacity = useTransform(scrollYProgress, [0.3, 0.4, 0.5, 0.6], [0, 1, 1, 0]);
-  const text3Opacity = useTransform(scrollYProgress, [0.7, 0.85, 0.95], [0, 1, 0]);
-  
-  // 3. KUNCI JAWABAN: Konten naik HANYA di 1% terakhir (0.99 ke 1.0)
-  // Jadi canvas 'habis' dulu di 0.98, lalu pas dikit lagi mentok (0.99), konten langsung naik.
-  const contentY = useTransform(scrollYProgress, [0.99, 1], ["100vh", "0vh"]);
+  const text3Opacity = useTransform(scrollYProgress, [0.7, 0.85, 0.99], [0, 1, 1]);
 
   useEffect(() => {
     const loadedImages: HTMLImageElement[] = [];
@@ -79,62 +74,66 @@ export default function Home() {
   }, [isLoaded, images, frameIndex]);
 
   return (
-    <main className="bg-white text-[#001a41]">
-      <AnimatePresence>
-        {!isLoaded && (
-          <motion.div exit={{ opacity: 0 }} className="fixed inset-0 z-[999] bg-white flex flex-col items-center justify-center">
-            <h2 className="text-2xl font-black italic text-blue-600">GURU BANTU GURU</h2>
-            <p className="mt-2 text-xs font-bold text-gray-400">LOADING {progress}%</p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <nav className="fixed top-0 w-full z-[100] px-6 py-6 flex justify-between items-center mix-blend-difference">
-        <div className="text-xl font-black text-white italic tracking-tighter uppercase">GURU BANTU GURU</div>
+    <main className="bg-white">
+      {/* Navbar - Teks menu hitam agar keliatan di atas canvas */}
+      <nav className="fixed top-0 w-full z-[100] px-6 py-6 flex justify-between items-center">
+        <div className="text-xl font-black text-black italic tracking-tighter uppercase">GURU BANTU GURU</div>
         <button 
           onClick={() => setIsMenuOpen(!isMenuOpen)} 
-          className="text-white font-bold uppercase text-[10px] tracking-[0.2em] bg-blue-600 px-5 py-2.5 rounded-full hover:scale-105 transition-transform"
+          className="text-white font-bold uppercase text-[10px] tracking-[0.2em] bg-black px-5 py-2.5 rounded-full"
         >
           {isMenuOpen ? "Close" : "Menu"}
         </button>
       </nav>
 
-      {/* Gunakan 1000vh agar kontrol scroll presisi */}
-      <section ref={containerRef} className="relative h-[1000vh]">
+      <section ref={containerRef} className="relative h-[800vh]">
         <div className="sticky top-0 h-screen w-full overflow-hidden">
+          {/* Canvas Utama */}
           <canvas ref={canvasRef} className="w-full h-full object-cover" />
+
+          {/* INPUT LOADING DI ATAS CANVAS (Muncul sebelum load selesai) */}
+          <AnimatePresence>
+            {!isLoaded && (
+              <motion.div 
+                exit={{ opacity: 0 }} 
+                className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white/80 backdrop-blur-sm"
+              >
+                <div className="w-48 h-1 bg-gray-200 rounded-full overflow-hidden">
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: `${progress}%` }}
+                    className="h-full bg-black"
+                  />
+                </div>
+                <p className="mt-4 text-[10px] font-black italic tracking-widest text-black uppercase">
+                  Processing Guru Bantu AI {progress}%
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
           
+          {/* TEKS CANVAS - SEMUA JADI HITAM */}
           <div className="absolute inset-0 flex items-center justify-center text-center px-6 pointer-events-none">
             <motion.div style={{ opacity: text1Opacity }} className="absolute">
-              <h2 className="text-4xl md:text-6xl font-black italic text-white tracking-tighter leading-none">GURUBANTUGURU</h2>
-              <p className="text-blue-400 font-bold tracking-[0.3em] uppercase text-[10px] md:text-xs mt-4">Asisten AI Untuk Para Guru Indonesia</p>
+              <h2 className="text-4xl md:text-6xl font-black italic text-black tracking-tighter leading-none">GURUBANTUGURU</h2>
+              <p className="text-black/60 font-bold tracking-[0.3em] uppercase text-[10px] md:text-xs mt-4">Asisten AI Untuk Para Guru Indonesia</p>
             </motion.div>
 
             <motion.div style={{ opacity: text2Opacity }} className="absolute">
-              <h2 className="text-3xl md:text-5xl font-black italic text-white uppercase">Merubah Kebiasaan <br/> Yang Lama</h2>
+              <h2 className="text-3xl md:text-5xl font-black italic text-black uppercase leading-none">Merubah Kebiasaan <br/> Yang Lama</h2>
             </motion.div>
 
             <motion.div style={{ opacity: text3Opacity }} className="absolute">
-              <h2 className="text-3xl md:text-5xl font-black italic text-white uppercase">Menjadi Lebih Modern <br/> Dan Efisien</h2>
+              <h2 className="text-3xl md:text-5xl font-black italic text-black uppercase leading-none">Menjadi Lebih Modern <br/> Dan Efisien</h2>
             </motion.div>
           </div>
-          <div className="absolute inset-0 bg-black/10 pointer-events-none" />
         </div>
-
-        <motion.div style={{ y: contentY }} className="relative z-20 bg-white shadow-[0_-30px_60px_rgba(0,0,0,0.2)] rounded-t-[50px] md:rounded-t-[100px]">
-          <section id="ourstory" className="py-40 px-6 bg-white border-t border-gray-100 rounded-t-[50px] md:rounded-t-[100px]">
-            <div className="max-w-4xl mx-auto text-center">
-              <span className="text-blue-600 font-bold tracking-[0.3em] uppercase text-xs mb-4 block">The Mission</span>
-              <h3 className="text-6xl md:text-8xl font-black italic uppercase mb-10 tracking-tighter">OUR STORY</h3>
-              <p className="text-xl md:text-3xl text-gray-500 font-medium italic leading-relaxed">
-                Berawal dari sekolah yang <span className="text-blue-600 font-bold">gaptek</span>. 
-                Kami hadir untuk memerdekakan waktu guru yang tercuri oleh administrasi purba melalui AI.
-              </p>
-            </div>
-          </section>
-          {/* Sisa konten sama... */}
-        </motion.div>
       </section>
+
+      {/* FOOTER SIMPLE (Tanpa Our Story) */}
+      <footer className="relative z-30 bg-white py-10 text-center">
+        <p className="opacity-40 text-[10px] font-black uppercase tracking-[0.5em]">© 2026 GURU BANTU GURU</p>
+      </footer>
     </main>
   );
 }
