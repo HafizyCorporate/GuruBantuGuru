@@ -19,35 +19,32 @@ export default function Home() {
 
   const frameIndex = useTransform(scrollYProgress, [0, 1], [0, totalFrames - 1]);
 
-  const text1Opacity = useTransform(scrollYProgress, [0, 0.15, 0.3], [1, 1, 0]);
-  const text2Opacity = useTransform(scrollYProgress, [0.4, 0.55, 0.7], [0, 1, 0]);
-  const text3Opacity = useTransform(scrollYProgress, [0.8, 0.95, 1], [0, 1, 1]);
-
-  // FIX: Bunuh background sistem sejak detik 0
-  useEffect(() => {
-    document.documentElement.style.background = "none";
-    document.body.style.background = "none";
-    document.body.style.overflow = "hidden"; // Lock scroll sampai frame 1 nongol
-  }, []);
+  const text1Opacity = useTransform(scrollYProgress, [0, 0.1, 0.25], [1, 1, 0]);
+  const text2Opacity = useTransform(scrollYProgress, [0.35, 0.5, 0.65], [0, 1, 0]);
+  const text3Opacity = useTransform(scrollYProgress, [0.75, 0.9, 1], [0, 1, 1]);
 
   useEffect(() => {
+    // Bunuh background sistem instan
+    document.documentElement.style.background = "transparent";
+    document.body.style.background = "transparent";
+    
     const loadedImages: HTMLImageElement[] = [];
     let count = 0;
 
-    // LANGSUNG TEMBAK FRAME 1
+    // 1. AMBIL FRAME PERTAMA SECEPAT KILAT
     const firstImg = new Image();
     firstImg.src = `/ezgif-frame-001.jpg`;
     firstImg.onload = () => {
       if (canvasRef.current) {
-        const context = canvasRef.current.getContext("2d", { alpha: false });
-        if (context) {
-          draw(firstImg, context, canvasRef.current);
-          document.body.style.overflow = "unset"; // Begitu gedung nongol, bebas scroll
+        const ctx = canvasRef.current.getContext("2d", { alpha: false });
+        if (ctx) {
+            ctx.imageSmoothingEnabled = false; // Speed up
+            draw(firstImg, ctx, canvasRef.current);
         }
       }
     };
 
-    // LOAD SISANYA
+    // 2. LOAD SISANYA SECARA ASYNC
     for (let i = 1; i <= totalFrames; i++) {
       const img = new Image();
       img.src = `/ezgif-frame-${i.toString().padStart(3, '0')}.jpg`;
@@ -73,82 +70,67 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (!canvasRef.current) return;
+    if (!canvasRef.current || images.length === 0) return;
     const context = canvasRef.current.getContext("2d", { alpha: false });
     if (!context) return;
     
     const unsubscribe = frameIndex.on("change", (latest) => {
       const img = images[Math.floor(latest)];
-      if (img && canvasRef.current) {
-        draw(img, context, canvasRef.current);
+      if (img) {
+        requestAnimationFrame(() => draw(img, context, canvasRef.current!));
       }
     });
     return () => unsubscribe();
   }, [images]);
 
-  // Style Teks: Ukuran Pas + Glow Putih agar tajam
-  const glowStyle = {
-    filter: "drop-shadow(0 0 15px rgba(255,255,255,1))",
+  // Style Teks: Glow diringankan biar render lebih enteng
+  const textStyle = {
+    filter: "drop-shadow(0 0 8px rgba(255,255,255,0.9))",
     color: "black"
   };
 
   return (
-    <main className="relative min-h-screen bg-transparent">
-      {/* PAKSA TRANSPARAN DI LEVEL GLOBAL */}
+    <main className="relative">
       <style jsx global>{`
-        html, body { background: transparent !important; }
-        * { -webkit-tap-highlight-color: transparent; }
+        html, body { background: transparent !important; margin: 0; padding: 0; }
+        canvas { background: transparent; }
       `}</style>
 
-      <nav className="fixed top-0 w-full z-[100] px-6 py-8 flex justify-between items-center mix-blend-difference">
-        <div className="text-xl font-black text-white italic tracking-tighter uppercase">
+      <nav className="fixed top-0 w-full z-50 px-6 py-6 flex justify-between items-center mix-blend-difference">
+        <div className="text-lg font-black text-white italic tracking-tighter uppercase">
           GURU BANTU GURU
         </div>
       </nav>
 
-      <section ref={containerRef} className="relative h-[600vh]">
+      <section ref={containerRef} className="relative h-[500vh]">
         <div className="sticky top-0 h-screen w-full overflow-hidden">
-          
-          {/* CANVAS: Layer Paling Bawah */}
-          <canvas 
-            ref={canvasRef} 
-            className="absolute inset-0 w-full h-full object-cover z-0" 
-          />
+          <canvas ref={canvasRef} className="absolute inset-0 w-full h-full object-cover" />
           
           <div className="relative z-10 h-full w-full flex flex-col items-center justify-center text-center px-6 pointer-events-none">
             
-            {/* TEXT 1: Ukuran di-adjust biar pas */}
-            <motion.div style={{ opacity: text1Opacity, ...glowStyle }} className="absolute flex flex-col items-center w-full">
-              <h1 className="text-[2.8rem] md:text-8xl font-black italic tracking-tighter leading-[0.9] uppercase">
+            <motion.div style={{ opacity: text1Opacity, ...textStyle }} className="absolute flex flex-col items-center">
+              <h1 className="text-5xl md:text-8xl font-black italic tracking-tighter leading-[0.85] uppercase">
                 GURUBANTUGURU
               </h1>
-              <p className="font-bold tracking-[0.3em] uppercase text-[10px] md:text-sm mt-4">
+              <p className="font-bold tracking-[0.3em] uppercase text-[10px] md:text-xs mt-4">
                 Asisten AI Untuk Para Guru Indonesia
               </p>
 
-              {/* Progress 0-100% (Tanpa background ganggu) */}
+              {/* Progress tipis aja biar gak berat */}
               {!isLoaded && (
-                <div className="mt-8 flex flex-col items-center opacity-60">
-                  <span className="text-[11px] font-black italic">{progress}%</span>
-                  <div className="w-24 h-[1.5px] bg-black/10 mt-1 overflow-hidden">
-                    <motion.div 
-                      className="h-full bg-black" 
-                      animate={{ width: `${progress}%` }}
-                    />
-                  </div>
+                <div className="mt-6 opacity-40">
+                  <span className="text-[10px] font-bold">{progress}%</span>
                 </div>
               )}
             </motion.div>
 
-            {/* TEXT 2 */}
-            <motion.div style={{ opacity: text2Opacity, ...glowStyle }} className="absolute w-full px-8">
+            <motion.div style={{ opacity: text2Opacity, ...textStyle }} className="absolute">
               <h2 className="text-4xl md:text-7xl font-black italic uppercase leading-none tracking-tighter">
                 Merubah Kebiasaan <br/> Yang Lama
               </h2>
             </motion.div>
 
-            {/* TEXT 3 */}
-            <motion.div style={{ opacity: text3Opacity, ...glowStyle }} className="absolute w-full px-8">
+            <motion.div style={{ opacity: text3Opacity, ...textStyle }} className="absolute">
               <h2 className="text-4xl md:text-7xl font-black italic uppercase leading-none tracking-tighter">
                 Menjadi Lebih Modern <br/> Dan Efisien
               </h2>
@@ -157,12 +139,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      <footer className="relative z-20 py-6 text-center">
-        <p className="opacity-30 text-[9px] font-bold uppercase tracking-[0.4em] text-black">
-          © 2026 GURU BANTU GURU
-        </p>
-      </footer>
     </main>
   );
 }
