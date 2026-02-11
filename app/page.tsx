@@ -60,7 +60,6 @@ export default function Home() {
     return () => unsubscribe();
   }, [images, frameIndex]);
 
-  // STYLE BARU: Kolom Putih Tipis & Teks Hitam (Menghapus Emas)
   const whiteBoxStyle = "bg-white/40 backdrop-blur-[4px] px-6 py-2 inline-block border border-white/60 shadow-lg";
   const canvasTitleStyle = "text-black font-black italic uppercase leading-none tracking-tighter";
 
@@ -75,8 +74,6 @@ export default function Home() {
         <div className="fixed top-0 left-0 w-full h-screen z-0 overflow-hidden">
           <canvas ref={canvasRef} className="w-full h-full object-cover" />
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-4 pointer-events-none">
-            
-            {/* TEXT 1 */}
             <motion.div style={{ opacity: text1Opacity }} className="absolute flex flex-col items-center w-full">
               <div className={whiteBoxStyle}>
                 <h1 className={`${canvasTitleStyle} text-[2.6rem] md:text-8xl`}>GURUBANTUGURU</h1>
@@ -88,7 +85,6 @@ export default function Home() {
               </div>
             </motion.div>
 
-            {/* TEXT 2 */}
             <motion.div style={{ opacity: text2Opacity }} className="absolute w-full px-6 flex flex-col items-center gap-3">
               <div className={whiteBoxStyle}>
                 <h2 className={`${canvasTitleStyle} text-3xl md:text-7xl`}>Merubah Kebiasaan</h2>
@@ -98,7 +94,6 @@ export default function Home() {
               </div>
             </motion.div>
 
-            {/* TEXT 3 */}
             <motion.div style={{ opacity: text3Opacity }} className="absolute w-full px-6 flex flex-col items-center gap-3">
               <div className={whiteBoxStyle}>
                 <h2 className={`${canvasTitleStyle} text-3xl md:text-7xl`}>Menjadi Lebih Modern</h2>
@@ -107,14 +102,11 @@ export default function Home() {
                 <h2 className={`${canvasTitleStyle} text-3xl md:text-7xl`}>Dan Efisien</h2>
               </div>
             </motion.div>
-
           </div>
         </div>
       </div>
 
-      {/* WHITE SECTIONS (Story, Visi & Misi) */}
       <div className="relative z-20 w-full bg-white">
-        
         {/* OUR STORY */}
         <section className="min-h-screen w-full flex flex-col items-center justify-center px-6 py-32 bg-gradient-to-b from-white to-blue-50/30">
           <div className="max-w-4xl w-full text-center">
@@ -133,10 +125,9 @@ export default function Home() {
           </div>
         </section>
 
-        {/* VISI & MISI 2 KOLOM */}
+        {/* VISI & MISI */}
         <section className="w-full px-6 py-32 bg-gradient-to-b from-blue-50/30 to-white">
           <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
-            
             <motion.div 
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -160,7 +151,63 @@ export default function Home() {
                 Membangun teknologi yang inklusif untuk menyederhanakan proses belajar mengajar secara revolusioner. Kami berkomitmen untuk mendemokrasikan akses AI bagi pendidik, serta memastikan tidak ada guru yang berjalan sendirian.
               </p>
             </motion.div>
+          </div>
+        </section>
 
+        {/* PRODUK KAMI - SECTION BARU */}
+        <section className="w-full px-6 py-32 bg-[#eef6ff]">
+          <div className="max-w-7xl mx-auto">
+            <motion.h2 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              className="text-5xl md:text-7xl font-black italic tracking-tighter text-black uppercase mb-20 text-center"
+            >
+              Produk Kami
+            </motion.h2>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+              {/* SOAL AI */}
+              <motion.div 
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="bg-white rounded-3xl overflow-hidden shadow-xl border border-blue-100"
+              >
+                <div className="p-8">
+                   <h3 className="text-4xl font-black italic uppercase mb-4 text-black italic">SOAL <span className="text-blue-600">AI</span></h3>
+                   <p className="text-gray-700 font-medium mb-6 leading-relaxed">
+                     AI yang menjadi asisten para guru untuk membuat soal secara instan! Khusus diatur untuk jenjang **SD, SMP, dan SMA**. Jangan biarkan waktu Anda habis hanya untuk mengetik soal. Dengan SOAL AI, Anda bisa menciptakan bank soal berkualitas, variatif, dan sesuai kurikulum hanya dalam hitungan detik. Biarkan teknologi bekerja, sementara Anda fokus menginspirasi siswa!
+                   </p>
+                   {/* Placeholder Slider - Masukkan link gambar Anda di sini */}
+                   <div className="flex gap-2 overflow-x-auto pb-4 snap-x">
+                      <div className="min-w-full h-64 bg-gray-200 rounded-xl snap-center flex items-center justify-center text-gray-400">Slide Foto 1</div>
+                      <div className="min-w-full h-64 bg-gray-200 rounded-xl snap-center flex items-center justify-center text-gray-400">Slide Foto 2</div>
+                      <div className="min-w-full h-64 bg-gray-200 rounded-xl snap-center flex items-center justify-center text-gray-400">Slide Foto 3</div>
+                   </div>
+                </div>
+              </motion.div>
+
+              {/* JAWABAN AI */}
+              <motion.div 
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="bg-[#0f172a] rounded-3xl overflow-hidden shadow-xl text-white"
+              >
+                <div className="p-8">
+                   <h3 className="text-4xl font-black italic uppercase mb-4 text-white">JAWABAN <span className="text-blue-400">AI</span></h3>
+                   <p className="text-blue-50 font-medium mb-6 leading-relaxed">
+                     Lelah memeriksa tumpukan kertas ujian setiap malam? **JAWABAN AI** dirancang khusus untuk menjadi asisten pribadi Anda dalam memeriksa soal murid secara otomatis dan akurat. AI kami tidak hanya memberi skor, tapi memberikan analisis mendalam tentang pemahaman siswa. Kurangi beban kerja Anda secara drastis dan kembalikan waktu berharga Anda bersama keluarga. Efisiensi bukan lagi mimpi!
+                   </p>
+                   {/* Placeholder Slider - Masukkan link gambar Anda di sini */}
+                   <div className="flex gap-2 overflow-x-auto pb-4 snap-x">
+                      <div className="min-w-full h-64 bg-gray-800 rounded-xl snap-center flex items-center justify-center text-gray-500">Slide Foto 1</div>
+                      <div className="min-w-full h-64 bg-gray-800 rounded-xl snap-center flex items-center justify-center text-gray-500">Slide Foto 2</div>
+                      <div className="min-w-full h-64 bg-gray-800 rounded-xl snap-center flex items-center justify-center text-gray-500">Slide Foto 3</div>
+                   </div>
+                </div>
+              </motion.div>
+            </div>
           </div>
         </section>
 
