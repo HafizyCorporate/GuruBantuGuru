@@ -19,7 +19,7 @@ export default function Home() {
 
   const frameIndex = useTransform(scrollYProgress, [0, 1], [0, totalFrames - 1]);
 
-  // Opacity teks untuk Canvas agar pas di gedung modern
+  // Opacity teks untuk Canvas (GURUBANTUGURU)
   const text1Opacity = useTransform(scrollYProgress, [0, 0.1, 0.2], [1, 1, 0]);
   const text2Opacity = useTransform(scrollYProgress, [0.35, 0.5, 0.6], [0, 1, 0]);
   const text3Opacity = useTransform(scrollYProgress, [0.75, 0.85, 0.95], [0, 1, 0]);
@@ -31,7 +31,7 @@ export default function Home() {
     const loadedImages: HTMLImageElement[] = [];
     let count = 0;
 
-    // Load Frame 1 Instan (Gedung Modern Awal)
+    // Load Frame 1 Instan
     const firstImg = new Image();
     firstImg.src = `/ezgif-frame-001.jpg`;
     firstImg.onload = () => {
@@ -87,7 +87,7 @@ export default function Home() {
         html, body { background: transparent !important; margin: 0; padding: 0; overflow-x: hidden; }
       `}</style>
 
-      {/* SECTION 1: CANVAS (Gedung Modern & Daun) */}
+      {/* SECTION 1: CANVAS TETAP SEPERTI SEBELUMNYA */}
       <section ref={containerRef} className="relative h-[600vh]">
         <div className="sticky top-0 h-screen w-full overflow-hidden">
           <canvas ref={canvasRef} className="absolute inset-0 w-full h-full object-cover z-0" />
@@ -117,24 +117,24 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SECTION 2: OUR STORY (Muncul setelah scroll gedung selesai) */}
+      {/* SECTION 2: OUR STORY (MUNCUL SETELAH CANVAS) */}
       <section 
-        className="relative min-h-screen w-full flex flex-col items-center justify-center px-6 py-32 bg-gradient-to-b from-white via-white to-blue-100/50"
+        className="relative min-h-screen w-full flex flex-col items-center justify-center px-6 py-32 bg-gradient-to-b from-white via-white to-blue-100 z-20"
       >
         <div className="max-w-4xl w-full text-center">
           <motion.h2 
-            initial={{ opacity: 0, filter: "blur(10px)" }}
-            whileInView={{ opacity: 1, filter: "blur(0px)" }}
-            transition={{ duration: 1.5 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
             className="text-5xl md:text-7xl font-black italic tracking-tighter text-black uppercase mb-16"
           >
             Our Story
           </motion.h2>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 2, delay: 0.5 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 1.5, delay: 0.5 }}
             className="space-y-10 text-black px-4"
           >
             <p className="text-xl md:text-3xl font-semibold leading-tight italic text-blue-900/80">
@@ -150,19 +150,11 @@ export default function Home() {
             <p className="text-lg md:text-xl leading-relaxed italic">
               Guru Bantu Guru bukan sekadar platform digital. Ia adalah persembahan cinta bagi mereka yang tak lelah menanam benih masa depan. Kami hadir agar tak ada lagi guru yang merasa tertinggal, agar tak ada lagi dedikasi yang terbuang sia-sia. Karena saat beban guru terangkat, saat itulah masa depan bangsa benar-benar mulai <span className="font-bold text-blue-700">bertumbuh dan bersemi.</span>
             </p>
-
-            <motion.div 
-              initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
-              className="pt-16 text-blue-500/30 text-4xl"
-            >
-              🍃
-            </motion.div>
           </motion.div>
         </div>
       </section>
 
-      <footer className="bg-blue-100/50 py-12 text-center">
+      <footer className="bg-blue-100 py-12 text-center">
         <p className="opacity-40 text-[10px] font-black uppercase tracking-[0.5em] text-blue-900">
           © 2026 GURU BANTU GURU
         </p>
