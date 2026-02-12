@@ -52,7 +52,7 @@ export default function Home() {
   }, []);
 
   const totalFrames = 194;
-  const minFramesToStart = 5; // KECEPATAN: Loading sangat cepat
+  const minFramesToStart = 5; // TETAP CEPAT: Hanya butuh 5 frame untuk mulai
   
   const { scrollYProgress } = useScroll({ 
     target: containerRef, 
@@ -144,7 +144,6 @@ export default function Home() {
       <div ref={containerRef} className="relative h-[600vh] w-full">
         <div className="fixed top-0 left-0 w-full h-screen z-0 overflow-hidden bg-black">
           <canvas ref={canvasRef} className="w-full h-full object-cover" />
-          
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-4 pointer-events-none">
             <motion.div style={{ opacity: text1Opacity }} className="absolute flex flex-col items-center w-full">
               <div className={whiteBoxStyle}><h1 className={`${canvasTitleStyle} text-[2.6rem] md:text-8xl lg:text-[11rem]`}>GURUBANTUGURU</h1></div>
@@ -153,12 +152,10 @@ export default function Home() {
                 {!isLoaded && <div className="loader-mini"></div>}
               </div>
             </motion.div>
-            
             <motion.div style={{ opacity: text2Opacity }} className="absolute w-full px-6 flex flex-col items-center gap-3 lg:gap-8">
               <div className={whiteBoxStyle}><h2 className={`${canvasTitleStyle} text-3xl md:text-7xl lg:text-9xl`}>Merubah Kebiasaan</h2></div>
               <div className={whiteBoxStyle}><h2 className={`${canvasTitleStyle} text-3xl md:text-7xl lg:text-9xl`}>Yang Lama</h2></div>
             </motion.div>
-            
             <motion.div style={{ opacity: text3Opacity }} className="absolute w-full px-6 flex flex-col items-center gap-3 lg:gap-8">
               <div className={whiteBoxStyle}><h2 className={`${canvasTitleStyle} text-3xl md:text-7xl lg:text-9xl`}>Menjadi Lebih Modern</h2></div>
               <div className={whiteBoxStyle}><h2 className={`${canvasTitleStyle} text-3xl md:text-7xl lg:text-9xl`}>Dan Efisien</h2></div>
@@ -168,12 +165,27 @@ export default function Home() {
       </div>
 
       <div className="relative z-20 w-full bg-white">
+        {/* OUR STORY */}
         <section id="our-story" className="w-full px-6 pt-32 pb-12 lg:pt-52 lg:pb-32 text-center max-w-7xl mx-auto">
             <h2 className="text-5xl md:text-7xl lg:text-9xl font-black italic tracking-tighter text-black uppercase mb-16 lg:mb-24">Our Story</h2>
             <div className="space-y-10 lg:space-y-20 text-black px-4 text-lg md:text-xl lg:text-3xl leading-relaxed font-light italic">
               <p className="text-xl md:text-3xl lg:text-5xl font-semibold text-blue-900/80">"Berawal dari mimpi sederhana di tengah keterbatasan teknologi..."</p>
               <p className="not-italic text-gray-700 lg:max-w-4xl lg:mx-auto">Kami menyaksikan lelahnya mata para guru di balik tumpukan kertas. Kami berangkat untuk meruntuhkan sekat rumit itu dan menggantinya dengan keajaiban teknologi yang memanusiakan.</p>
             </div>
+        </section>
+
+        {/* VISI MISI */}
+        <section className="w-full px-6 pt-12 pb-32 lg:pb-52 bg-gradient-to-b from-white to-blue-50/20 overflow-hidden">
+          <div className="max-w-7xl lg:max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
+            <div className="p-8 md:p-12 lg:p-24 border-l-4 lg:border-l-8 border-blue-600 bg-gray-50/50 shadow-sm rounded-r-2xl lg:rounded-r-[3rem]">
+              <h3 className="text-4xl md:text-5xl lg:text-7xl font-black italic tracking-tighter text-black uppercase mb-8 lg:mb-12">Visi</h3>
+              <p className="text-lg md:text-xl lg:text-3xl leading-relaxed text-gray-800 font-light italic">Menjadi episentrum transformasi digital pendidikan di Indonesia yang tidak hanya mengandalkan AI, namun mengedepankan empati teknologi.</p>
+            </div>
+            <div className="p-8 md:p-12 lg:p-24 border-l-4 lg:border-l-8 border-blue-600 bg-gray-50/50 shadow-sm rounded-r-2xl lg:rounded-r-[3rem]">
+              <h3 className="text-4xl md:text-5xl lg:text-7xl font-black italic tracking-tighter text-black uppercase mb-8 lg:mb-12">Misi</h3>
+              <p className="text-lg md:text-xl lg:text-3xl leading-relaxed text-gray-800 font-light italic">Membangun teknologi yang inklusif untuk menyederhanakan proses belajar mengajar secara revolusioner dan mendemokrasikan akses AI bagi pendidik.</p>
+            </div>
+          </div>
         </section>
 
         {/* PRODUK */}
@@ -207,12 +219,29 @@ export default function Home() {
           </div>
         </section>
 
-        {/* CONTACT US (DIPERBAIKI) */}
+        {/* TESTIMONI */}
+        <section id="testimoni" className="w-full px-6 py-32 lg:py-52 bg-white">
+          <div className="max-w-7xl mx-auto">
+            <h2 className="text-5xl md:text-7xl lg:text-9xl font-black italic tracking-tighter text-black uppercase mb-20 text-center">Apa Kata Mereka?</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="p-10 border-2 border-gray-100 rounded-[2.5rem] hover:border-blue-500 transition-colors">
+                  <p className="text-xl italic text-gray-600 mb-8">"Sangat membantu pekerjaan saya sebagai guru dalam membuat soal secara variatif."</p>
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-blue-100 rounded-full"></div>
+                    <div><h4 className="font-bold">Guru {i}</h4><p className="text-sm opacity-50">Pengajar SD</p></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CONTACT US */}
         <section id="contact" className="w-full px-6 py-24 lg:py-44 bg-white border-t border-gray-100">
           <div className="max-w-4xl lg:max-w-6xl mx-auto text-center">
             <h2 className="text-4xl md:text-5xl lg:text-8xl font-black italic tracking-tighter text-black uppercase mb-12 lg:mb-20">Contact Us</h2>
             <div className="flex flex-col md:flex-row justify-center items-center gap-12 md:gap-24 lg:gap-40">
-              
               <div className="flex flex-col items-center gap-6 lg:gap-10">
                 <h4 className="text-[10px] lg:text-sm font-black tracking-[0.4em] text-blue-600 uppercase">Social Media</h4>
                 <div className="flex gap-6 lg:gap-10">
@@ -221,7 +250,6 @@ export default function Home() {
                   <a href="#" className="w-12 h-12 lg:w-20 lg:h-20 bg-gray-50 rounded-2xl flex items-center justify-center border border-gray-100 hover:scale-110 transition-transform"><img src="/logo-threads.png" className="w-6 h-6 lg:w-10 lg:h-10" /></a>
                 </div>
               </div>
-
               <div className="flex flex-col items-center gap-6 lg:gap-10">
                 <h4 className="text-[10px] lg:text-sm font-black tracking-[0.4em] text-blue-600 uppercase">Direct Message</h4>
                 <div className="flex gap-6 lg:gap-10">
@@ -229,7 +257,6 @@ export default function Home() {
                   <a href="#" className="w-12 h-12 lg:w-20 lg:h-20 bg-gray-50 rounded-2xl flex items-center justify-center border border-gray-100 hover:scale-110 transition-transform"><img src="/logo-email.png" className="w-6 h-6 lg:w-10 lg:h-10" /></a>
                 </div>
               </div>
-
             </div>
           </div>
         </section>
@@ -245,10 +272,7 @@ export default function Home() {
           {isChatOpen && (
             <motion.div initial={{ opacity: 0, scale: 0.8, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.8, y: 20 }}
               className="mb-4 w-[320px] lg:w-[500px] bg-white rounded-2xl lg:rounded-[2.5rem] shadow-2xl border border-gray-100 overflow-hidden flex flex-col">
-              <div className="bg-blue-600 p-4 lg:p-7 text-white flex items-center gap-3">
-                <div className="w-10 h-10 lg:w-16 lg:h-16 bg-white/20 rounded-full flex items-center justify-center font-bold text-xl lg:text-3xl">🤖</div>
-                <h4 className="font-bold lg:text-xl">AI GuruBantuGuru</h4>
-              </div>
+              <div className="bg-blue-600 p-4 lg:p-7 text-white flex items-center gap-3"><div className="w-10 h-10 lg:w-16 lg:h-16 bg-white/20 rounded-full flex items-center justify-center font-bold text-xl lg:text-3xl">🤖</div><h4 className="font-bold lg:text-xl">AI GuruBantuGuru</h4></div>
               <div className="p-4 lg:p-7 h-[300px] lg:h-[450px] overflow-y-auto bg-gray-50 flex flex-col gap-3 scrollbar-hide">
                 {chatMessages.map((msg, i) => (
                   <div key={i} className={`${msg.role === 'ai' ? 'bg-blue-100 text-blue-900 rounded-tl-none self-start' : 'bg-blue-600 text-white rounded-tr-none self-end'} text-xs lg:text-base p-3 lg:p-5 rounded-2xl max-w-[80%] shadow-sm`}>{msg.text}</div>
