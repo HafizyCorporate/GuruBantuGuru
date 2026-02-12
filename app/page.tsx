@@ -253,17 +253,26 @@ export default function Home() {
               <div className="flex flex-col gap-8">
                 <h4 className="text-sm lg:text-lg font-black text-blue-600 tracking-[0.4em] uppercase">Social Media</h4>
                 <div className="flex gap-6 lg:gap-8 justify-center">
-                  {['/logo-fb.png', '/logo-ig.png', '/logo-threads.png'].map(src => (
-                    <img key={src} src={src} className="w-16 h-16 lg:w-24 lg:h-24 object-contain hover:scale-110 transition-transform cursor-pointer shadow-xl rounded-3xl p-4 lg:p-5 bg-white border" />
-                  ))}
+                  <a href="https://facebook.com/GURUBANTUGURU" target="_blank" rel="noopener noreferrer">
+                    <img src="/logo-fb.png" className="w-16 h-16 lg:w-24 lg:h-24 object-contain hover:scale-110 transition-transform cursor-pointer shadow-xl rounded-3xl p-4 lg:p-5 bg-white border" alt="Facebook" />
+                  </a>
+                  <a href="https://instagram.com/GURUBANTUGURU" target="_blank" rel="noopener noreferrer">
+                    <img src="/logo-ig.png" className="w-16 h-16 lg:w-24 lg:h-24 object-contain hover:scale-110 transition-transform cursor-pointer shadow-xl rounded-3xl p-4 lg:p-5 bg-white border" alt="Instagram" />
+                  </a>
+                  <a href="https://threads.net/@GURUBANTUGURU" target="_blank" rel="noopener noreferrer">
+                    <img src="/logo-threads.png" className="w-16 h-16 lg:w-24 lg:h-24 object-contain hover:scale-110 transition-transform cursor-pointer shadow-xl rounded-3xl p-4 lg:p-5 bg-white border" alt="Threads" />
+                  </a>
                 </div>
               </div>
               <div className="flex flex-col gap-8">
                 <h4 className="text-sm lg:text-lg font-black text-blue-600 tracking-[0.4em] uppercase">Direct Message</h4>
                 <div className="flex gap-6 lg:gap-8 justify-center">
-                  {['/logo-wa.png', '/logo-email.png'].map(src => (
-                    <img key={src} src={src} className="w-16 h-16 lg:w-24 lg:h-24 object-contain hover:scale-110 transition-transform cursor-pointer shadow-xl rounded-3xl p-4 lg:p-5 bg-white border" />
-                  ))}
+                  <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer">
+                    <img src="/logo-wa.png" className="w-16 h-16 lg:w-24 lg:h-24 object-contain hover:scale-110 transition-transform cursor-pointer shadow-xl rounded-3xl p-4 lg:p-5 bg-white border" alt="WhatsApp" />
+                  </a>
+                  <a href="mailto:halo@gurubantuguru.com">
+                    <img src="/logo-email.png" className="w-16 h-16 lg:w-24 lg:h-24 object-contain hover:scale-110 transition-transform cursor-pointer shadow-xl rounded-3xl p-4 lg:p-5 bg-white border" alt="Email" />
+                  </a>
                 </div>
               </div>
             </div>
@@ -277,3 +286,4 @@ export default function Home() {
     </main>
   );
 }
+
