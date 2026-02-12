@@ -162,56 +162,73 @@ export default function Home() {
             <h2 className="text-5xl md:text-7xl font-black italic tracking-tighter text-black uppercase mb-16">Our Story</h2>
             <div className="space-y-10 text-black px-4 text-lg md:text-xl leading-relaxed font-light italic">
               <p className="text-xl md:text-3xl font-semibold text-blue-900/80">"Berawal dari mimpi sederhana di tengah keterbatasan teknologi..."</p>
-              <p className="not-italic">Kami menyaksikan lelahnya mata para guru di balik tumpukan kertas. Kami berangkat untuk meruntuhkan sekat rumit itu dan menggantinya dengan keajaiban teknologi yang memanusiakan.</p>
+              <p className="not-italic text-gray-700">Kami menyaksikan lelahnya mata para guru di balik tumpukan kertas. Kami berangkat untuk meruntuhkan sekat rumit itu dan menggantinya dengan keajaiban teknologi yang memanusiakan.</p>
             </div>
         </section>
 
-        {/* --- VISI & MISI (DIKEMBALIKAN) --- */}
+        {/* VISI & MISI */}
         <section className="w-full px-6 pt-12 pb-32 bg-gradient-to-b from-white to-blue-50/20 overflow-hidden">
           <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div className="p-8 md:p-12 border-l-4 border-blue-600 bg-gray-50/50 shadow-sm">
+            <div className="p-8 md:p-12 border-l-4 border-blue-600 bg-gray-50/50 shadow-sm rounded-r-2xl">
               <h3 className="text-4xl md:text-5xl font-black italic tracking-tighter text-black uppercase mb-8">Visi</h3>
               <p className="text-lg md:text-xl leading-relaxed text-gray-800 font-light italic">Menjadi episentrum transformasi digital pendidikan di Indonesia yang tidak hanya mengandalkan AI, namun mengedepankan empati teknologi.</p>
             </div>
-            <div className="p-8 md:p-12 border-l-4 border-blue-600 bg-gray-50/50 shadow-sm">
+            <div className="p-8 md:p-12 border-l-4 border-blue-600 bg-gray-50/50 shadow-sm rounded-r-2xl">
               <h3 className="text-4xl md:text-5xl font-black italic tracking-tighter text-black uppercase mb-8">Misi</h3>
               <p className="text-lg md:text-xl leading-relaxed text-gray-800 font-light italic">Membangun teknologi yang inklusif untuk menyederhanakan proses belajar mengajar secara revolusioner dan mendemokrasikan akses AI bagi pendidik.</p>
             </div>
           </div>
         </section>
 
-        {/* PRODUK KAMI - SLIDER BESAR & AUTOPLAY */}
+        {/* PRODUK KAMI - DENGAN DESKRIPSI & DOWNLOAD BUTTON DI BAWAH SLIDER */}
         <section id="produk" className="w-full px-6 py-32 bg-[#eef6ff]">
           <div className="max-w-7xl mx-auto">
             <h2 className="text-5xl md:text-7xl font-black italic tracking-tighter text-black uppercase mb-20 text-center">Produk Kami</h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                
                 {/* SOAL AI */}
-                <div className="bg-white rounded-[2rem] p-10 shadow-2xl border border-blue-100 overflow-hidden">
-                   <h3 className="text-5xl font-black italic uppercase mb-8 text-black tracking-tighter">SOAL <span className="text-blue-600">AI</span></h3>
-                   <div className="relative w-full h-[450px] overflow-hidden rounded-2xl shadow-inner bg-gray-50">
+                <div className="bg-white rounded-[2.5rem] p-10 shadow-2xl border border-blue-100 overflow-hidden flex flex-col">
+                   <h3 className="text-5xl font-black italic uppercase mb-4 text-black tracking-tighter">SOAL <span className="text-blue-600">AI</span></h3>
+                   <p className="text-gray-600 font-medium mb-8 leading-relaxed italic text-lg">AI yang menjadi asisten para guru untuk membuat soal secara instan! Khusus diatur untuk jenjang SD, SMP, dan SMA.</p>
+                   
+                   <div className="relative w-full h-[450px] overflow-hidden rounded-2xl shadow-inner bg-gray-50 mb-8">
                       <motion.div animate={{ x: `-${soalIndex * 100}%` }} transition={{ duration: 0.8, ease: "easeInOut" }} className="flex w-full h-full">
                         <img src="/soal-ai-1.jpg" className="w-full h-full object-cover flex-shrink-0" />
                         <img src="/soal-ai-2.jpg" className="w-full h-full object-cover flex-shrink-0" />
                         <img src="/soal-ai-3.jpg" className="w-full h-full object-cover flex-shrink-0" />
                       </motion.div>
                    </div>
+
+                   {/* Playstore Button Soal AI (Di bawah slider) */}
+                   <a href="https://play.google.com/store/apps/details?id=com.soal.ai" target="_blank" rel="noopener noreferrer" className="w-fit hover:scale-105 transition-transform">
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" className="h-14" />
+                   </a>
                 </div>
+
                 {/* JAWABAN AI */}
-                <div className="bg-[#0f172a] rounded-[2rem] p-10 shadow-2xl text-white overflow-hidden">
-                   <h3 className="text-5xl font-black italic uppercase mb-8 tracking-tighter">JAWABAN <span className="text-blue-400">AI</span></h3>
-                   <div className="relative w-full h-[450px] overflow-hidden rounded-2xl shadow-inner bg-black/20">
+                <div className="bg-[#0f172a] rounded-[2.5rem] p-10 shadow-2xl text-white overflow-hidden flex flex-col">
+                   <h3 className="text-5xl font-black italic uppercase mb-4 tracking-tighter">JAWABAN <span className="text-blue-400">AI</span></h3>
+                   <p className="text-blue-100/70 font-medium mb-8 leading-relaxed italic text-lg">Lelah memeriksa tumpukan kertas ujian setiap malam? JAWABAN AI dirancang khusus untuk membantu koreksi otomatis secara akurat.</p>
+                   
+                   <div className="relative w-full h-[450px] overflow-hidden rounded-2xl shadow-inner bg-black/20 mb-8">
                       <motion.div animate={{ x: `-${jawabanIndex * 100}%` }} transition={{ duration: 0.8, ease: "easeInOut" }} className="flex w-full h-full">
                         <img src="/jawaban-ai-1.jpg" className="w-full h-full object-cover flex-shrink-0" />
                         <img src="/jawaban-ai-2.jpg" className="w-full h-full object-cover flex-shrink-0" />
                         <img src="/jawaban-ai-3.jpg" className="w-full h-full object-cover flex-shrink-0" />
                       </motion.div>
                    </div>
+
+                   {/* Playstore Button Jawaban AI (Di bawah slider) */}
+                   <a href="https://play.google.com/store/apps/details?id=com.jawaban.ai" target="_blank" rel="noopener noreferrer" className="w-fit hover:scale-105 transition-transform bg-white/10 p-1 rounded-xl">
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" className="h-14" />
+                   </a>
                 </div>
+
             </div>
           </div>
         </section>
 
-        {/* CONTACT US (LOGO/ICON) */}
+        {/* CONTACT US */}
         <section id="contact" className="w-full px-6 py-24 bg-white border-t border-gray-100">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl md:text-5xl font-black italic tracking-tighter text-black uppercase mb-12">Contact Us</h2>
