@@ -52,7 +52,7 @@ export default function Home() {
   }, []);
 
   const totalFrames = 194;
-  const minFramesToStart = 5; // TETAP CEPAT: Hanya butuh 5 frame untuk mulai
+  const minFramesToStart = 5; 
   
   const { scrollYProgress } = useScroll({ 
     target: containerRef, 
@@ -140,7 +140,6 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* SECTION 1: CANVAS */}
       <div ref={containerRef} className="relative h-[600vh] w-full">
         <div className="fixed top-0 left-0 w-full h-screen z-0 overflow-hidden bg-black">
           <canvas ref={canvasRef} className="w-full h-full object-cover" />
@@ -165,7 +164,6 @@ export default function Home() {
       </div>
 
       <div className="relative z-20 w-full bg-white">
-        {/* OUR STORY */}
         <section id="our-story" className="w-full px-6 pt-32 pb-12 lg:pt-52 lg:pb-32 text-center max-w-7xl mx-auto">
             <h2 className="text-5xl md:text-7xl lg:text-9xl font-black italic tracking-tighter text-black uppercase mb-16 lg:mb-24">Our Story</h2>
             <div className="space-y-10 lg:space-y-20 text-black px-4 text-lg md:text-xl lg:text-3xl leading-relaxed font-light italic">
@@ -174,27 +172,15 @@ export default function Home() {
             </div>
         </section>
 
-        {/* VISI MISI */}
-        <section className="w-full px-6 pt-12 pb-32 lg:pb-52 bg-gradient-to-b from-white to-blue-50/20 overflow-hidden">
-          <div className="max-w-7xl lg:max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
-            <div className="p-8 md:p-12 lg:p-24 border-l-4 lg:border-l-8 border-blue-600 bg-gray-50/50 shadow-sm rounded-r-2xl lg:rounded-r-[3rem]">
-              <h3 className="text-4xl md:text-5xl lg:text-7xl font-black italic tracking-tighter text-black uppercase mb-8 lg:mb-12">Visi</h3>
-              <p className="text-lg md:text-xl lg:text-3xl leading-relaxed text-gray-800 font-light italic">Menjadi episentrum transformasi digital pendidikan di Indonesia yang tidak hanya mengandalkan AI, namun mengedepankan empati teknologi.</p>
-            </div>
-            <div className="p-8 md:p-12 lg:p-24 border-l-4 lg:border-l-8 border-blue-600 bg-gray-50/50 shadow-sm rounded-r-2xl lg:rounded-r-[3rem]">
-              <h3 className="text-4xl md:text-5xl lg:text-7xl font-black italic tracking-tighter text-black uppercase mb-8 lg:mb-12">Misi</h3>
-              <p className="text-lg md:text-xl lg:text-3xl leading-relaxed text-gray-800 font-light italic">Membangun teknologi yang inklusif untuk menyederhanakan proses belajar mengajar secara revolusioner dan mendemokrasikan akses AI bagi pendidik.</p>
-            </div>
-          </div>
-        </section>
-
-        {/* PRODUK */}
         <section id="produk" className="w-full px-6 py-32 lg:py-52 bg-[#eef6ff]">
           <div className="max-w-7xl lg:max-w-[1400px] mx-auto">
             <h2 className="text-5xl md:text-7xl lg:text-9xl font-black italic tracking-tighter text-black uppercase mb-20 lg:mb-32 text-center">Produk Kami</h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
-                <div className="bg-white rounded-[2.5rem] lg:rounded-[4rem] p-10 lg:p-16 shadow-2xl border border-blue-100 flex flex-col">
+                
+                {/* SOAL AI DENGAN DESKRIPSI LENGKAP */}
+                <div className="bg-white rounded-[2.5rem] lg:rounded-[4rem] p-10 lg:p-16 shadow-2xl border border-blue-100 overflow-hidden flex flex-col">
                    <h3 className="text-5xl lg:text-7xl font-black italic uppercase mb-4 lg:mb-8 text-black tracking-tighter">SOAL <span className="text-blue-600">AI</span></h3>
+                   <p className="text-gray-600 lg:text-2xl font-medium mb-8 lg:mb-12 leading-relaxed italic text-lg">AI yang menjadi asisten para guru untuk membuat soal secara instan! Khusus diatur untuk jenjang SD, SMP, dan SMA.</p>
                    <div className="relative w-full h-[450px] lg:h-[650px] overflow-hidden rounded-2xl lg:rounded-[3rem] shadow-inner bg-gray-50 mb-8 lg:mb-12">
                       <motion.div animate={{ x: `-${soalIndex * 100}%` }} transition={{ duration: 0.8, ease: "easeInOut" }} className="flex w-full h-full">
                         <img src="/soal-ai-1.jpg" className="w-full h-full object-cover flex-shrink-0" />
@@ -204,8 +190,11 @@ export default function Home() {
                    </div>
                    <a href="https://play.google.com/store/apps/details?id=com.soal.ai" target="_blank" rel="noopener noreferrer" className="w-fit"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" className="h-14 lg:h-20" /></a>
                 </div>
-                <div className="bg-[#0f172a] rounded-[2.5rem] lg:rounded-[4rem] p-10 lg:p-16 shadow-2xl text-white flex flex-col">
+
+                {/* JAWABAN AI DENGAN DESKRIPSI LENGKAP */}
+                <div className="bg-[#0f172a] rounded-[2.5rem] lg:rounded-[4rem] p-10 lg:p-16 shadow-2xl text-white overflow-hidden flex flex-col">
                    <h3 className="text-5xl lg:text-7xl font-black italic uppercase mb-4 lg:mb-8 tracking-tighter">JAWABAN <span className="text-blue-400">AI</span></h3>
+                   <p className="text-blue-100/70 lg:text-2xl font-medium mb-8 lg:mb-12 leading-relaxed italic text-lg">Lelah memeriksa tumpukan kertas ujian setiap malam? JAWABAN AI dirancang khusus untuk membantu koreksi otomatis secara akurat.</p>
                    <div className="relative w-full h-[450px] lg:h-[650px] overflow-hidden rounded-2xl lg:rounded-[3rem] shadow-inner bg-black/20 mb-8 lg:mb-12">
                       <motion.div animate={{ x: `-${jawabanIndex * 100}%` }} transition={{ duration: 0.8, ease: "easeInOut" }} className="flex w-full h-full">
                         <img src="/jawaban-ai-1.jpg" className="w-full h-full object-cover flex-shrink-0" />
@@ -215,33 +204,29 @@ export default function Home() {
                    </div>
                    <a href="https://play.google.com/store/apps/details?id=com.jawaban.ai" target="_blank" rel="noopener noreferrer" className="w-fit bg-white/10 p-1 rounded-xl"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" className="h-14 lg:h-20" /></a>
                 </div>
+
             </div>
           </div>
         </section>
 
         {/* TESTIMONI */}
-        <section id="testimoni" className="w-full px-6 py-32 lg:py-52 bg-white">
-          <div className="max-w-7xl mx-auto">
-            <h2 className="text-5xl md:text-7xl lg:text-9xl font-black italic tracking-tighter text-black uppercase mb-20 text-center">Apa Kata Mereka?</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <section id="testimoni" className="w-full px-6 py-32 lg:py-52 bg-white text-center">
+            <h2 className="text-5xl md:text-7xl lg:text-9xl font-black italic tracking-tighter text-black uppercase mb-20 lg:mb-32">Testimoni</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16 max-w-7xl mx-auto">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="p-10 border-2 border-gray-100 rounded-[2.5rem] hover:border-blue-500 transition-colors">
-                  <p className="text-xl italic text-gray-600 mb-8">"Sangat membantu pekerjaan saya sebagai guru dalam membuat soal secara variatif."</p>
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-blue-100 rounded-full"></div>
-                    <div><h4 className="font-bold">Guru {i}</h4><p className="text-sm opacity-50">Pengajar SD</p></div>
-                  </div>
+                <div key={i} className="bg-gray-50 p-10 lg:p-16 rounded-[2rem] lg:rounded-[3rem] border border-gray-100 shadow-sm">
+                  <p className="text-lg lg:text-2xl italic text-gray-700 mb-8">"Sangat membantu efisiensi waktu saya dalam mengajar setiap harinya."</p>
+                  <h4 className="font-bold lg:text-xl text-blue-600">Guru Indonesia {i}</h4>
                 </div>
               ))}
             </div>
-          </div>
         </section>
 
         {/* CONTACT US */}
         <section id="contact" className="w-full px-6 py-24 lg:py-44 bg-white border-t border-gray-100">
-          <div className="max-w-4xl lg:max-w-6xl mx-auto text-center">
+          <div className="max-w-6xl mx-auto text-center">
             <h2 className="text-4xl md:text-5xl lg:text-8xl font-black italic tracking-tighter text-black uppercase mb-12 lg:mb-20">Contact Us</h2>
-            <div className="flex flex-col md:flex-row justify-center items-center gap-12 md:gap-24 lg:gap-40">
+            <div className="flex flex-col md:flex-row justify-center items-center gap-12 lg:gap-40">
               <div className="flex flex-col items-center gap-6 lg:gap-10">
                 <h4 className="text-[10px] lg:text-sm font-black tracking-[0.4em] text-blue-600 uppercase">Social Media</h4>
                 <div className="flex gap-6 lg:gap-10">
@@ -292,3 +277,4 @@ export default function Home() {
     </main>
   );
 }
+
