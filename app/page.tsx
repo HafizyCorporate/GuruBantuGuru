@@ -10,7 +10,38 @@ export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Logic Autoplay Slider
+  // --- LOGIK FRONTEND API AI ---
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatInput, setChatInput] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const [chatMessages, setChatMessages] = useState([
+    { role: 'ai', text: 'Halo Bapak/Ibu Guru! 👋 Saya AI Assistant. Ada yang bisa saya bantu terkait Soal AI atau Jawaban AI?' }
+  ]);
+
+  const handleSendMessage = async () => {
+    if (!chatInput.trim()) return;
+
+    const userMsg = chatInput;
+    setChatMessages(prev => [...prev, { role: 'user', text: userMsg }]);
+    setChatInput("");
+    setIsTyping(true);
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMsg }),
+      });
+      const data = await res.json();
+      setChatMessages(prev => [...prev, { role: 'ai', text: data.text }]);
+    } catch (e) {
+      setChatMessages(prev => [...prev, { role: 'ai', text: "Maaf, koneksi terputus. Silakan hubungi WA admin kami." }]);
+    } finally {
+      setIsTyping(false);
+    }
+  };
+  // -----------------------------
+
   const [soalIndex, setSoalIndex] = useState(0);
   const [jawabanIndex, setJawabanIndex] = useState(0);
   const totalSlides = 3;
@@ -180,7 +211,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* PRODUK KAMI - DENGAN DESKRIPSI & DOWNLOAD BUTTON DI BAWAH SLIDER */}
+        {/* PRODUK KAMI */}
         <section id="produk" className="w-full px-6 py-32 bg-[#eef6ff]">
           <div className="max-w-7xl mx-auto">
             <h2 className="text-5xl md:text-7xl font-black italic tracking-tighter text-black uppercase mb-20 text-center">Produk Kami</h2>
@@ -199,7 +230,6 @@ export default function Home() {
                       </motion.div>
                    </div>
 
-                   {/* Playstore Button Soal AI (Di bawah slider) */}
                    <a href="https://play.google.com/store/apps/details?id=com.soal.ai" target="_blank" rel="noopener noreferrer" className="w-fit hover:scale-105 transition-transform">
                       <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" className="h-14" />
                    </a>
@@ -218,7 +248,6 @@ export default function Home() {
                       </motion.div>
                    </div>
 
-                   {/* Playstore Button Jawaban AI (Di bawah slider) */}
                    <a href="https://play.google.com/store/apps/details?id=com.jawaban.ai" target="_blank" rel="noopener noreferrer" className="w-fit hover:scale-105 transition-transform bg-white/10 p-1 rounded-xl">
                       <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play" className="h-14" />
                    </a>
@@ -255,6 +284,73 @@ export default function Home() {
         <footer className="py-12 text-center bg-white border-t border-blue-50">
           <p className="opacity-40 text-[10px] font-black uppercase tracking-[0.5em] text-blue-900">© 2026 GURU BANTU GURU</p>
         </footer>
+      </div>
+
+      {/* --- UI CHAT AI PROFESIONAL --- */}
+      <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end">
+        <AnimatePresence>
+          {isChatOpen && (
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.8, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.8, y: 20 }}
+              className="mb-4 w-[320px] md:w-[380px] bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col"
+            >
+              <div className="bg-blue-600 p-4 text-white flex items-center gap-3">
+                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center font-bold text-xl">🤖</div>
+                <div>
+                  <h4 className="font-bold text-sm">AI GuruBantuGuru</h4>
+                  <p className="text-[10px] opacity-80 uppercase tracking-widest">Online | Assistant</p>
+                </div>
+              </div>
+
+              <div className="p-4 h-[300px] overflow-y-auto bg-gray-50 flex flex-col gap-3 scrollbar-hide">
+                {chatMessages.map((msg, i) => (
+                  <div 
+                    key={i} 
+                    className={`${msg.role === 'ai' ? 'bg-blue-100 text-blue-900 rounded-tl-none self-start' : 'bg-blue-600 text-white rounded-tr-none self-end'} text-xs p-3 rounded-2xl max-w-[80%] shadow-sm`}
+                  >
+                    {msg.text}
+                  </div>
+                ))}
+                {isTyping && <div className="text-[10px] text-gray-400 italic animate-pulse">AI sedang berpikir...</div>}
+              </div>
+
+              <div className="p-3 bg-white border-t border-gray-100 flex gap-2">
+                <input 
+                  type="text" 
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                  placeholder="Ketik pesan..." 
+                  className="flex-1 bg-gray-100 border-none rounded-full px-4 py-2 text-xs focus:ring-2 focus:ring-blue-500 outline-none text-black" 
+                />
+                <button 
+                  onClick={handleSendMessage}
+                  className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition-colors"
+                >
+                  <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <button 
+          onClick={() => setIsChatOpen(!isChatOpen)}
+          className="w-16 h-16 bg-blue-600 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform active:scale-95 group"
+        >
+          {isChatOpen ? (
+            <span className="text-white text-2xl font-light">✕</span>
+          ) : (
+            <div className="relative">
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white animate-bounce"></span>
+              <svg className="w-8 h-8 text-white fill-current" viewBox="0 0 24 24">
+                <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.2L4 17.2V4h16v12z"/>
+              </svg>
+            </div>
+          )}
+        </button>
       </div>
     </main>
   );
