@@ -10,6 +10,19 @@ export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // Logic Autoplay Slider
+  const [soalIndex, setSoalIndex] = useState(0);
+  const [jawabanIndex, setJawabanIndex] = useState(0);
+  const totalSlides = 3;
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSoalIndex((prev) => (prev + 1) % totalSlides);
+      setJawabanIndex((prev) => (prev + 1) % totalSlides);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
+
   const totalFrames = 194;
   const minFramesToStart = 20; 
   
@@ -146,72 +159,76 @@ export default function Home() {
       <div className="relative z-20 w-full bg-white">
         {/* OUR STORY */}
         <section id="our-story" className="w-full px-6 pt-32 pb-12 text-center max-w-4xl mx-auto">
-            <motion.h2 initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} className="text-5xl md:text-7xl font-black italic tracking-tighter text-black uppercase mb-16">Our Story</motion.h2>
+            <h2 className="text-5xl md:text-7xl font-black italic tracking-tighter text-black uppercase mb-16">Our Story</h2>
             <div className="space-y-10 text-black px-4 text-lg md:text-xl leading-relaxed font-light italic">
               <p className="text-xl md:text-3xl font-semibold text-blue-900/80">"Berawal dari mimpi sederhana di tengah keterbatasan teknologi..."</p>
               <p className="not-italic">Kami menyaksikan lelahnya mata para guru di balik tumpukan kertas. Kami berangkat untuk meruntuhkan sekat rumit itu dan menggantinya dengan keajaiban teknologi yang memanusiakan.</p>
             </div>
         </section>
 
-        {/* VISI MISI & PRODUK */}
+        {/* --- VISI & MISI (DIKEMBALIKAN) --- */}
+        <section className="w-full px-6 pt-12 pb-32 bg-gradient-to-b from-white to-blue-50/20 overflow-hidden">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div className="p-8 md:p-12 border-l-4 border-blue-600 bg-gray-50/50 shadow-sm">
+              <h3 className="text-4xl md:text-5xl font-black italic tracking-tighter text-black uppercase mb-8">Visi</h3>
+              <p className="text-lg md:text-xl leading-relaxed text-gray-800 font-light italic">Menjadi episentrum transformasi digital pendidikan di Indonesia yang tidak hanya mengandalkan AI, namun mengedepankan empati teknologi.</p>
+            </div>
+            <div className="p-8 md:p-12 border-l-4 border-blue-600 bg-gray-50/50 shadow-sm">
+              <h3 className="text-4xl md:text-5xl font-black italic tracking-tighter text-black uppercase mb-8">Misi</h3>
+              <p className="text-lg md:text-xl leading-relaxed text-gray-800 font-light italic">Membangun teknologi yang inklusif untuk menyederhanakan proses belajar mengajar secara revolusioner dan mendemokrasikan akses AI bagi pendidik.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* PRODUK KAMI - SLIDER BESAR & AUTOPLAY */}
         <section id="produk" className="w-full px-6 py-32 bg-[#eef6ff]">
           <div className="max-w-7xl mx-auto">
             <h2 className="text-5xl md:text-7xl font-black italic tracking-tighter text-black uppercase mb-20 text-center">Produk Kami</h2>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
                 {/* SOAL AI */}
-                <div className="bg-white rounded-3xl p-8 shadow-xl border border-blue-100">
-                   <h3 className="text-4xl font-black italic uppercase mb-4 text-black">SOAL <span className="text-blue-600">AI</span></h3>
-                   <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
-                      <div className="min-w-[80%] h-64 bg-gray-200 rounded-xl overflow-hidden"><img src="/soal-ai-1.jpg" className="w-full h-full object-cover" /></div>
-                      <div className="min-w-[80%] h-64 bg-gray-200 rounded-xl overflow-hidden"><img src="/soal-ai-2.jpg" className="w-full h-full object-cover" /></div>
-                      <div className="min-w-[80%] h-64 bg-gray-200 rounded-xl overflow-hidden"><img src="/soal-ai-3.jpg" className="w-full h-full object-cover" /></div>
+                <div className="bg-white rounded-[2rem] p-10 shadow-2xl border border-blue-100 overflow-hidden">
+                   <h3 className="text-5xl font-black italic uppercase mb-8 text-black tracking-tighter">SOAL <span className="text-blue-600">AI</span></h3>
+                   <div className="relative w-full h-[450px] overflow-hidden rounded-2xl shadow-inner bg-gray-50">
+                      <motion.div animate={{ x: `-${soalIndex * 100}%` }} transition={{ duration: 0.8, ease: "easeInOut" }} className="flex w-full h-full">
+                        <img src="/soal-ai-1.jpg" className="w-full h-full object-cover flex-shrink-0" />
+                        <img src="/soal-ai-2.jpg" className="w-full h-full object-cover flex-shrink-0" />
+                        <img src="/soal-ai-3.jpg" className="w-full h-full object-cover flex-shrink-0" />
+                      </motion.div>
                    </div>
                 </div>
                 {/* JAWABAN AI */}
-                <div className="bg-[#0f172a] rounded-3xl p-8 shadow-xl text-white">
-                   <h3 className="text-4xl font-black italic uppercase mb-4">JAWABAN <span className="text-blue-400">AI</span></h3>
-                   <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
-                      <div className="min-w-[80%] h-64 bg-gray-800 rounded-xl overflow-hidden"><img src="/jawaban-ai-1.jpg" className="w-full h-full object-cover" /></div>
-                      <div className="min-w-[80%] h-64 bg-gray-800 rounded-xl overflow-hidden"><img src="/jawaban-ai-2.jpg" className="w-full h-full object-cover" /></div>
-                      <div className="min-w-[80%] h-64 bg-gray-800 rounded-xl overflow-hidden"><img src="/jawaban-ai-3.jpg" className="w-full h-full object-cover" /></div>
+                <div className="bg-[#0f172a] rounded-[2rem] p-10 shadow-2xl text-white overflow-hidden">
+                   <h3 className="text-5xl font-black italic uppercase mb-8 tracking-tighter">JAWABAN <span className="text-blue-400">AI</span></h3>
+                   <div className="relative w-full h-[450px] overflow-hidden rounded-2xl shadow-inner bg-black/20">
+                      <motion.div animate={{ x: `-${jawabanIndex * 100}%` }} transition={{ duration: 0.8, ease: "easeInOut" }} className="flex w-full h-full">
+                        <img src="/jawaban-ai-1.jpg" className="w-full h-full object-cover flex-shrink-0" />
+                        <img src="/jawaban-ai-2.jpg" className="w-full h-full object-cover flex-shrink-0" />
+                        <img src="/jawaban-ai-3.jpg" className="w-full h-full object-cover flex-shrink-0" />
+                      </motion.div>
                    </div>
                 </div>
             </div>
           </div>
         </section>
 
-        {/* --- SECTION CONTACT (OPTIMIZED WITH LOGOS) --- */}
+        {/* CONTACT US (LOGO/ICON) */}
         <section id="contact" className="w-full px-6 py-24 bg-white border-t border-gray-100">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-black italic tracking-tighter text-black uppercase mb-12 text-center">Contact Us</h2>
-            
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-4xl md:text-5xl font-black italic tracking-tighter text-black uppercase mb-12">Contact Us</h2>
             <div className="flex flex-col md:flex-row justify-center items-center gap-12 md:gap-24">
-              {/* Media Sosial Group */}
               <div className="flex flex-col items-center gap-6">
                 <h4 className="text-[10px] font-black tracking-[0.4em] text-blue-600 uppercase">Social Media</h4>
                 <div className="flex gap-6">
-                  <a href="#" className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 border border-gray-100">
-                    <img src="/logo-fb.png" alt="Facebook" className="w-6 h-6 object-contain" />
-                  </a>
-                  <a href="#" className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 border border-gray-100">
-                    <img src="/logo-ig.png" alt="Instagram" className="w-6 h-6 object-contain" />
-                  </a>
-                  <a href="#" className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 border border-gray-100">
-                    <img src="/logo-threads.png" alt="Threads" className="w-6 h-6 object-contain" />
-                  </a>
+                  <a href="#" className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center hover:scale-110 transition-all border border-gray-100"><img src="/logo-fb.png" className="w-6 h-6 object-contain" /></a>
+                  <a href="#" className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center hover:scale-110 transition-all border border-gray-100"><img src="/logo-ig.png" className="w-6 h-6 object-contain" /></a>
+                  <a href="#" className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center hover:scale-110 transition-all border border-gray-100"><img src="/logo-threads.png" className="w-6 h-6 object-contain" /></a>
                 </div>
               </div>
-
-              {/* Direct Contact Group */}
               <div className="flex flex-col items-center gap-6">
                 <h4 className="text-[10px] font-black tracking-[0.4em] text-blue-600 uppercase">Direct Message</h4>
                 <div className="flex gap-6">
-                  <a href="https://wa.me/yournumber" className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 border border-gray-100">
-                    <img src="/logo-wa.png" alt="Whatsapp" className="w-6 h-6 object-contain" />
-                  </a>
-                  <a href="mailto:hello@gurubantuguru.com" className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 border border-gray-100">
-                    <img src="/logo-email.png" alt="Email" className="w-6 h-6 object-contain" />
-                  </a>
+                  <a href="#" className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center hover:scale-110 transition-all border border-gray-100"><img src="/logo-wa.png" className="w-6 h-6 object-contain" /></a>
+                  <a href="#" className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center hover:scale-110 transition-all border border-gray-100"><img src="/logo-email.png" className="w-6 h-6 object-contain" /></a>
                 </div>
               </div>
             </div>
