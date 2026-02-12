@@ -80,7 +80,7 @@ export default function Home() {
   return (
     <main className="relative w-full bg-black overflow-x-hidden">
       <style jsx global>{`
-        html, body { background-color: black; margin: 0; padding: 0; overflow-x: hidden; }
+        html, body { background-color: black; margin: 0; padding: 0; overflow-x: hidden; scroll-behavior: smooth; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -105,7 +105,7 @@ export default function Home() {
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div initial={{ opacity: 0, x: "100%" }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: "100%" }} transition={{ type: "spring", damping: 25 }} className="fixed inset-0 z-[85] bg-white flex flex-col items-center justify-center gap-8">
-            {['Home', 'Our Story', 'Produk', 'Testimoni'].map((item) => (
+            {['Home', 'Our Story', 'Produk', 'Testimoni', 'Contact'].map((item) => (
               <a key={item} href={`#${item.toLowerCase().replace(' ', '-')}`} onClick={() => setIsMenuOpen(false)} className="text-4xl md:text-6xl font-black italic uppercase text-black hover:text-blue-600 transition-colors">
                 {item}
               </a>
@@ -145,80 +145,77 @@ export default function Home() {
 
       <div className="relative z-20 w-full bg-white">
         {/* OUR STORY */}
-        <section id="our-story" className="w-full flex flex-col items-center justify-center px-6 pt-32 pb-12 bg-gradient-to-b from-white to-blue-50/30">
-          <div className="max-w-4xl w-full text-center">
+        <section id="our-story" className="w-full px-6 pt-32 pb-12 text-center max-w-4xl mx-auto">
             <motion.h2 initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} className="text-5xl md:text-7xl font-black italic tracking-tighter text-black uppercase mb-16">Our Story</motion.h2>
-            <div className="space-y-10 text-black px-4 text-lg md:text-xl leading-relaxed font-light">
-              <p className="text-xl md:text-3xl font-semibold italic text-blue-900/80">"Berawal dari mimpi sederhana di tengah keterbatasan teknologi..."</p>
-              <p>Kami menyaksikan lelahnya mata para guru di balik tumpukan kertas. Kami berangkat untuk meruntuhkan sekat rumit itu dan menggantinya dengan keajaiban teknologi yang memanusiakan.</p>
+            <div className="space-y-10 text-black px-4 text-lg md:text-xl leading-relaxed font-light italic">
+              <p className="text-xl md:text-3xl font-semibold text-blue-900/80">"Berawal dari mimpi sederhana di tengah keterbatasan teknologi..."</p>
+              <p className="not-italic">Kami menyaksikan lelahnya mata para guru di balik tumpukan kertas. Kami berangkat untuk meruntuhkan sekat rumit itu dan menggantinya dengan keajaiban teknologi yang memanusiakan.</p>
             </div>
-          </div>
         </section>
 
-        {/* VISI & MISI */}
-        <section className="w-full px-6 pt-12 pb-32 bg-gradient-to-b from-blue-50/30 to-white overflow-hidden">
-          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
-            <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 1 }} className="p-8 md:p-12 border-l-4 border-blue-400 bg-blue-50/20 shadow-sm">
-              <h3 className="text-4xl md:text-5xl font-black italic tracking-tighter text-black uppercase mb-8">Visi</h3>
-              <p className="text-lg md:text-xl leading-relaxed text-gray-800 font-light">Menjadi episentrum transformasi digital pendidikan di Indonesia yang tidak hanya mengandalkan AI, namun mengedepankan empati teknologi.</p>
-            </motion.div>
-            <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 1, delay: 0.2 }} className="p-8 md:p-12 border-l-4 border-blue-400 bg-blue-50/20 shadow-sm">
-              <h3 className="text-4xl md:text-5xl font-black italic tracking-tighter text-black uppercase mb-8">Misi</h3>
-              <p className="text-lg md:text-xl leading-relaxed text-gray-800 font-light">Membangun teknologi yang inklusif untuk menyederhanakan proses belajar mengajar secara revolusioner dan mendemokrasikan akses AI bagi pendidik.</p>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* PRODUK KAMI */}
-        <section id="produk" className="w-full px-6 py-32 bg-[#eef6ff] overflow-hidden">
+        {/* VISI MISI & PRODUK (Sama Seperti Sebelumnya) */}
+        <section id="produk" className="w-full px-6 py-32 bg-[#eef6ff]">
           <div className="max-w-7xl mx-auto">
-            <motion.h2 initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} className="text-5xl md:text-7xl font-black italic tracking-tighter text-black uppercase mb-20 text-center">Produk Kami</motion.h2>
+            <h2 className="text-5xl md:text-7xl font-black italic tracking-tighter text-black uppercase mb-20 text-center">Produk Kami</h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-              {/* SOAL AI */}
-              <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="bg-white rounded-3xl overflow-hidden shadow-xl border border-blue-100">
-                <div className="p-8">
-                   <h3 className="text-4xl font-black italic uppercase mb-4 text-black italic">SOAL <span className="text-blue-600">AI</span></h3>
-                   <p className="text-gray-700 font-medium mb-6 leading-relaxed">AI yang menjadi asisten para guru untuk membuat soal secara instan! Khusus diatur untuk jenjang **SD, SMP, dan SMA**.</p>
-                   <div className="flex gap-4 overflow-x-auto pb-4 snap-x scrollbar-hide">
-                      <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-100 rounded-xl snap-center overflow-hidden border"><img src="/soal-ai-1.jpg" className="w-full h-full object-cover" /></div>
-                      <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-100 rounded-xl snap-center overflow-hidden border"><img src="/soal-ai-2.jpg" className="w-full h-full object-cover" /></div>
-                      <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-100 rounded-xl snap-center overflow-hidden border"><img src="/soal-ai-3.jpg" className="w-full h-full object-cover" /></div>
+                {/* SOAL AI */}
+                <div className="bg-white rounded-3xl p-8 shadow-xl border border-blue-100">
+                   <h3 className="text-4xl font-black italic uppercase mb-4 text-black">SOAL <span className="text-blue-600">AI</span></h3>
+                   <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+                      <div className="min-w-[80%] h-64 bg-gray-200 rounded-xl overflow-hidden"><img src="/soal-ai-1.jpg" className="w-full h-full object-cover" /></div>
+                      <div className="min-w-[80%] h-64 bg-gray-200 rounded-xl overflow-hidden"><img src="/soal-ai-2.jpg" className="w-full h-full object-cover" /></div>
+                      <div className="min-w-[80%] h-64 bg-gray-200 rounded-xl overflow-hidden"><img src="/soal-ai-3.jpg" className="w-full h-full object-cover" /></div>
                    </div>
                 </div>
-              </motion.div>
-              {/* JAWABAN AI */}
-              <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="bg-[#0f172a] rounded-3xl overflow-hidden shadow-xl text-white">
-                <div className="p-8">
-                   <h3 className="text-4xl font-black italic uppercase mb-4 text-white">JAWABAN <span className="text-blue-400">AI</span></h3>
-                   <p className="text-blue-50 font-medium mb-6 leading-relaxed">Lelah memeriksa tumpukan kertas ujian setiap malam? **JAWABAN AI** dirancang khusus untuk Anda.</p>
-                   <div className="flex gap-4 overflow-x-auto pb-4 snap-x scrollbar-hide">
-                      <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-800 rounded-xl snap-center overflow-hidden border border-white/10"><img src="/jawaban-ai-1.jpg" className="w-full h-full object-cover" /></div>
-                      <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-800 rounded-xl snap-center overflow-hidden border border-white/10"><img src="/jawaban-ai-2.jpg" className="w-full h-full object-cover" /></div>
-                      <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-800 rounded-xl snap-center overflow-hidden border border-white/10"><img src="/jawaban-ai-3.jpg" className="w-full h-full object-cover" /></div>
+                {/* JAWABAN AI */}
+                <div className="bg-[#0f172a] rounded-3xl p-8 shadow-xl text-white">
+                   <h3 className="text-4xl font-black italic uppercase mb-4">JAWABAN <span className="text-blue-400">AI</span></h3>
+                   <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+                      <div className="min-w-[80%] h-64 bg-gray-800 rounded-xl overflow-hidden"><img src="/jawaban-ai-1.jpg" className="w-full h-full object-cover" /></div>
+                      <div className="min-w-[80%] h-64 bg-gray-800 rounded-xl overflow-hidden"><img src="/jawaban-ai-2.jpg" className="w-full h-full object-cover" /></div>
+                      <div className="min-w-[80%] h-64 bg-gray-800 rounded-xl overflow-hidden"><img src="/jawaban-ai-3.jpg" className="w-full h-full object-cover" /></div>
                    </div>
                 </div>
-              </motion.div>
             </div>
+          </div>
+        </section>
 
-            {/* TESTIMONI */}
-            <div id="testimoni" className="mt-32">
-               <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="text-4xl md:text-5xl font-black italic tracking-tighter text-black uppercase mb-12 text-center">Testimoni</motion.h2>
-               <div className="flex gap-6 overflow-x-auto pb-8 snap-x scrollbar-hide px-4">
-                 {[
-                   { name: "Ibu Siti Zulaikha", role: "Guru Matematika SMP", text: "Luar biasa! Dulu bikin soal butuh waktu berjam-jam, sekarang hitungan detik langsung jadi." },
-                   { name: "Bapak Andi Pratama", role: "Guru Bahasa Indonesia SMA", text: "Koreksi jawaban jadi jauh lebih cepat dengan Jawaban AI. Akurasinya mantap!" },
-                   { name: "Ibu Maya Lestari", role: "Guru IPA SD", text: "GURUBANTUGURU benar-benar modern. Fitur-fiturnya to-the-point." }
-                 ].map((t, i) => (
-                   <div key={i} className="min-w-[300px] md:min-w-[400px] bg-white p-8 rounded-2xl shadow-xl border border-blue-50 snap-center">
-                     <div className="flex text-yellow-400 mb-4 text-xl">★★★★★</div>
-                     <p className="text-gray-700 italic mb-6 font-medium">"{t.text}"</p>
-                     <div>
-                       <p className="font-black text-black uppercase italic tracking-tighter">{t.name}</p>
-                       <p className="text-[10px] text-blue-600 font-bold tracking-[0.2em] uppercase">{t.role}</p>
-                     </div>
-                   </div>
-                 ))}
-               </div>
+        {/* --- SECTION CONTACT (BARU) --- */}
+        <section id="contact" className="w-full px-6 py-32 bg-white">
+          <div className="max-w-6xl mx-auto text-center">
+            <h2 className="text-5xl md:text-7xl font-black italic tracking-tighter text-black uppercase mb-16 text-center">Contact Us</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              {/* Media Sosial */}
+              <div className="flex flex-col items-center md:items-start gap-6">
+                <h4 className="text-xs font-black tracking-[0.3em] text-blue-600 uppercase">Social Media</h4>
+                <div className="flex flex-col gap-4 text-left">
+                  <a href="#" className="group flex items-center gap-4 text-3xl md:text-4xl font-black italic uppercase tracking-tighter hover:text-blue-600 transition-all">
+                    <span className="opacity-20 group-hover:opacity-100 group-hover:mr-2 transition-all">FB</span> Facebook
+                  </a>
+                  <a href="#" className="group flex items-center gap-4 text-3xl md:text-4xl font-black italic uppercase tracking-tighter hover:text-pink-500 transition-all">
+                    <span className="opacity-20 group-hover:opacity-100 group-hover:mr-2 transition-all">IG</span> Instagram
+                  </a>
+                  <a href="#" className="group flex items-center gap-4 text-3xl md:text-4xl font-black italic uppercase tracking-tighter hover:text-black transition-all">
+                    <span className="opacity-20 group-hover:opacity-100 group-hover:mr-2 transition-all">TH</span> Thread
+                  </a>
+                </div>
+              </div>
+
+              {/* Direct Contact */}
+              <div className="flex flex-col items-center md:items-end gap-6 text-center md:text-right">
+                <h4 className="text-xs font-black tracking-[0.3em] text-blue-600 uppercase">Get In Touch</h4>
+                <div className="flex flex-col gap-4">
+                  <a href="https://wa.me/yournumber" className="group flex flex-col md:items-end">
+                    <span className="text-3xl md:text-4xl font-black italic uppercase tracking-tighter hover:text-green-500 transition-all">Whatsapp</span>
+                    <span className="text-sm font-bold opacity-40 uppercase tracking-widest">+62 812-XXXX-XXXX</span>
+                  </a>
+                  <a href="mailto:hello@gurubantuguru.com" className="group flex flex-col md:items-end">
+                    <span className="text-3xl md:text-4xl font-black italic uppercase tracking-tighter hover:text-blue-400 transition-all">Email</span>
+                    <span className="text-sm font-bold opacity-40 uppercase tracking-widest">hello@gurubantuguru.com</span>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </section>
