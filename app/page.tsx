@@ -11,8 +11,7 @@ export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const totalFrames = 194;
-  // --- OPTIMASI: Batas minimal frame untuk membuka loading screen ---
-  const minFramesToStart = 20; 
+  const minFramesToStart = 20; // Optimasi loading: buka lebih cepat
   
   const { scrollYProgress } = useScroll({ 
     target: containerRef, 
@@ -34,7 +33,6 @@ export default function Home() {
     }
   }, [isLoaded]);
 
-  // --- OPTIMASI LOADING: Load paralel dan buka pintu lebih cepat ---
   useEffect(() => {
     const loadedImages: HTMLImageElement[] = [];
     let loadedCount = 0;
@@ -44,7 +42,6 @@ export default function Home() {
       img.src = `/ezgif-frame-${i.toString().padStart(3, '0')}.jpg`;
       img.onload = () => {
         loadedCount++;
-        // Begitu mencapai minimal frame, web langsung bisa diakses
         if (loadedCount === minFramesToStart) {
           setIsLoaded(true);
         }
@@ -69,7 +66,6 @@ export default function Home() {
     if (!context) return;
     const unsubscribe = frameIndex.on("change", (latest) => {
       const img = images[Math.floor(latest)];
-      // Tambahan pengecekan img.complete agar tidak kedap-kedip
       if (img && img.complete) {
         requestAnimationFrame(() => draw(img, context, canvasRef.current!));
       }
@@ -87,65 +83,30 @@ export default function Home() {
         html, body { background-color: black; margin: 0; padding: 0; overflow-x: hidden; }
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-        .loader {
-          border: 3px solid rgba(255, 255, 255, 0.1);
-          border-left-color: #ffffff;
-          border-radius: 50%;
-          width: 40px;
-          height: 40px;
-          animation: spin 1s linear infinite;
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .loader { border: 3px solid rgba(255, 255, 255, 0.1); border-left-color: #ffffff; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
       `}</style>
 
-      {/* --- HEADER --- */}
+      {/* HEADER NAV */}
       <header className="fixed top-0 left-0 w-full z-[90] p-6 flex justify-between items-center pointer-events-none">
         <div className="pointer-events-auto">
           <h2 className="text-white font-black italic tracking-tighter text-xl md:text-2xl uppercase bg-black/20 backdrop-blur-md px-4 py-1 rounded-lg border border-white/10">
             GURUBANTUGURU
           </h2>
         </div>
-
-        <button 
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="pointer-events-auto w-12 h-12 bg-white rounded-full flex flex-col items-center justify-center gap-1.5 shadow-2xl z-[100]"
-        >
-          <motion.span 
-            animate={isMenuOpen ? { rotate: 45, y: 6.5 } : { rotate: 0, y: 0 }} 
-            className="w-6 h-0.5 bg-black block" 
-          />
-          <motion.span 
-            animate={isMenuOpen ? { opacity: 0 } : { opacity: 1 }} 
-            className="w-6 h-0.5 bg-black block" 
-          />
-          <motion.span 
-            animate={isMenuOpen ? { rotate: -45, y: -6.5 } : { rotate: 0, y: 0 }} 
-            className="w-6 h-0.5 bg-black block" 
-          />
+        <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="pointer-events-auto w-12 h-12 bg-white rounded-full flex flex-col items-center justify-center gap-1.5 shadow-2xl z-[100]">
+          <motion.span animate={isMenuOpen ? { rotate: 45, y: 6.5 } : { rotate: 0, y: 0 }} className="w-6 h-0.5 bg-black block" />
+          <motion.span animate={isMenuOpen ? { opacity: 0 } : { opacity: 1 }} className="w-6 h-0.5 bg-black block" />
+          <motion.span animate={isMenuOpen ? { rotate: -45, y: -6.5 } : { rotate: 0, y: 0 }} className="w-6 h-0.5 bg-black block" />
         </button>
       </header>
 
-      {/* --- MENU OVERLAY --- */}
+      {/* MENU OVERLAY */}
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div 
-            initial={{ opacity: 0, x: "100%" }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: "100%" }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-[85] bg-white flex flex-col items-center justify-center gap-8"
-          >
+          <motion.div initial={{ opacity: 0, x: "100%" }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: "100%" }} transition={{ type: "spring", damping: 25 }} className="fixed inset-0 z-[85] bg-white flex flex-col items-center justify-center gap-8">
             {['Home', 'Our Story', 'Produk', 'Testimoni'].map((item) => (
-              <a 
-                key={item} 
-                href={`#${item.toLowerCase().replace(' ', '-')}`} 
-                onClick={() => setIsMenuOpen(false)}
-                className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-black hover:text-blue-600 transition-colors"
-              >
+              <a key={item} href={`#${item.toLowerCase().replace(' ', '-')}`} onClick={() => setIsMenuOpen(false)} className="text-4xl md:text-6xl font-black italic uppercase text-black hover:text-blue-600 transition-colors">
                 {item}
               </a>
             ))}
@@ -156,78 +117,104 @@ export default function Home() {
       {/* SECTION 1: CANVAS */}
       <div ref={containerRef} className="relative h-[600vh] w-full">
         <div className="fixed top-0 left-0 w-full h-screen z-0 overflow-hidden">
-          
-          {/* --- LOADING OVERLAY (Optimized Transition) --- */}
           <AnimatePresence>
             {!isLoaded && (
-              <motion.div 
-                initial={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.4 }} // Transisi keluar lebih cepat
-                className="absolute inset-0 z-[100] flex flex-col items-center justify-center bg-black"
-              >
+              <motion.div initial={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.4 }} className="absolute inset-0 z-[100] flex flex-col items-center justify-center bg-black">
                 <div className="loader mb-4"></div>
-                <p className="text-white text-[10px] font-black tracking-[0.3em] uppercase opacity-50 italic">
-                    Fast Loading AI...
-                </p>
+                <p className="text-white text-[10px] font-black tracking-[0.3em] uppercase opacity-50 italic">Fast Loading AI...</p>
               </motion.div>
             )}
           </AnimatePresence>
-
           <canvas ref={canvasRef} className="w-full h-full object-cover" />
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-4 pointer-events-none">
             <motion.div style={{ opacity: text1Opacity }} className="absolute flex flex-col items-center w-full">
-              <div className={whiteBoxStyle}>
-                <h1 className={`${canvasTitleStyle} text-[2.6rem] md:text-8xl`}>GURUBANTUGURU</h1>
-              </div>
-              <div className="mt-4 bg-black/90 px-4 py-1">
-                <p className="font-bold tracking-[0.3em] uppercase text-[9px] md:text-xs text-white">
-                    Asisten AI Untuk Para Guru Indonesia
-                </p>
-              </div>
+              <div className={whiteBoxStyle}><h1 className={`${canvasTitleStyle} text-[2.6rem] md:text-8xl`}>GURUBANTUGURU</h1></div>
+              <div className="mt-4 bg-black/90 px-4 py-1"><p className="font-bold tracking-[0.3em] uppercase text-[9px] md:text-xs text-white">Asisten AI Untuk Para Guru Indonesia</p></div>
             </motion.div>
-
             <motion.div style={{ opacity: text2Opacity }} className="absolute w-full px-6 flex flex-col items-center gap-3">
-              <div className={whiteBoxStyle}>
-                <h2 className={`${canvasTitleStyle} text-3xl md:text-7xl`}>Merubah Kebiasaan</h2>
-              </div>
-              <div className={whiteBoxStyle}>
-                <h2 className={`${canvasTitleStyle} text-3xl md:text-7xl`}>Yang Lama</h2>
-              </div>
+              <div className={whiteBoxStyle}><h2 className={`${canvasTitleStyle} text-3xl md:text-7xl`}>Merubah Kebiasaan</h2></div>
+              <div className={whiteBoxStyle}><h2 className={`${canvasTitleStyle} text-3xl md:text-7xl`}>Yang Lama</h2></div>
             </motion.div>
-
             <motion.div style={{ opacity: text3Opacity }} className="absolute w-full px-6 flex flex-col items-center gap-3">
-              <div className={whiteBoxStyle}>
-                <h2 className={`${canvasTitleStyle} text-3xl md:text-7xl`}>Menjadi Lebih Modern</h2>
-              </div>
-              <div className={whiteBoxStyle}>
-                <h2 className={`${canvasTitleStyle} text-3xl md:text-7xl`}>Dan Efisien</h2>
-              </div>
+              <div className={whiteBoxStyle}><h2 className={`${canvasTitleStyle} text-3xl md:text-7xl`}>Menjadi Lebih Modern</h2></div>
+              <div className={whiteBoxStyle}><h2 className={`${canvasTitleStyle} text-3xl md:text-7xl`}>Dan Efisien</h2></div>
             </motion.div>
           </div>
         </div>
       </div>
 
       <div className="relative z-20 w-full bg-white">
-        {/* ... Konten Our Story dll tetap sama ... */}
+        {/* OUR STORY */}
         <section id="our-story" className="w-full flex flex-col items-center justify-center px-6 pt-32 pb-12 bg-gradient-to-b from-white to-blue-50/30">
           <div className="max-w-4xl w-full text-center">
-            <motion.h2 
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1 }}
-              className="text-5xl md:text-7xl font-black italic tracking-tighter text-black uppercase mb-16"
-            >
-              Our Story
-            </motion.h2>
+            <motion.h2 initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} className="text-5xl md:text-7xl font-black italic tracking-tighter text-black uppercase mb-16">Our Story</motion.h2>
             <div className="space-y-10 text-black px-4 text-lg md:text-xl leading-relaxed font-light">
               <p className="text-xl md:text-3xl font-semibold italic text-blue-900/80">"Berawal dari mimpi sederhana di tengah keterbatasan teknologi..."</p>
               <p>Kami menyaksikan lelahnya mata para guru di balik tumpukan kertas. Kami berangkat untuk meruntuhkan sekat rumit itu dan menggantinya dengan keajaiban teknologi yang memanusiakan.</p>
             </div>
           </div>
         </section>
-        
-        {/* Lanjutkan sisa konten seperti sebelumnya */}
+
+        {/* VISI & MISI */}
+        <section className="w-full px-6 pt-12 pb-32 bg-gradient-to-b from-blue-50/30 to-white overflow-hidden">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
+            <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 1 }} className="p-8 md:p-12 border-l-4 border-blue-400 bg-blue-50/20 shadow-sm">
+              <h3 className="text-4xl md:text-5xl font-black italic tracking-tighter text-black uppercase mb-8">Visi</h3>
+              <p className="text-lg md:text-xl leading-relaxed text-gray-800 font-light">Menjadi episentrum transformasi digital pendidikan di Indonesia yang tidak hanya mengandalkan AI, namun mengedepankan empati teknologi.</p>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, x: 50 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 1, delay: 0.2 }} className="p-8 md:p-12 border-l-4 border-blue-400 bg-blue-50/20 shadow-sm">
+              <h3 className="text-4xl md:text-5xl font-black italic tracking-tighter text-black uppercase mb-8">Misi</h3>
+              <p className="text-lg md:text-xl leading-relaxed text-gray-800 font-light">Membangun teknologi yang inklusif untuk menyederhanakan proses belajar mengajar secara revolusioner dan mendemokrasikan akses AI bagi pendidik.</p>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* PRODUK KAMI */}
+        <section id="produk" className="w-full px-6 py-32 bg-[#eef6ff] overflow-hidden">
+          <div className="max-w-7xl mx-auto">
+            <motion.h2 initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} className="text-5xl md:text-7xl font-black italic tracking-tighter text-black uppercase mb-20 text-center">Produk Kami</motion.h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+              {/* SOAL AI */}
+              <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="bg-white rounded-3xl overflow-hidden shadow-xl border border-blue-100">
+                <div className="p-8">
+                   <h3 className="text-4xl font-black italic uppercase mb-4 text-black">SOAL <span className="text-blue-600">AI</span></h3>
+                   <p className="text-gray-700 font-medium mb-6 leading-relaxed">AI yang membantu guru membuat soal SD, SMP, SMA secara instan dan sesuai kurikulum hanya dalam hitungan detik.</p>
+                   <div className="flex gap-4 overflow-x-auto pb-4 snap-x scrollbar-hide">
+                      <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-100 rounded-xl snap-center overflow-hidden border"><img src="/soal-ai-1.jpg" className="w-full h-full object-cover" /></div>
+                      <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-100 rounded-xl snap-center overflow-hidden border"><img src="/soal-ai-2.jpg" className="w-full h-full object-cover" /></div>
+                   </div>
+                </div>
+              </motion.div>
+              {/* JAWABAN AI */}
+              <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="bg-[#0f172a] rounded-3xl overflow-hidden shadow-xl text-white">
+                <div className="p-8">
+                   <h3 className="text-4xl font-black italic uppercase mb-4 text-white">JAWABAN <span className="text-blue-400">AI</span></h3>
+                   <p className="text-blue-50 font-medium mb-6 leading-relaxed">Periksa tumpukan kertas ujian secara otomatis dan akurat. Kurangi beban kerja Anda secara drastis!</p>
+                   <div className="flex gap-4 overflow-x-auto pb-4 snap-x scrollbar-hide">
+                      <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-800 rounded-xl snap-center overflow-hidden border border-white/10"><img src="/jawaban-ai-1.jpg" className="w-full h-full object-cover" /></div>
+                      <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-800 rounded-xl snap-center overflow-hidden border border-white/10"><img src="/jawaban-ai-2.jpg" className="w-full h-full object-cover" /></div>
+                   </div>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* TESTIMONI */}
+            <div id="testimoni" className="mt-32">
+               <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="text-4xl md:text-5xl font-black italic tracking-tighter text-black uppercase mb-12 text-center">Testimoni</motion.h2>
+               <div className="flex gap-6 overflow-x-auto pb-8 snap-x scrollbar-hide px-4">
+                 <div className="min-w-[300px] md:min-w-[400px] bg-white p-8 rounded-2xl shadow-xl border border-blue-50 snap-center">
+                   <p className="text-gray-700 italic mb-6">"Luar biasa! Dulu bikin soal butuh waktu berjam-jam, sekarang hitungan detik langsung jadi."</p>
+                   <p className="font-black text-black uppercase italic tracking-tighter">Ibu Siti Zulaikha</p>
+                 </div>
+                 <div className="min-w-[300px] md:min-w-[400px] bg-white p-8 rounded-2xl shadow-xl border border-blue-50 snap-center">
+                   <p className="text-gray-700 italic mb-6">"Koreksi jawaban jadi jauh lebih cepat dengan Jawaban AI. Akurasinya mantap!"</p>
+                   <p className="font-black text-black uppercase italic tracking-tighter">Bapak Andi Pratama</p>
+                 </div>
+               </div>
+            </div>
+          </div>
+        </section>
+
         <footer className="py-12 text-center bg-white border-t border-blue-50">
           <p className="opacity-40 text-[10px] font-black uppercase tracking-[0.5em] text-blue-900">© 2026 GURU BANTU GURU</p>
         </footer>
