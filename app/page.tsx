@@ -153,7 +153,7 @@ export default function Home() {
             </div>
         </section>
 
-        {/* VISI MISI & PRODUK (Sama Seperti Sebelumnya) */}
+        {/* VISI MISI & PRODUK */}
         <section id="produk" className="w-full px-6 py-32 bg-[#eef6ff]">
           <div className="max-w-7xl mx-auto">
             <h2 className="text-5xl md:text-7xl font-black italic tracking-tighter text-black uppercase mb-20 text-center">Produk Kami</h2>
@@ -180,39 +180,37 @@ export default function Home() {
           </div>
         </section>
 
-        {/* --- SECTION CONTACT (BARU) --- */}
-        <section id="contact" className="w-full px-6 py-32 bg-white">
-          <div className="max-w-6xl mx-auto text-center">
-            <h2 className="text-5xl md:text-7xl font-black italic tracking-tighter text-black uppercase mb-16 text-center">Contact Us</h2>
+        {/* --- SECTION CONTACT (OPTIMIZED WITH LOGOS) --- */}
+        <section id="contact" className="w-full px-6 py-24 bg-white border-t border-gray-100">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-4xl md:text-5xl font-black italic tracking-tighter text-black uppercase mb-12 text-center">Contact Us</h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              {/* Media Sosial */}
-              <div className="flex flex-col items-center md:items-start gap-6">
-                <h4 className="text-xs font-black tracking-[0.3em] text-blue-600 uppercase">Social Media</h4>
-                <div className="flex flex-col gap-4 text-left">
-                  <a href="#" className="group flex items-center gap-4 text-3xl md:text-4xl font-black italic uppercase tracking-tighter hover:text-blue-600 transition-all">
-                    <span className="opacity-20 group-hover:opacity-100 group-hover:mr-2 transition-all">FB</span> Facebook
+            <div className="flex flex-col md:flex-row justify-center items-center gap-12 md:gap-24">
+              {/* Media Sosial Group */}
+              <div className="flex flex-col items-center gap-6">
+                <h4 className="text-[10px] font-black tracking-[0.4em] text-blue-600 uppercase">Social Media</h4>
+                <div className="flex gap-6">
+                  <a href="#" className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 border border-gray-100">
+                    <img src="/logo-fb.png" alt="Facebook" className="w-6 h-6 object-contain" />
                   </a>
-                  <a href="#" className="group flex items-center gap-4 text-3xl md:text-4xl font-black italic uppercase tracking-tighter hover:text-pink-500 transition-all">
-                    <span className="opacity-20 group-hover:opacity-100 group-hover:mr-2 transition-all">IG</span> Instagram
+                  <a href="#" className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 border border-gray-100">
+                    <img src="/logo-ig.png" alt="Instagram" className="w-6 h-6 object-contain" />
                   </a>
-                  <a href="#" className="group flex items-center gap-4 text-3xl md:text-4xl font-black italic uppercase tracking-tighter hover:text-black transition-all">
-                    <span className="opacity-20 group-hover:opacity-100 group-hover:mr-2 transition-all">TH</span> Thread
+                  <a href="#" className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 border border-gray-100">
+                    <img src="/logo-threads.png" alt="Threads" className="w-6 h-6 object-contain" />
                   </a>
                 </div>
               </div>
 
-              {/* Direct Contact */}
-              <div className="flex flex-col items-center md:items-end gap-6 text-center md:text-right">
-                <h4 className="text-xs font-black tracking-[0.3em] text-blue-600 uppercase">Get In Touch</h4>
-                <div className="flex flex-col gap-4">
-                  <a href="https://wa.me/yournumber" className="group flex flex-col md:items-end">
-                    <span className="text-3xl md:text-4xl font-black italic uppercase tracking-tighter hover:text-green-500 transition-all">Whatsapp</span>
-                    <span className="text-sm font-bold opacity-40 uppercase tracking-widest">+62 812-XXXX-XXXX</span>
+              {/* Direct Contact Group */}
+              <div className="flex flex-col items-center gap-6">
+                <h4 className="text-[10px] font-black tracking-[0.4em] text-blue-600 uppercase">Direct Message</h4>
+                <div className="flex gap-6">
+                  <a href="https://wa.me/yournumber" className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 border border-gray-100">
+                    <img src="/logo-wa.png" alt="Whatsapp" className="w-6 h-6 object-contain" />
                   </a>
-                  <a href="mailto:hello@gurubantuguru.com" className="group flex flex-col md:items-end">
-                    <span className="text-3xl md:text-4xl font-black italic uppercase tracking-tighter hover:text-blue-400 transition-all">Email</span>
-                    <span className="text-sm font-bold opacity-40 uppercase tracking-widest">hello@gurubantuguru.com</span>
+                  <a href="mailto:hello@gurubantuguru.com" className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 border border-gray-100">
+                    <img src="/logo-email.png" alt="Email" className="w-6 h-6 object-contain" />
                   </a>
                 </div>
               </div>
