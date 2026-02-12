@@ -236,16 +236,16 @@ export default function Home() {
               <div className="flex flex-col items-center gap-6">
                 <h4 className="text-[10px] font-black tracking-[0.4em] text-blue-600 uppercase">Social Media</h4>
                 <div className="flex gap-6">
-                  <a href="#" className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center hover:scale-110 transition-all border border-gray-100"><img src="/logo-fb.png" className="w-6 h-6 object-contain" /></a>
-                  <a href="#" className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center hover:scale-110 transition-all border border-gray-100"><img src="/logo-ig.png" className="w-6 h-6 object-contain" /></a>
-                  <a href="#" className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center hover:scale-110 transition-all border border-gray-100"><img src="/logo-threads.png" className="w-6 h-6 object-contain" /></a>
+                  <a href="https://facebook.com/nama_page_anda" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center hover:scale-110 transition-all border border-gray-100"><img src="/logo-fb.png" className="w-6 h-6 object-contain" /></a>
+                  <a href="https://instagram.com/username_anda" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center hover:scale-110 transition-all border border-gray-100"><img src="/logo-ig.png" className="w-6 h-6 object-contain" /></a>
+                  <a href="https://threads.net/@username_anda" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center hover:scale-110 transition-all border border-gray-100"><img src="/logo-threads.png" className="w-6 h-6 object-contain" /></a>
                 </div>
               </div>
               <div className="flex flex-col items-center gap-6">
                 <h4 className="text-[10px] font-black tracking-[0.4em] text-blue-600 uppercase">Direct Message</h4>
                 <div className="flex gap-6">
-                  <a href="#" className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center hover:scale-110 transition-all border border-gray-100"><img src="/logo-wa.png" className="w-6 h-6 object-contain" /></a>
-                  <a href="#" className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center hover:scale-110 transition-all border border-gray-100"><img src="/logo-email.png" className="w-6 h-6 object-contain" /></a>
+                  <a href="https://wa.me/628123456789" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center hover:scale-110 transition-all border border-gray-100"><img src="/logo-wa.png" className="w-6 h-6 object-contain" /></a>
+                  <a href="mailto:emailanda@gmail.com" className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center hover:scale-110 transition-all border border-gray-100"><img src="/logo-email.png" className="w-6 h-6 object-contain" /></a>
                 </div>
               </div>
             </div>
