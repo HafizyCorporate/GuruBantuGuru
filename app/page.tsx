@@ -11,7 +11,7 @@ export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const totalFrames = 194;
-  const minFramesToStart = 20; // Optimasi loading: buka lebih cepat
+  const minFramesToStart = 20; 
   
   const { scrollYProgress } = useScroll({ 
     target: containerRef, 
@@ -177,11 +177,12 @@ export default function Home() {
               {/* SOAL AI */}
               <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="bg-white rounded-3xl overflow-hidden shadow-xl border border-blue-100">
                 <div className="p-8">
-                   <h3 className="text-4xl font-black italic uppercase mb-4 text-black">SOAL <span className="text-blue-600">AI</span></h3>
-                   <p className="text-gray-700 font-medium mb-6 leading-relaxed">AI yang membantu guru membuat soal SD, SMP, SMA secara instan dan sesuai kurikulum hanya dalam hitungan detik.</p>
+                   <h3 className="text-4xl font-black italic uppercase mb-4 text-black italic">SOAL <span className="text-blue-600">AI</span></h3>
+                   <p className="text-gray-700 font-medium mb-6 leading-relaxed">AI yang menjadi asisten para guru untuk membuat soal secara instan! Khusus diatur untuk jenjang **SD, SMP, dan SMA**.</p>
                    <div className="flex gap-4 overflow-x-auto pb-4 snap-x scrollbar-hide">
                       <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-100 rounded-xl snap-center overflow-hidden border"><img src="/soal-ai-1.jpg" className="w-full h-full object-cover" /></div>
                       <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-100 rounded-xl snap-center overflow-hidden border"><img src="/soal-ai-2.jpg" className="w-full h-full object-cover" /></div>
+                      <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-100 rounded-xl snap-center overflow-hidden border"><img src="/soal-ai-3.jpg" className="w-full h-full object-cover" /></div>
                    </div>
                 </div>
               </motion.div>
@@ -189,10 +190,11 @@ export default function Home() {
               <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="bg-[#0f172a] rounded-3xl overflow-hidden shadow-xl text-white">
                 <div className="p-8">
                    <h3 className="text-4xl font-black italic uppercase mb-4 text-white">JAWABAN <span className="text-blue-400">AI</span></h3>
-                   <p className="text-blue-50 font-medium mb-6 leading-relaxed">Periksa tumpukan kertas ujian secara otomatis dan akurat. Kurangi beban kerja Anda secara drastis!</p>
+                   <p className="text-blue-50 font-medium mb-6 leading-relaxed">Lelah memeriksa tumpukan kertas ujian setiap malam? **JAWABAN AI** dirancang khusus untuk Anda.</p>
                    <div className="flex gap-4 overflow-x-auto pb-4 snap-x scrollbar-hide">
                       <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-800 rounded-xl snap-center overflow-hidden border border-white/10"><img src="/jawaban-ai-1.jpg" className="w-full h-full object-cover" /></div>
                       <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-800 rounded-xl snap-center overflow-hidden border border-white/10"><img src="/jawaban-ai-2.jpg" className="w-full h-full object-cover" /></div>
+                      <div className="min-w-[90%] md:min-w-[70%] h-64 bg-gray-800 rounded-xl snap-center overflow-hidden border border-white/10"><img src="/jawaban-ai-3.jpg" className="w-full h-full object-cover" /></div>
                    </div>
                 </div>
               </motion.div>
@@ -202,14 +204,20 @@ export default function Home() {
             <div id="testimoni" className="mt-32">
                <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="text-4xl md:text-5xl font-black italic tracking-tighter text-black uppercase mb-12 text-center">Testimoni</motion.h2>
                <div className="flex gap-6 overflow-x-auto pb-8 snap-x scrollbar-hide px-4">
-                 <div className="min-w-[300px] md:min-w-[400px] bg-white p-8 rounded-2xl shadow-xl border border-blue-50 snap-center">
-                   <p className="text-gray-700 italic mb-6">"Luar biasa! Dulu bikin soal butuh waktu berjam-jam, sekarang hitungan detik langsung jadi."</p>
-                   <p className="font-black text-black uppercase italic tracking-tighter">Ibu Siti Zulaikha</p>
-                 </div>
-                 <div className="min-w-[300px] md:min-w-[400px] bg-white p-8 rounded-2xl shadow-xl border border-blue-50 snap-center">
-                   <p className="text-gray-700 italic mb-6">"Koreksi jawaban jadi jauh lebih cepat dengan Jawaban AI. Akurasinya mantap!"</p>
-                   <p className="font-black text-black uppercase italic tracking-tighter">Bapak Andi Pratama</p>
-                 </div>
+                 {[
+                   { name: "Ibu Siti Zulaikha", role: "Guru Matematika SMP", text: "Luar biasa! Dulu bikin soal butuh waktu berjam-jam, sekarang hitungan detik langsung jadi." },
+                   { name: "Bapak Andi Pratama", role: "Guru Bahasa Indonesia SMA", text: "Koreksi jawaban jadi jauh lebih cepat dengan Jawaban AI. Akurasinya mantap!" },
+                   { name: "Ibu Maya Lestari", role: "Guru IPA SD", text: "GURUBANTUGURU benar-benar modern. Fitur-fiturnya to-the-point." }
+                 ].map((t, i) => (
+                   <div key={i} className="min-w-[300px] md:min-w-[400px] bg-white p-8 rounded-2xl shadow-xl border border-blue-50 snap-center">
+                     <div className="flex text-yellow-400 mb-4 text-xl">★★★★★</div>
+                     <p className="text-gray-700 italic mb-6 font-medium">"{t.text}"</p>
+                     <div>
+                       <p className="font-black text-black uppercase italic tracking-tighter">{t.name}</p>
+                       <p className="text-[10px] text-blue-600 font-bold tracking-[0.2em] uppercase">{t.role}</p>
+                     </div>
+                   </div>
+                 ))}
                </div>
             </div>
           </div>
